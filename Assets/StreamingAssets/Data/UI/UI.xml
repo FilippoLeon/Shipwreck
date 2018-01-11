@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Canvas>
+	<Panel id="ship_view" layout="vertical" anchorMin="0,0" anchorMax="0.2,1" content="preferredFit,minFit" padding="2,2,2,2">
+		<Argument>@ship</Argument>
+		<Label alignment="MiddleCenter" minSize="-1,20"><Text type="dynamic" argument="ship">Name</Text></Label>
+		<Panel id="ship_details" layout="grid" gridY="2" cellSize="100,20" content="minFit">
+			<Label><Text>Health</Text></Label>
+			<Label><Text type="dynamic" argument="ship">Health</Text></Label>
+			<Label><Text>Energy</Text></Label>
+			<Label><Text type="dynamic" argument="ship">0</Text></Label>
+			<Label><Text>Energy Status</Text></Label>
+			<ProgressBar>
+				<Sprite>ASD</Sprite>
+			</ProgressBar>
+		</Panel>
+	</Panel>
+	<Panel id="creative_panel" layout="horizontal" anchorMin="0,0" anchorMax="1,0.1" padding="2,2,2,2">
+		<Action event="OnCreate" type="script">buildBuildingPlacementPanel</Action>
+	</Panel>
+</Canvas>

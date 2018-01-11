@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SpriteSheet defaultSize="32,32" defaultPivot="0.5,0.5" defaultPpu="32">
+  <Sprite start="0,15" category="Parts">root</Sprite>
+  <Sprite start="1,15" category="Parts">basic_hull</Sprite>
+  <Sprite start="2,15" category="Parts">turret</Sprite>
+</SpriteSheet>

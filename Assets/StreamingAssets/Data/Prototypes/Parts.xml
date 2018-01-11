@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Prototypes>
+	<Part id="root" hull="true" root="True">
+		<Parameter name="health">100</Parameter>
+		<Parameter name="energy_drain">1</Parameter>
+		<Parameter name="energy_storage">1000</Parameter>
+		<Icon>
+			<Sprite category="Parts" id="root"></Sprite>
+		</Icon>
+	</Part>
+	<Part id="basic_hull" hull="true">
+		<Parameter name="health">100</Parameter>
+		<Parameter name="energy_drain">1</Parameter>
+		<Parameter name="energy_storage">1000</Parameter>
+		<Icon>
+			<Sprite category="Parts" id="basic_hull"/>
+		</Icon>
+	</Part>
+	<Part id="turret">
+		<Icon>
+			<Sprite category="Parts" id="turret"/>
+		</Icon>
+	</Part>
+</Prototypes>

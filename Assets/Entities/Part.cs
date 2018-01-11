@@ -1,0 +1,131 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using System;
+using UnityEngine;
+using System.Xml;
+using MoonSharp.Interpreter;
+
+[MoonSharpUserData]
+public partial class Part : Entity<Part> {   
+    public bool IsRoot { set; get; }
+    public bool IsHull { set; get; } 
+
+    public SpriteInfo si;
+
+    public Coordinate position;
+
+    Ship ship = null;
+    Ship Ship {
+        set {
+            ship = value;
+        }
+        get {
+            return ship;
+        }
+    }
+
+    int health = 100;
+    public int Health {
+        set {
+            health = value;
+            Emit("OnHealthChanged");
+            Ship.RecomputeHealth();
+        }
+        get {
+            return health;
+        }
+    }
+
+    public bool CanAttachTo(Ship ship, Coordinate position) {
+        if(ship.PartAt(position) != null && ship.PartAt(position).Count != 0 ) {
+            return false;
+        }
+
+        if (ship.Root == null && IsRoot) {
+            return true;
+        }
+        if ( ship.Root != null && IsRoot ) {
+            return false;
+        }
+        bool adjacentHull = false;
+        IEnumerable<List<Part>> nhbd = ship.GetNeighbourhoods(position);
+        foreach (List < Part > nList in nhbd) {
+            if( nList == null ) {
+                continue;
+            }
+            foreach (Part n in nList) {
+                if ( n.IsHull ) {
+                    adjacentHull = true;
+                }
+            }
+        }
+        if(adjacentHull == false) {
+            return false;
+        }
+
+        return true;
+    }
+    public bool AddTo(Ship ship, Coordinate position) {
+        if( !CanAttachTo(ship, position) ) {
+            return false;
+        }
+
+        this.position = position;
+        this.Ship = ship;
+
+        Emit("AddTo", new object[] { position });
+
+        return true;
+    }
+
+    public Part(XmlReader reader) : this(){
+        ReadXml(reader);
+    }
+
+    public Part() { }
+
+    private Part(Part other) : base(other) {
+        si = other.si;
+        IsRoot = other.IsRoot;
+        IsHull = other.IsHull;
+    }
+
+    override public void ReadXml(XmlReader reader) {
+        base.ReadCurrentElement(reader);
+
+        Debug.Log(String.Format("New part with id = {0}", Id));
+
+        if ( reader.GetAttribute("root") != null ) {
+            IsRoot = Convert.ToBoolean(reader.GetAttribute("root"));
+        }
+        if (reader.GetAttribute("hull") != null) {
+            IsHull = Convert.ToBoolean(reader.GetAttribute("hull"));
+        }
+
+        XmlReader subreader = reader.ReadSubtree();
+        while (subreader.Read()) {
+            if (subreader.NodeType == XmlNodeType.Element) {
+                ReadElement(subreader);
+            }
+        }
+        subreader.Close();
+    }
+
+    public override void ReadElement(XmlReader reader) {
+        switch (reader.Name) {
+            case "Icon":
+                XmlReader subreader = reader.ReadSubtree();
+                subreader.ReadToDescendant("Sprite");
+                si = new SpriteInfo(subreader);
+                subreader.Close();
+                break;
+            default:
+                base.ReadElement(reader);
+                break;
+        }
+    }
+
+    public override Part Clone() {
+        return new Part(this);
+    }
+}

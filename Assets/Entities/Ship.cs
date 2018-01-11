@@ -1,0 +1,94 @@
+﻿using MoonSharp.Interpreter;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[MoonSharpUserData]
+public class Ship : Entity<Ship> {
+
+    Dictionary<Coordinate, List<Part>> parts = new Dictionary<Coordinate, List<Part>>();
+    public Part Root { get; set; }
+
+    public Verse verse;
+
+    public Ship(Verse verse) {
+        this.verse = verse;
+    }
+
+    string name = "Serenity";
+    public string Name {
+        set {
+            name = value;
+            Emit("OnNameChanged");
+        }
+        get {
+            return name;
+        }
+    }
+
+    int health = 100;
+    public int Health {
+        set {
+            health = value;
+            Emit("OnHealthChanged");
+        }
+        get {
+            return health;
+        }
+    }
+
+    internal void RecomputeHealth() {
+        int h = 0;
+        foreach(List<Part> pList in parts.Values) {
+            foreach (Part p in pList) {
+                h += p.Health;
+            }
+        }
+        Health = h;
+    }
+
+    public List<Part> PartAt(Coordinate position) {
+        if( !parts.ContainsKey(position) ) {
+            return null;
+        }
+        return parts[position];
+    }
+
+    public void AddPart(Part part, Coordinate position) {
+
+        if (!part.CanAttachTo(this, position)) {
+            return;
+        }
+
+        Emit("AddPart", new object[] { part });
+
+        part.AddTo(this, position);
+
+        if( part.IsRoot ) {
+            Root = part;
+        }
+
+        if( !parts.ContainsKey(position) ) {
+            parts[position] = new List<Part>();
+        }
+        parts[position].Add(part);
+
+        RecomputeHealth();
+    }
+
+    internal IEnumerable<List<Part>> GetNeighbourhoods(Coordinate position) {
+        List<List<Part>> ret = new List<List<Part>>();
+
+        ret.Add(PartAt(position + Coordinate.Up));
+        ret.Add(PartAt(position + Coordinate.Left));
+        ret.Add(PartAt(position + Coordinate.Down));
+        ret.Add(PartAt(position + Coordinate.Right));
+
+        return ret;
+    }
+
+    public override Ship Clone() {
+        throw new System.NotImplementedException();
+    }
+}
