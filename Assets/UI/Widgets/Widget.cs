@@ -15,6 +15,13 @@ namespace GUI {
             set { root = value; }
         }
 
+        public override object GetParameter(string name) {
+            throw new NotImplementedException();
+        }
+        public override void SetParameter(string name, object val) {
+            throw new NotImplementedException();
+        }
+
         UnityEngine.UI.LayoutElement layoutComponent;
 
         protected object[] args = null;
@@ -24,9 +31,10 @@ namespace GUI {
 
         public Action ChangeArguments { set; get; }
 
-        protected GenericAction addedAction = null;
-        protected GenericAction addedActionArgumentChange = null;
-        public abstract object Value { set; }
+        protected Dictionary<int, GenericAction> addedAction = new Dictionary<int, GenericAction>();
+
+        protected SortedDictionary<int, object> values = new SortedDictionary<int, object >();
+        public abstract void SetValue(object value, int index);
 
         public void SetParameters(object[] args) {
             Debug.Log("Change Parameters!");
@@ -77,7 +85,9 @@ namespace GUI {
 
         public UnityEngine.GameObject GameObject { set; get; }
         
-        protected void LinkArgNameToValue(string argName, string propName) {
+
+
+        protected void LinkArgNameToValue(string argName, string propName, int index) {
 
             System.Action<object[]> action = (object[] o) => {
                 IEmitter arg = Root.GetArgument(argName);
@@ -86,16 +96,16 @@ namespace GUI {
                 }
                 object val = GetPropValue(arg, propName).ToString();
                 Debug.Log(String.Format("Argument object {0} has value {1}", propName, val.ToString()));
-                Value = GetPropValue(arg, propName).ToString();
+                SetValue(GetPropValue(arg, propName).ToString(), index);
             };
             Root.ChangeArguments += () => {
                 // Register the "Value update"-Lambda with the Root element's argument with this name.
                 // Deregister old lambda from the element.
                 // TODO: if argument changes, we should deregister the addedAction.
-                Root.GetArgument(argName).RemoveAction("On" + propName + "Changed", addedAction);
-                addedAction = Root.GetArgument(argName).AddAction("On" + propName + "Changed", action);
-
-                action(new object[] { });
+                if ( addedAction.ContainsKey(index) ) {
+                    Root.GetArgument(argName).RemoveAction("On" + propName + "Changed", addedAction[index]);
+                }
+                addedAction[index] = Root.GetArgument(argName).AddAction("On" + propName + "Changed", action);
             };
 
         }
@@ -132,6 +142,30 @@ namespace GUI {
             }
         }
 
+        protected int valueIndex = 0;
+
+        public void FinalizeRead() {
+
+            Root.ChangeArguments += () => {
+                foreach (GenericAction act in addedAction.Values) {
+                    act.Call(this, new object[] { });
+                }
+            };
+        }
+
+        protected void ReadSubElement(XmlReader reader) {
+            //GUIController.ReadElement(subReader, progressBar);
+            
+            switch (reader.Name) {
+                case "Value":
+                    string argName = "@" + reader.GetAttribute("argument");
+                    string propName = reader.ReadElementContentAsString();
+                    int idx = valueIndex++;
+                    LinkArgNameToValue(argName, propName, idx);
+                    break;
+            }
+        }
+
         public void SetPreferredSize(int w, int h = -1) {
             if( w >= 0) layoutComponent.preferredWidth = w;
             if (h >= 0) layoutComponent.preferredHeight = h;
@@ -165,10 +199,19 @@ namespace GUI {
                 if (obj == null) { return null; }
 
                 Type type = obj.GetType();
-                PropertyInfo info = type.GetProperty(part);
-                if (info == null) { return null; }
 
-                obj = info.GetValue(obj, null);
+                object param = null;
+                if( obj is IEmitter ) {
+                    param =  (obj as IEmitter).GetParameter(name);
+                }
+                if (param != null) {
+                    obj = param;
+                } else {
+                    PropertyInfo info = type.GetProperty(part);
+                    if (info == null) { return null; }
+
+                    obj = info.GetValue(obj, null);
+                }
             }
             return obj;
         }

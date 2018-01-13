@@ -8,6 +8,9 @@ public interface IEmitter {
     void RemoveAction(string eventName, GenericAction act);
     string Category { get; }
     string Id { set; get; }
+
+    object GetParameter(string name);
+    void SetParameter(string name, object o);
 }
 
 public interface IEmitter<T> : IEmitter where T: class {

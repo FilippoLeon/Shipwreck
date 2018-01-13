@@ -17,7 +17,7 @@ public class PartComponent : ObserverBehaviour<Part> {
         transform.position = coordinate.ToVector();
 
         sr = gameObject.AddComponent<SpriteRenderer>();
-        sr.sprite = SpriteController.spriteLoader.Load(Emitter.si);
+        sr.sprite = SpriteController.spriteLoader.Load(Emitter.spriteInfo, Emitter);
     }
 
     override public void HandleEvent(string signal, object[] args) {
@@ -33,6 +33,6 @@ public class PartComponent : ObserverBehaviour<Part> {
     }
 
     void Update() {
-        sr.sprite = SpriteController.spriteLoader.Load(Emitter.si);
+        sr.sprite = SpriteController.spriteLoader.Load(Emitter.spriteInfo, Emitter);
     }
 }

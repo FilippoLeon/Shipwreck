@@ -13,6 +13,8 @@ namespace GUI {
         float size;
         float factor = 1f;
 
+        string labelType;
+         
         public ProgressBar() {
             GameObject imageGameObject = new GameObject("image", new Type[] { typeof(Image) });
             imageGameObject.transform.SetParent(GameObject.transform);
@@ -47,16 +49,38 @@ namespace GUI {
             Id = id;
         }
 
-        public override object Value {
-            set {
-                int height = 10;
-                int leftPadding = 10;
-                int rightPadding = 10;
-                float v = Convert.ToSingle(value.ToString());
-                float delta = size * (1.0f - v/ factor) ;
+        public override void SetValue(object value, int index) {
+            values[index] = value;
+            float maxVal = 1;
+            if (values.ContainsKey(1) && values[1] != null) {
+                maxVal = Convert.ToSingle(values[1].ToString());
+            }
 
-                barComponent.rectTransform.offsetMin = new Vector2(leftPadding, -height / 2);
-                barComponent.rectTransform.offsetMax = new Vector2(-rightPadding - delta, height / 2);
+            int height = 10;
+            int leftPadding = 10;
+            int rightPadding = 10;
+            float v = 0;
+            if (values.ContainsKey(0)) { 
+                v = Convert.ToSingle(values[0].ToString());
+            }
+            float delta;
+            if (maxVal == 0) {
+                delta = size;
+            } else { 
+                delta = size * (1.0f - v / maxVal / factor);
+            }
+
+            barComponent.rectTransform.offsetMin = new Vector2(leftPadding, -height / 2);
+            barComponent.rectTransform.offsetMax = new Vector2(-rightPadding - Mathf.Clamp(delta, 0, size), height / 2);
+
+            switch(labelType) {
+                default:
+                case "fraction":
+                    textComponent.text = v + "/" + maxVal;
+                    break;
+                case "none":
+                    textComponent.text = "";
+                    break;
             }
         }
 
@@ -68,7 +92,7 @@ namespace GUI {
             ProgressBar progressBar = new ProgressBar();
             progressBar.ReadElement(reader, parent);
             progressBar.SetParent(parent);
-            
+
             while (reader.Read()) {
                 if (reader.NodeType == XmlNodeType.Element) {
                     switch (reader.Name) {
@@ -79,17 +103,20 @@ namespace GUI {
                         case "Value":
                             string argName = "@" + reader.GetAttribute("argument");
                             string propName = reader.ReadElementContentAsString();
-                            progressBar.LinkArgNameToValue(argName, propName);
+                            int idx = progressBar.valueIndex++;
+                            progressBar.LinkArgNameToValue(argName, propName, idx);
+                            break;
+                        case "Label":
+                            progressBar.labelType = reader.GetAttribute("type");
                             break;
                         default:
-                            XmlReader subReader = reader.ReadSubtree();
-                            GUIController.ReadElement(subReader, progressBar);
-                            subReader.Close();
+                            progressBar.ReadSubElement(reader);
                             break;
                     }
                 }
             }
-            
+            progressBar.FinalizeRead();
+
             return progressBar;
         }
         internal void ReadElement(XmlReader reader, IWidget parent) {

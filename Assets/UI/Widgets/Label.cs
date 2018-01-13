@@ -5,11 +5,14 @@ using UnityEngine.UI;
 using System.Xml;
 using System.Reflection;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace GUI {
     [MoonSharpUserData]
     public class Label : Widget {
         Text textComponent;
+
+        GenericAction textModifier = null;
 
         enum TextType {
             Dynamic, Static
@@ -55,9 +58,16 @@ namespace GUI {
             return new Label(id);
         }
         
-        public override object Value {
-            set {
-                textComponent.text = value.ToString();
+        public override void SetValue(object value, int index) {
+            values[index] = value;
+            if ( textModifier == null ) {
+                textComponent.text = values[0].ToString();
+            } else {
+                try {
+                    textComponent.text = textModifier.Call(this, values.Values.ToArray()).String;
+                } catch(Exception e) {
+
+                }
             }
         }
 
@@ -69,35 +79,42 @@ namespace GUI {
             if (reader.GetAttribute("alignment") != null) {
                 label.SetAlignment( (TextAnchor) Enum.Parse( typeof(TextAnchor), reader.GetAttribute("alignment") ) );
             }
-
+            
             while (reader.Read()) {
                 if (reader.NodeType == XmlNodeType.Element) {
-                    if (reader.Name == "Text") {
-                        string tType = reader.GetAttribute("type");
-                        switch(tType) {
-                            case "dynamic":
-                                label.textType = TextType.Dynamic;
+                    switch (reader.Name) {
+                        case "Text":
+                            string tType = reader.GetAttribute("type");
+                            switch(tType) {
+                                case "dynamic":
+                                    label.textType = TextType.Dynamic;
 
-                                string argName = "@" + reader.GetAttribute("argument");
-                                string propName = reader.ReadElementContentAsString();
-                                label.LinkArgNameToValue(argName, propName);
+                                    string argName = "@" + reader.GetAttribute("argument");
+                                    string propName = reader.ReadElementContentAsString();
+                                    label.LinkArgNameToValue(argName, propName, label.valueIndex++);
                                 
-                                label.Text = propName;
-                                break;
-                            default:
-                            case "static":
-                                label.textType = TextType.Static;
-                                label.Text = reader.ReadElementContentAsString();
-                                break;
-                        }
-                    } else {
-                        XmlReader subReader = reader.ReadSubtree();
-                        GUIController.ReadElement(subReader, label);
-                        subReader.Close();
+                                    label.Text = propName;
+                                    break;
+                                case "function":
+                                    label.textModifier = new GenericAction(label, "OnTextChange", "UI", reader.ReadElementContentAsString());
+                                    break;
+                                case "script":
+                                    throw new NotImplementedException();
+                                default:
+                                case "static":
+                                    label.textType = TextType.Static;
+                                    label.Text = reader.ReadElementContentAsString();
+                                    break;
+                            }
+                            break;
+                        default:
+                            label.ReadSubElement(reader);
+                            break;
                     }
                 }
             }
 
+            label.FinalizeRead();
 
             return label;
         }

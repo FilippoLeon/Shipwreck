@@ -43,29 +43,45 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IXmlSerializable wh
             case "Parameter":
                 string name = reader.GetAttribute("name");
 
-                string type = "string";
+                string type = null;
                 if ( reader.GetAttribute("type") != null ) {
                     type = reader.GetAttribute("type");
                 }
-
-                switch( type ) {
-                    case "string":
-                        parameters.Add(name, reader.ReadElementContentAsString());
-                        break;
-                    case "int":
-                        parameters.Add(name, reader.ReadElementContentAsInt());
-                        break;
-                    case "float":
-                        parameters.Add(name, reader.ReadElementContentAsFloat());
-                        break;
-                    default:
-                        Debug.LogWarning("Unknown Type.");
-                        break;
-                }
+                
+                AddParameter(name, type, reader.ReadElementContentAsString());
                 break;
             default:
                 base.ReadElement(reader);
                 break;
+        }
+    }
+
+    private void AddParameter(string name, string type, string value) {
+        switch( type ) {
+            case "int":
+                parameters[name] = Convert.ToInt32(value);
+                break;
+            case "string":
+                parameters[name] = value;
+                break;
+            case "float":
+                parameters[name] = Convert.ToSingle(value);
+                break;
+            case null:
+                Debug.LogError("Invalid type of parameter.");
+                break;
+        }
+    }
+
+    public override void SetParameter(string name, object value) {
+        Emit("On" + name + "Changed");
+    }
+
+    public override object GetParameter(string name) {
+        if ( parameters.ContainsKey(name)) {
+            return parameters[name];
+        } else {
+            return null;
         }
     }
 
@@ -81,6 +97,15 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IXmlSerializable wh
 
     protected Entity(Entity<T> other) {
         id = other.id;
-        parameters = new Dictionary<string, object>(other.parameters);
+        parameters = new Dictionary<string, object>();
+        foreach (KeyValuePair<string, object> o in other.parameters) {
+            if (o.Value is int) {
+                parameters[o.Key] = (int) o.Value;
+            } else if (o.Value is string) {
+                parameters[o.Key] = (string) o.Value;
+            } else  if (o.Value is float) {
+                parameters[o.Key] = (float) o.Value;
+            }
+        }
     }
 }

@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Prototypes>
-	<Part id="root" hull="true" root="True">
-		<Parameter name="health">100</Parameter>
-		<Parameter name="energy_drain">1</Parameter>
-		<Parameter name="energy_storage">1000</Parameter>
+	<Part id="root" type="hull" root="True">
+		<Parameter name="health" type="int">100</Parameter>
+		<Parameter name="energy_drain" type="int">1</Parameter>
+		<Parameter name="energy_storage" type="int">1000</Parameter>
 		<Icon>
-			<Sprite category="Parts" id="root"></Sprite>
+			<Sprite category="Parts">root</Sprite>
 		</Icon>
 	</Part>
-	<Part id="basic_hull" hull="true">
-		<Parameter name="health">100</Parameter>
-		<Parameter name="energy_drain">1</Parameter>
-		<Parameter name="energy_storage">1000</Parameter>
+	<Part id="basic_hull" type="hull">
+		<Parameter name="health" type="int">100</Parameter>
+		<Parameter name="energy_drain" type="int">1</Parameter>
+		<Parameter name="energy_storage" type="int">1000</Parameter>
+		<Parameter name="direction" type="string"></Parameter>
 		<Icon>
-			<Sprite category="Parts" id="basic_hull"/>
+			<Sprite category="Parts">basic_hull</Sprite>
 		</Icon>
 	</Part>
-	<Part id="turret">
+	<Part id="turret" type="addon">
 		<Icon>
-			<Sprite category="Parts" id="turret"/>
+			<Sprite category="Parts" type="function" id="turret">
+				function ( part )
+					return "turret" .. part.GetProperty("direction")
+				end
+			</Sprite>
+		</Icon>
+	</Part>
+	<Part id="battery" type="addon">
+		<Icon>
+			<Sprite category="Parts">battery</Sprite>
+		</Icon>
+	</Part>
+	<Part id="shield_generator" type="addon">
+		<Icon>
+			<Sprite category="Parts">shield_generator</Sprite>
 		</Icon>
 	</Part>
 </Prototypes>

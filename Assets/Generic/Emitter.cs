@@ -22,6 +22,9 @@ abstract public class Emitter<T> : IXmlSerializable, IEmitter<T> where T : class
         observers.Add(observer);
     }
 
+    public abstract object GetParameter(string name);
+    public abstract void SetParameter(string name, object v);
+
     public void deregister(IObserver<T> observer) {
         observer.Emitter = null;
         observers.Remove(observer);

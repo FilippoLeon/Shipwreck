@@ -41,32 +41,32 @@ public class Ship : Entity<Ship> {
     int maxHealth = 0;
     public int MaxHealth {
         set {
-            MaxHealth = value;
+            maxHealth = value;
             Emit("OnMaxHealthChanged");
         }
         get {
-            return MaxHealth;
+            return maxHealth;
         }
     }
 
     int energy = 0;
     public int Energy {
         set {
-            Energy = value;
+            energy = value;
             Emit("OnEnergyChanged");
         }
         get {
-            return Energy;
+            return energy;
         }
     }
     int energyCapacity = 0;
     public int EnergyCapacity {
         set {
-            EnergyCapacity = value;
+            energyCapacity = value;
             Emit("OnEnergyCapacityChanged");
         }
         get {
-            return EnergyCapacity;
+            return energyCapacity;
         }
     }
 
@@ -117,6 +117,7 @@ public class Ship : Entity<Ship> {
         parts[position].Add(part);
 
         RecomputeHealth();
+        RecomputeMaxHealth();
     }
 
     internal IEnumerable<List<Part>> GetNeighbourhoods(Coordinate position) {

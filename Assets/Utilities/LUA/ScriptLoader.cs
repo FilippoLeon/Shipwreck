@@ -53,6 +53,10 @@ namespace LUA {
         }
 
         public static void DoString(string category, string content) {
+            if( !script.ContainsKey(category) ) {
+                Debug.LogError(String.Format("Invalid script category '{0}'!", category));
+                return;
+            }
             try {
                 script[category].DoString(content);
             } catch (SyntaxErrorException e) {

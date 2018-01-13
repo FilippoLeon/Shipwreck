@@ -76,13 +76,13 @@ public class SpriteLoader {
         }
     }
 
-    internal Sprite Load(SpriteInfo spriteInfo) {
+    internal Sprite Load(SpriteInfo spriteInfo, IEmitter obj = null) {
         if( spriteInfo == null ) {
             Debug.LogError("null SpriteInfo.");
             return placeHolder;
         }
-        if (spriteInfo.category == null) { return GetSprite(spriteInfo.id); }
-        return tryLoadSprite(spriteInfo.category, spriteInfo.id);
+        if (spriteInfo.category == null) { return GetSprite(spriteInfo.GetId(obj)); }
+        return tryLoadSprite(spriteInfo.category, spriteInfo.GetId(obj));
     }
 
     void loadSpriteSheet(FileInfo path) {

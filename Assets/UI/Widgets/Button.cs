@@ -28,10 +28,8 @@ namespace GUI {
             }
         }
 
-        public override object Value {
-            set {
-                throw new NotImplementedException();
-            }
+        public override void SetValue(object o, int idx) {
+            throw new NotImplementedException();
         }
 
         public Button() {

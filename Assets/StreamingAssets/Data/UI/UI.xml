@@ -9,12 +9,23 @@
 			<Label><Text>Energy</Text></Label>
 			<Label>
 				<!-- Put LUA Functionality -->
-				<Text type="dynamic" argument="ship">Energy
-					
+				<Value argument="ship">Energy</Value>
+				<Value argument="ship">Health</Value>
+				<Text type="function">
+					function (Energy, Health)
+						print(Energy)
+						print(Health)
+						if Health == nil then
+							return Energy .. "erg"
+						end
+						return Energy .. "erg" .. Health
+					end
 				</Text>
 			</Label>
+			<Label><Text>Energy2</Text></Label>
+			<Label><Text type="dynamic" argument="ship">Energy</Text></Label>
 			<Label><Text>Health</Text></Label>
-			<ProgressBar factor="100">
+			<ProgressBar factor="1">
 				<Value argument="ship">Health</Value>
 				<Value argument="ship">MaxHealth</Value>
 				<Sprite>ASD</Sprite>
@@ -37,6 +48,8 @@
 			<Label><Text type="dynamic" argument="part">Position</Text></Label>
 			<Label><Text>Health</Text></Label>
 			<Label><Text type="dynamic" argument="part">Health</Text></Label>
+			<Label><Text>Energy Drain</Text></Label>
+			<Label><Text type="dynamic" argument="part">energy_drain</Text></Label>
 
 		</Panel>
 	</Panel>
