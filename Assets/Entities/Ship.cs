@@ -13,6 +13,7 @@ public class Ship : Entity<Ship> {
     public Verse verse;
 
     public Ship(Verse verse) {
+        verse.AddShip(this);
         this.verse = verse;
     }
 
@@ -27,7 +28,7 @@ public class Ship : Entity<Ship> {
         }
     }
 
-    int health = 100;
+    int health = 0;
     public int Health {
         set {
             health = value;
@@ -35,6 +36,37 @@ public class Ship : Entity<Ship> {
         }
         get {
             return health;
+        }
+    }
+    int maxHealth = 0;
+    public int MaxHealth {
+        set {
+            MaxHealth = value;
+            Emit("OnMaxHealthChanged");
+        }
+        get {
+            return MaxHealth;
+        }
+    }
+
+    int energy = 0;
+    public int Energy {
+        set {
+            Energy = value;
+            Emit("OnEnergyChanged");
+        }
+        get {
+            return Energy;
+        }
+    }
+    int energyCapacity = 0;
+    public int EnergyCapacity {
+        set {
+            EnergyCapacity = value;
+            Emit("OnEnergyCapacityChanged");
+        }
+        get {
+            return EnergyCapacity;
         }
     }
 
@@ -47,6 +79,16 @@ public class Ship : Entity<Ship> {
         }
         Health = h;
     }
+    internal void RecomputeMaxHealth() {
+        int h = 0;
+        foreach (List<Part> pList in parts.Values) {
+            foreach (Part p in pList) {
+                h += p.MaxHealth;
+            }
+        }
+        MaxHealth = h;
+    }
+
 
     public List<Part> PartAt(Coordinate position) {
         if( !parts.ContainsKey(position) ) {

@@ -25,4 +25,14 @@ public struct Coordinate {
     public static Coordinate operator +(Coordinate a, Coordinate b) {
         return new Coordinate(a.x + b.x, a.y + b.y);
     }
+
+    public static bool operator ==(Coordinate a, Coordinate b) {
+        return (a.x == b.x && a.y == b.y);
+    }
+    public static bool operator !=(Coordinate a, Coordinate b) {
+        return (a.x != b.x || a.y != b.y);
+    }
+    public override string ToString() {
+        return "(" + x + "," + y + ")";
+    }
 }

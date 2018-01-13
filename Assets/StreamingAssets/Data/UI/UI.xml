@@ -7,11 +7,37 @@
 			<Label><Text>Health</Text></Label>
 			<Label><Text type="dynamic" argument="ship">Health</Text></Label>
 			<Label><Text>Energy</Text></Label>
-			<Label><Text type="dynamic" argument="ship">0</Text></Label>
-			<Label><Text>Energy Status</Text></Label>
-			<ProgressBar>
+			<Label>
+				<!-- Put LUA Functionality -->
+				<Text type="dynamic" argument="ship">Energy
+					
+				</Text>
+			</Label>
+			<Label><Text>Health</Text></Label>
+			<ProgressBar factor="100">
+				<Value argument="ship">Health</Value>
+				<Value argument="ship">MaxHealth</Value>
 				<Sprite>ASD</Sprite>
+				<Label type="fraction"/>
 			</ProgressBar>
+		</Panel>
+	</Panel>
+	
+	<Panel id="part_view" layout="vertical" 
+	anchorMin="0.8,0" anchorMax="1,1" 
+	content="preferredFit,minFit" padding="2,2,2,2">
+		<Argument>@part</Argument>
+		<Label alignment="MiddleCenter" minSize="-1,20">
+			<Text>Part Viewer</Text>
+		</Label>
+		<Panel id="part_details" layout="grid" gridY="2" cellSize="100,20" content="minFit">
+			<Label><Text>Name</Text></Label>
+			<Label><Text type="dynamic" argument="part">Name</Text></Label>
+			<Label><Text>Position</Text></Label>
+			<Label><Text type="dynamic" argument="part">Position</Text></Label>
+			<Label><Text>Health</Text></Label>
+			<Label><Text type="dynamic" argument="part">Health</Text></Label>
+
 		</Panel>
 	</Panel>
 	<Panel id="creative_panel" layout="horizontal" anchorMin="0,0" anchorMax="1,0.1" padding="2,2,2,2">

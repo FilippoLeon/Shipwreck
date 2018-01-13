@@ -28,6 +28,12 @@ namespace GUI {
             }
         }
 
+        public override object Value {
+            set {
+                throw new NotImplementedException();
+            }
+        }
+
         public Button() {
             backgroundComponent = GameObject.AddComponent<Image>();
             backgroundComponent.type = Image.Type.Sliced;

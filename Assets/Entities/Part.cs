@@ -13,6 +13,9 @@ public partial class Part : Entity<Part> {
     public SpriteInfo si;
 
     public Coordinate position;
+    public Coordinate Position {
+        get { return position; }
+    }
 
     Ship ship = null;
     Ship Ship {
@@ -34,6 +37,44 @@ public partial class Part : Entity<Part> {
         get {
             return health;
         }
+    }
+
+    int maxHealth = 100;
+    public int MaxHealth {
+        set {
+            maxHealth = value;
+            Emit("OnMaxHealthChanged");
+            Ship.RecomputeMaxHealth();
+        }
+        get {
+            return maxHealth;
+        }
+    }
+    int energy = 100;
+    public int Energy {
+        set {
+            energy = value;
+            Emit("OnEnergyChanged");
+            //Ship.RecomputeMaxHealth();
+        }
+        get {
+            return energy;
+        }
+    }
+    int energyCapacity = 100;
+    public int EnergyCapacity {
+        set {
+            energyCapacity = value;
+            Emit("OnEnergyCapcacityChanged");
+            //Ship.RecomputeMaxHealth();
+        }
+        get {
+            return energyCapacity;
+        }
+    }
+
+    public string Name {
+        get { return Id; }
     }
 
     public bool CanAttachTo(Ship ship, Coordinate position) {

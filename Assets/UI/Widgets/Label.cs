@@ -54,8 +54,12 @@ namespace GUI {
         public static Label Create(string id) {
             return new Label(id);
         }
-
-        GenericAction addedAction = null;
+        
+        public override object Value {
+            set {
+                textComponent.text = value.ToString();
+            }
+        }
 
         public static Label Create(XmlReader reader, IWidget parent = null) {
             Label label = new Label();
@@ -72,21 +76,13 @@ namespace GUI {
                         string tType = reader.GetAttribute("type");
                         switch(tType) {
                             case "dynamic":
-                                string argName = "@" + reader.GetAttribute("argument");
-                                label.Text = reader.ReadElementContentAsString();
-                                
                                 label.textType = TextType.Dynamic;
 
-                                System.Action<object[]> action = (object[] o) => {
-                                    IEmitter arg = label.Root.GetArgument(argName);
-                                    Debug.Log(label.Text);
-                                    Debug.Log(GetPropValue(arg, label.Text).ToString());
-                                    label.textComponent.text = GetPropValue(arg, label.Text).ToString();
-                                };
-                                label.Root.ChangeArguments += () => {
-                                    label.Root.GetArgument(argName).RemoveAction("On" + label.Text + "Changed", label.addedAction);
-                                    label.addedAction = label.Root.GetArgument(argName).AddAction("On" + label.Text  + "Changed", action);
-                                };
+                                string argName = "@" + reader.GetAttribute("argument");
+                                string propName = reader.ReadElementContentAsString();
+                                label.LinkArgNameToValue(argName, propName);
+                                
+                                label.Text = propName;
                                 break;
                             default:
                             case "static":
@@ -105,6 +101,7 @@ namespace GUI {
 
             return label;
         }
+        
 
         public override void Update(object[] args) {
             //textComponent.text = GenerateText();

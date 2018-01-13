@@ -20,6 +20,12 @@ namespace GUI {
             }
         }
 
+        public override object Value {
+            set {
+                throw new NotImplementedException();
+            }
+        }
+
         public Panel() {
             GameObject.AddComponent<CanvasRenderer>();
             background = GameObject.AddComponent<Image>();

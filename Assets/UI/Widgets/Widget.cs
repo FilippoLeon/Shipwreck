@@ -24,12 +24,18 @@ namespace GUI {
 
         public Action ChangeArguments { set; get; }
 
+        protected GenericAction addedAction = null;
+        protected GenericAction addedActionArgumentChange = null;
+        public abstract object Value { set; }
+
         public void SetParameters(object[] args) {
             Debug.Log("Change Parameters!");
 
             this.args = args;
 
             if(ChangeArguments != null) ChangeArguments();
+
+            // 
         }
 
         public void AddParameter(string name) {
@@ -70,6 +76,29 @@ namespace GUI {
         }
 
         public UnityEngine.GameObject GameObject { set; get; }
+        
+        protected void LinkArgNameToValue(string argName, string propName) {
+
+            System.Action<object[]> action = (object[] o) => {
+                IEmitter arg = Root.GetArgument(argName);
+                if (GetPropValue(arg, propName) == null ) {
+                    return;
+                }
+                object val = GetPropValue(arg, propName).ToString();
+                Debug.Log(String.Format("Argument object {0} has value {1}", propName, val.ToString()));
+                Value = GetPropValue(arg, propName).ToString();
+            };
+            Root.ChangeArguments += () => {
+                // Register the "Value update"-Lambda with the Root element's argument with this name.
+                // Deregister old lambda from the element.
+                // TODO: if argument changes, we should deregister the addedAction.
+                Root.GetArgument(argName).RemoveAction("On" + propName + "Changed", addedAction);
+                addedAction = Root.GetArgument(argName).AddAction("On" + propName + "Changed", action);
+
+                action(new object[] { });
+            };
+
+        }
 
         public void SetParent(IWidget parent) {
             this.parent = parent;

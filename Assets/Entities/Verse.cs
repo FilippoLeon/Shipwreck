@@ -10,6 +10,14 @@ public class Verse : Entity<Verse> {
     public Registry registry;
     public static Verse Instance = null;
 
+    public class Selection {
+        public Coordinate coordinate { set; get; }
+        public int index { set; get; }
+        public IEmitter selection { set; get; }
+    }
+
+    public Selection selection;
+
     public string Name { get { return "TheVerse"; } }
     
     public enum VerseMode {
@@ -33,6 +41,30 @@ public class Verse : Entity<Verse> {
         }
 
         registry = new Registry();
+    }
+
+    List<Ship> ships = new List<Ship>();
+
+    public void AddShip(Ship ship) {
+        ships.Add(ship);
+    }
+
+    public void Select(Coordinate where) {
+        List<Part> listOfParts = ships[0].PartAt(where);
+        if( listOfParts == null || listOfParts.Count == 0 ) {
+            return;
+        }
+        if( selection == null || selection.coordinate != where ) {
+            selection = new Selection { coordinate = where, index = 0, selection = listOfParts[0] };
+            Debug.Log(String.Format("Selecting new coordinate {0}.", where));
+        } else if( selection.coordinate == where ) {
+            selection.index = (selection.index + 1) % listOfParts.Count;
+            selection.selection = listOfParts[selection.index];
+            Debug.Log(String.Format("Selecting same coordinate {0}, indesx = {1}", where, selection.index));
+        }
+        if( selection.selection != null ) {
+            GUIController.childs["part_view"].SetParameters(new object[] { selection.selection });
+        }
     }
 
     public override Verse Clone() {
