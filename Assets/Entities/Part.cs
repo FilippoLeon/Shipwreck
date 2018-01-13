@@ -216,7 +216,7 @@ public partial class Part : Entity<Part> {
     }
 
     int i = 0;
-    public void Update() {
+    public override void Update() {
         SetParameter("direction", ((i++ + 1) % 4).ToString());
     }
 }

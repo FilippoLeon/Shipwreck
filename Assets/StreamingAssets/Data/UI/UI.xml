@@ -35,8 +35,8 @@
 	</Panel>
 	
 	<Panel id="part_view" layout="vertical" 
-	anchorMin="0.8,0" anchorMax="1,1" 
-	content="preferredFit,minFit" padding="2,2,2,2">
+			anchorMin="0.8,0" anchorMax="1,1" 
+			content="preferredFit,minFit" padding="2,2,2,2">
 		<Argument>@part</Argument>
 		<Label alignment="MiddleCenter" minSize="-1,20">
 			<Text>Part Viewer</Text>
@@ -76,6 +76,14 @@
 		</Panel>
 	</Panel>
 	
+	
+	<Panel id="player_panel" layout="horizontal" anchorMin="0,0.9" anchorMax="1,1" padding="4,2,2,2">
+		<Argument>@player</Argument>
+		<Label>
+			<Value argument="player">Funds</Value>
+			<Text type="formatted" argument="player">{0} $</Text>
+		</Label>
+	</Panel>
 	
 	<Panel id="creative_panel" layout="horizontal" anchorMin="0,0" anchorMax="1,0.1" padding="2,2,2,2">
 		<Action event="OnCreate" type="script">buildBuildingPlacementPanel</Action>

@@ -10,6 +10,9 @@ public class Verse : Entity<Verse> {
     public Registry registry;
     public static Verse Instance = null;
 
+    List<Ship> ships = new List<Ship>();
+    List<Player> players = new List<Player>();
+
     public class Selection {
         public Coordinate coordinate { set; get; }
         public int index { set; get; }
@@ -33,6 +36,12 @@ public class Verse : Entity<Verse> {
         modeArgs = args;
     }
 
+    public void SpawnEntity(ConcreteEntity entity, Coordinate position) {
+        // new and return new object (from prototype? nope, must clone and blablas
+        // Emit 
+        throw new NotImplementedException();
+    }
+
     public Verse() {
         if(Instance == null ) {
             Instance = this;
@@ -43,7 +52,9 @@ public class Verse : Entity<Verse> {
         registry = new Registry();
     }
 
-    List<Ship> ships = new List<Ship>();
+    public void AddPlayer(Player player) {
+        players.Add(player);
+    }
 
     public void AddShip(Ship ship) {
         ships.Add(ship);
@@ -69,5 +80,13 @@ public class Verse : Entity<Verse> {
 
     public override Verse Clone() {
         throw new NotImplementedException();
+    }
+    public override void Update() {
+        foreach(Player p in players) {
+            p.Update();
+        }
+        foreach(Ship s in ships) {
+            s.Update();
+        }
     }
 }

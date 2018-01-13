@@ -135,7 +135,7 @@ public class Ship : Entity<Ship> {
         throw new System.NotImplementedException();
     }
 
-    public void Update() {
+    public override void Update() {
         foreach(List<Part> pl in parts.Values) {
             foreach(Part p in pl) {
                 p.Update();

@@ -15,7 +15,8 @@ namespace GUI {
         GenericAction textModifier = null;
 
         enum TextType {
-            Dynamic, Static
+            Dynamic, Static,
+            Formatted
         }
 
         string content;
@@ -57,10 +58,12 @@ namespace GUI {
         public static Label Create(string id) {
             return new Label(id);
         }
-        
+
         public override void SetValue(object value, int index) {
             values[index] = value;
-            if ( textModifier == null ) {
+            if ( textType == TextType.Formatted ) {
+                textComponent.text = String.Format(content, values.Values.ToArray());
+            } else if ( textModifier == null ) {
                 textComponent.text = values[0].ToString();
             } else {
                 try {
@@ -86,6 +89,10 @@ namespace GUI {
                         case "Text":
                             string tType = reader.GetAttribute("type");
                             switch(tType) {
+                                case "formatted":
+                                    label.textType = TextType.Formatted;
+                                    label.Text = reader.ReadElementContentAsString();
+                                    break;
                                 case "dynamic":
                                     label.textType = TextType.Dynamic;
 

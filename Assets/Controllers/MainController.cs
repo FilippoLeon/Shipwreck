@@ -9,6 +9,8 @@ public class MainController : MonoBehaviour {
     ScriptLoader scriptLoader;
     public Verse Verse { set; get; }
 
+    ShipController shipController;
+
     // Use this for initialization
     void Start () {
         string pathXml = Path.Combine(Application.streamingAssetsPath, "Data/Prototypes/Parts.xml");
@@ -22,12 +24,12 @@ public class MainController : MonoBehaviour {
         Verse.registry.partRegistry.ReadPrototypes(pathXml);
 
         gameObject.AddComponent<GUIController>();
-        gameObject.AddComponent<ShipController>();
+        ShipController shipController = gameObject.AddComponent<ShipController>();
         gameObject.AddComponent<InputController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+        Verse.Update();
 	}
 }

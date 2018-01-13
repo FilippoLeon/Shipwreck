@@ -109,4 +109,6 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IXmlSerializable wh
             }
         }
     }
+
+    public abstract void Update();
 }
