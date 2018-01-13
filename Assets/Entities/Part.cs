@@ -121,9 +121,11 @@ public partial class Part : Entity<Part> {
                 break;
             case PartType.Addon:
                 List<Part> parts = ship.PartAt(position);
-                foreach(Part p in parts) {
-                    if(p.partType == PartType.Hull) {
-                        return p.IsAddonCompatible(this);
+                if (parts != null) {
+                    foreach (Part p in parts) {
+                        if (p.partType == PartType.Hull) {
+                            return p.IsAddonCompatible(this);
+                        }
                     }
                 }
                 return false;
@@ -211,5 +213,10 @@ public partial class Part : Entity<Part> {
 
     public override Part Clone() {
         return new Part(this);
+    }
+
+    int i = 0;
+    public void Update() {
+        SetParameter("direction", ((i++ + 1) % 4).ToString());
     }
 }

@@ -153,7 +153,7 @@ public class SpriteLoader {
                     Vector2 pos;
                     if (reader.GetAttribute("start") != null) {
                         string[] start = reader.GetAttribute("start").Split(',');
-                        pos = new Vector2(Convert.ToSingle(start[0]) * multiplierX, Convert.ToSingle(start[1]) * multiplierY);
+                        pos = new Vector2((int) (Convert.ToSingle(start[0]) * multiplierX), (int) (Convert.ToSingle(start[1]) * multiplierY));
                     } else {
                         pos = new Vector2(0, 0);
                     }

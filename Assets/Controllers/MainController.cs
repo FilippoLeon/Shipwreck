@@ -17,9 +17,10 @@ public class MainController : MonoBehaviour {
 
         Verse = new Verse();
 
+        gameObject.AddComponent<SpriteController>();
+
         Verse.registry.partRegistry.ReadPrototypes(pathXml);
 
-        gameObject.AddComponent<SpriteController>();
         gameObject.AddComponent<GUIController>();
         gameObject.AddComponent<ShipController>();
         gameObject.AddComponent<InputController>();

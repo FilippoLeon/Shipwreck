@@ -50,9 +50,33 @@
 			<Label><Text type="dynamic" argument="part">Health</Text></Label>
 			<Label><Text>Energy Drain</Text></Label>
 			<Label><Text type="dynamic" argument="part">energy_drain</Text></Label>
-
+			<Label><Text>Level 0</Text></Label>
+			<Panel id="upgrade" layout="horizontal" background="none" padding="2,2,2,2">
+				<Button type="simple">
+					<Value argument="part">Health</Value>
+					<Sprite category="UI">minus</Sprite>
+					<Alt>Reduce</Alt>
+					<Action event="OnClick">
+						function (verse)
+							print(verse);
+						end
+					</Action> 
+				</Button>
+				<Label preferredSize="100,0"><Text>Label</Text></Label>
+				<Button type="simple">
+					<Sprite category="UI">plus</Sprite>
+					<Alt>Increase</Alt>
+					<Action event="OnClick">
+						function (verse)
+							print("plus");
+						end
+					</Action> 
+				</Button>
+			</Panel>
 		</Panel>
 	</Panel>
+	
+	
 	<Panel id="creative_panel" layout="horizontal" anchorMin="0,0" anchorMax="1,0.1" padding="2,2,2,2">
 		<Action event="OnCreate" type="script">buildBuildingPlacementPanel</Action>
 	</Panel>

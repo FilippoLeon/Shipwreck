@@ -134,4 +134,12 @@ public class Ship : Entity<Ship> {
     public override Ship Clone() {
         throw new System.NotImplementedException();
     }
+
+    public void Update() {
+        foreach(List<Part> pl in parts.Values) {
+            foreach(Part p in pl) {
+                p.Update();
+            }
+        }
+    }
 }

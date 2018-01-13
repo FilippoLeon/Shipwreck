@@ -74,6 +74,7 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IXmlSerializable wh
     }
 
     public override void SetParameter(string name, object value) {
+        parameters[name] = value;
         Emit("On" + name + "Changed");
     }
 

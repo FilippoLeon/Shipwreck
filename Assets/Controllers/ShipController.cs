@@ -23,4 +23,8 @@ public class ShipController : MonoBehaviour {
         Ship.Name = "NewName";
         Ship.Health = 55;
     }
+
+    void Update() {
+        Ship.Update();
+    }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Xml;
 using System;
+using System.Linq;
 
 namespace GUI {
     [MoonSharpUserData]
@@ -27,10 +28,7 @@ namespace GUI {
                 textComponent.color = value;
             }
         }
-
-        public override void SetValue(object o, int idx) {
-            throw new NotImplementedException();
-        }
+        
 
         public Button() {
             backgroundComponent = GameObject.AddComponent<Image>();
@@ -59,15 +57,18 @@ namespace GUI {
             }
         }
 
-        public override GenericAction AddAction(string type, GenericAction action) {
+        public override GenericAction OnActionAdded( string type, GenericAction action ) {
             switch( type ) {
                 case "OnClick":
                     buttonComponent.onClick.AddListener(
-                        () => action.Call(this, new object[] { })
+                        () => {
+                            //Debug.Log(values);
+                            action.Call(this, values.Values.ToArray());
+                            }
                         );
                     break;
             }
-            return base.AddAction(type, action);
+            return base.OnActionAdded(type, action);
         }
         
         public void OnClick(Closure callback) {
@@ -99,11 +100,10 @@ namespace GUI {
                         case "Sprite":
                             Sprite sprite = SpriteController.spriteLoader.Load(new SpriteInfo(reader));
                             button.backgroundComponent.sprite = sprite;
+                            button.SetNonExpanding();
                             break;
                         default:
-                            XmlReader subReader = reader.ReadSubtree();
-                            GUIController.ReadElement(subReader, button);
-                            subReader.Close();
+                            button.ReadSubElement(reader);
                             break;
                     }
                 }
@@ -119,6 +119,7 @@ namespace GUI {
                     button.backgroundComponent.preserveAspect = true;
                     break;
             }
+            button.FinalizeRead();
 
             return button;
         }

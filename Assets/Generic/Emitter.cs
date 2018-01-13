@@ -89,25 +89,29 @@ abstract public class Emitter<T> : IXmlSerializable, IEmitter<T> where T : class
         }
     }
 
-    public GenericAction AddAction(string name, string type, string content) {
-        if (name == null) {
+    public GenericAction AddAction(string eventName, string type, string content) {
+        if (eventName == null) {
             Debug.LogWarning(String.Format("Try to add empty Action with no-name to list, content ={0}.", content));
             return null;
         }
-        GenericAction action = new GenericAction(this, name, type, content);
-        EnsureEventExists(name);
-        actions[name].Add(action);
+        GenericAction action = new GenericAction(this, eventName, type, content);
+        EnsureEventExists(eventName);
+
+        OnActionAdded(eventName, action);
+        actions[eventName].Add(action);
         return action;
     }
 
     public virtual GenericAction AddAction(string eventName, System.Action<object[]> act) {
         GenericAction action = new GenericAction(act);
         EnsureEventExists(eventName);
+
+        OnActionAdded(eventName, action);
         actions[eventName].Add(action);
         return action;
     }
 
-    public virtual GenericAction AddAction(string type, GenericAction action) {
+    public virtual GenericAction OnActionAdded( string eventName, GenericAction action) {
         return null;
     
     }
@@ -115,6 +119,7 @@ abstract public class Emitter<T> : IXmlSerializable, IEmitter<T> where T : class
     public virtual GenericAction AddAction(string eventName, MoonSharp.Interpreter.Closure closure) {
         GenericAction action = new GenericAction(closure);
         EnsureEventExists(eventName);
+        OnActionAdded(eventName, action);
         actions[eventName].Add(action);
         return action;
     }

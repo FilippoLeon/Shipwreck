@@ -164,6 +164,12 @@ namespace GUI {
                 panel.SetPadding(padding);
             }
 
+            if( reader.GetAttribute("background") != null ) {
+                if (reader.GetAttribute("background") == "none") {
+                    GameObject.Destroy(panel.background);
+                }
+            }
+
             while (reader.Read()) {
                 if (reader.NodeType == XmlNodeType.Element) {
                     XmlReader subReader = reader.ReadSubtree();

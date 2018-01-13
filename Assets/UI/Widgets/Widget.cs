@@ -34,7 +34,10 @@ namespace GUI {
         protected Dictionary<int, GenericAction> addedAction = new Dictionary<int, GenericAction>();
 
         protected SortedDictionary<int, object> values = new SortedDictionary<int, object >();
-        public abstract void SetValue(object value, int index);
+
+        public virtual void SetValue(object value, int index) {
+            values[index] = value;
+        }
 
         public void SetParameters(object[] args) {
             Debug.Log("Change Parameters!");
@@ -162,6 +165,9 @@ namespace GUI {
                     string propName = reader.ReadElementContentAsString();
                     int idx = valueIndex++;
                     LinkArgNameToValue(argName, propName, idx);
+                    break;
+                default:
+                    base.ReadElement(reader);
                     break;
             }
         }

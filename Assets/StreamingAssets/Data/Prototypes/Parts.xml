@@ -12,16 +12,16 @@
 		<Parameter name="health" type="int">100</Parameter>
 		<Parameter name="energy_drain" type="int">1</Parameter>
 		<Parameter name="energy_storage" type="int">1000</Parameter>
-		<Parameter name="direction" type="string"></Parameter>
 		<Icon>
 			<Sprite category="Parts">basic_hull</Sprite>
 		</Icon>
 	</Part>
 	<Part id="turret" type="addon">
+		<Parameter name="direction" type="string">0</Parameter>
 		<Icon>
 			<Sprite category="Parts" type="function" id="turret">
 				function ( part )
-					return "turret" .. part.GetProperty("direction")
+					return "turret_" .. part.GetParameter("direction")
 				end
 			</Sprite>
 		</Icon>

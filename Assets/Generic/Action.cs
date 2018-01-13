@@ -11,6 +11,10 @@ public class GenericAction {
     Closure closure;
     System.Action<object[]> sysAction;
 
+    public string Name {
+            get {return name;}
+    }
+
     public enum ActionType { FunctionName, Inline, None, Closure, System };
 
     public GenericAction(IEmitter emitter, string eventName, string type, string content) {
@@ -50,6 +54,7 @@ public class GenericAction {
             case ActionType.FunctionName:
                 return LUA.ScriptLoader.Call(emitter.Category, content, args);
             case ActionType.Inline:
+            default:
                 return LUA.ScriptLoader.Call(emitter.Category, name, args);
             case ActionType.Closure:
                 try {
@@ -63,8 +68,6 @@ public class GenericAction {
                 }
             case ActionType.System:
                 sysAction(args);
-                return null;
-            default:
                 return null;
         }
     }
