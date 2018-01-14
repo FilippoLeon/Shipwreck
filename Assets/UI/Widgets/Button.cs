@@ -33,7 +33,7 @@ namespace GUI {
         public Button() {
             backgroundComponent = GameObject.AddComponent<Image>();
             backgroundComponent.type = Image.Type.Sliced;
-            backgroundComponent.sprite = SpriteController.spriteLoader.tryLoadSprite("UI", "button_background");
+            backgroundComponent.sprite = SpriteController.spriteLoader.tryLoadSprite("UI", "button_background").sprite;
             backgroundComponent.SetNativeSize();
 
             buttonComponent = GameObject.AddComponent<UnityEngine.UI.Button>();
@@ -98,7 +98,7 @@ namespace GUI {
                             button.Text = reader.ReadElementContentAsString();
                             break;
                         case "Sprite":
-                            Sprite sprite = SpriteController.spriteLoader.Load(new SpriteInfo(reader));
+                            Sprite sprite = SpriteController.spriteLoader.Load(new SpriteInfo(reader)).sprite;
                             button.backgroundComponent.sprite = sprite;
                             button.SetNonExpanding();
                             break;

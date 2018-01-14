@@ -19,17 +19,27 @@ public class MainController : MonoBehaviour {
 
         Verse = new Verse();
 
-        gameObject.AddComponent<SpriteController>();
+        SpriteController spriteController = gameObject.AddComponent<SpriteController>();
+        spriteController.Load();
 
         Verse.registry.partRegistry.ReadPrototypes(pathXml);
 
         gameObject.AddComponent<GUIController>();
         ShipController shipController = gameObject.AddComponent<ShipController>();
         gameObject.AddComponent<InputController>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+
+        VerseComponent verseComponent = gameObject.AddComponent<VerseComponent>();
+        Verse.register(verseComponent);
+
+        GameObject overlay = new GameObject("Overlay");
+        OverlayComponent overlayComponent = overlay.AddComponent<OverlayComponent>();
+        Verse.register(overlayComponent);
+
+        Verse.Start();
+    }
+
+    // Update is called once per frame
+    void Update () {
         Verse.Update();
 	}
 }

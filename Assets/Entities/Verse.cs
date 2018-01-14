@@ -10,7 +10,7 @@ public class Verse : Entity<Verse> {
     public Registry registry;
     public static Verse Instance = null;
 
-    List<Ship> ships = new List<Ship>();
+    public List<Ship> ships = new List<Ship>();
     List<Player> players = new List<Player>();
 
     public class Selection {
@@ -37,9 +37,9 @@ public class Verse : Entity<Verse> {
     }
 
     public void SpawnEntity(ConcreteEntity entity, Coordinate position) {
-        // new and return new object (from prototype? nope, must clone and blablas
-        // Emit 
-        throw new NotImplementedException();
+        Emit("SpawnEntity", new object[] { entity });
+        entity.Position = position;
+        entity.Spawn(position);
     }
 
     public Verse() {
@@ -50,6 +50,20 @@ public class Verse : Entity<Verse> {
         }
 
         registry = new Registry();
+    }
+
+    ConcreteEntity selectionEntity;
+
+    public void Start() {
+        selectionEntity = new ConcreteEntity();
+        selectionEntity.spriteInfo = new SpriteInfo();
+        selectionEntity.spriteInfo.id = "selector_1";
+        selectionEntity.spriteInfo.category = "UI";
+
+        SpawnEntity(selectionEntity, new Coordinate(0, 0));
+        selectionEntity.Active = false;
+
+        Emit("VerseCreated", new object[] { });
     }
 
     public void AddPlayer(Player player) {
@@ -75,6 +89,11 @@ public class Verse : Entity<Verse> {
         }
         if( selection.selection != null ) {
             GUIController.childs["part_view"].SetParameters(new object[] { selection.selection });
+
+            selectionEntity.Active = true;
+            selectionEntity.Position = selection.coordinate;
+        } else {
+            selectionEntity.Active = false;
         }
     }
 
@@ -88,5 +107,9 @@ public class Verse : Entity<Verse> {
         foreach(Ship s in ships) {
             s.Update();
         }
+        
+        //if (Input.GetMouseButtonDown(2)) {
+        //    selectionEntity.Active = !selectionEntity.Active;
+        //}
     }
 }

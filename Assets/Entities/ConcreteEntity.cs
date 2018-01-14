@@ -10,9 +10,30 @@ abstract public class ConcreteEntity<T> : Entity<T> where T : class {
 
     public SpriteInfo spriteInfo;
 
-    public Coordinate position;
+    private Coordinate position;
     public Coordinate Position {
         get { return position; }
+        set {
+            position = value;
+            Emit("SetPosition", new object[] { position });
+        }
+    }
+
+    private bool active;
+    public bool Active {
+        get { return active; }
+        set {
+            active = value;
+            Emit("SetActive", new object[] { active });
+        }
+    }
+    
+    public bool Spawn(Coordinate position) {
+        this.Position = position;
+
+        Emit("SpawnAt", new object[] { position });
+
+        return true;
     }
 
     public override T Clone() {

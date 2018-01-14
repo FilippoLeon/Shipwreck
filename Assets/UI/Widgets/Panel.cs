@@ -28,7 +28,7 @@ namespace GUI {
             GameObject.AddComponent<CanvasRenderer>();
             background = GameObject.AddComponent<Image>();
             background.type = Image.Type.Sliced;
-            background.sprite = SpriteController.spriteLoader.tryLoadSprite("UI", "panel_background");
+            background.sprite = SpriteController.spriteLoader.tryLoadSprite("UI", "panel_background").sprite;
 
             SetAnchor(new Vector2(0, 0), new Vector2(1, 0.1f));
             SetSize();

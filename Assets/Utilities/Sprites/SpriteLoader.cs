@@ -15,11 +15,17 @@ public class SpriteLoader {
 
     static public int multiplierX, multiplierY;
 
-    public Texture2D placeholderTexture;
-    public Sprite placeHolder;
+    public void LoadIntoSpriteRenderer(SpriteRenderer sr, SpriteInfo spriteInfo, IEmitter emitter) {
+        SpriteLoader.SpriteContainer sd = SpriteController.spriteLoader.Load(spriteInfo, emitter);
+        sr.sprite = sd.sprite;
+        if (sd.layer != null) sr.sortingLayerName = sd.layer;
+    }
 
-    Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
-    Dictionary<string, Dictionary<string, Sprite>> categories = new Dictionary<string, Dictionary<string, Sprite>>();
+    public Texture2D placeholderTexture;
+    public SpriteContainer placeHolder;
+
+    Dictionary<string, SpriteContainer> sprites = new Dictionary<string, SpriteContainer>();
+    Dictionary<string, Dictionary<string, SpriteContainer>> categories = new Dictionary<string, Dictionary<string, SpriteContainer>>();
 
     public class SpriteData {
         public string name;
@@ -33,6 +39,11 @@ public class SpriteLoader {
             this.pivot = pivot;
         }
 
+    }
+
+    public class SpriteContainer {
+        public Sprite sprite;
+        public string layer;
     }
 
     public SpriteLoader(string spritesFolder) {
@@ -63,12 +74,12 @@ public class SpriteLoader {
     /// <param name="category"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public Sprite tryLoadSprite(string category, string id) {
+    public SpriteContainer tryLoadSprite(string category, string id) {
         if (categories.ContainsKey(category) && categories[category].ContainsKey(id))
             return categories[category][id];
         return placeHolder;
     }
-    public Sprite GetSprite(string name) {
+    public SpriteContainer GetSprite(string name) {
         if (name != null && sprites.ContainsKey(name) && sprites[name] != null) {
             return sprites[name];
         } else {
@@ -76,7 +87,7 @@ public class SpriteLoader {
         }
     }
 
-    internal Sprite Load(SpriteInfo spriteInfo, IEmitter obj = null) {
+    internal SpriteContainer Load(SpriteInfo spriteInfo, IEmitter obj = null) {
         if( spriteInfo == null ) {
             Debug.LogError("null SpriteInfo.");
             return placeHolder;
@@ -112,7 +123,7 @@ public class SpriteLoader {
         } else {
             SpriteData data = new SpriteData(new Rect(Vector2.zero, defaultSize), defaultPivot);
             data.name = fileName;
-            sprites[data.name] = Sprite.Create(tex, data.rect, data.pivot);
+            sprites[data.name] = new SpriteContainer{ sprite = Sprite.Create(tex, data.rect, data.pivot), layer = null};
             return;
         }
     }
@@ -143,6 +154,8 @@ public class SpriteLoader {
         if (reader.GetAttribute("defaultPpu") != null) {
             defaultPpu = Convert.ToInt32(reader.GetAttribute("defaultPpu"));
         }
+
+        string defaultLayer = reader.GetAttribute("defaultLayer");
 
         int count = 0;
         while (reader.Read()) {
@@ -184,12 +197,19 @@ public class SpriteLoader {
                     string cat = reader.GetAttribute("category");
                     string name = reader.ReadInnerXml();
 
+                    string layer;
+                    if ( reader.GetAttribute("layer") != null ) {
+                        layer = reader.GetAttribute("layer");
+                    } else {
+                        layer = defaultLayer;
+                    }
+
                     Debug.Assert(tex != null);
-                    sprites[name] = Sprite.Create(tex, new Rect(pos, dS1), dP1, ppu, 0, SpriteMeshType.FullRect, border);
+                    sprites[name] = new SpriteContainer { sprite = Sprite.Create(tex, new Rect(pos, dS1), dP1, ppu, 0, SpriteMeshType.FullRect, border), layer = layer };
                     count++;
                     if (cat != null) {
                         if (!categories.ContainsKey(cat)) {
-                            categories[cat] = new Dictionary<string, Sprite>();
+                            categories[cat] = new Dictionary<string, SpriteContainer>();
                         }
                         categories[cat][name] = sprites[name];
                     }
@@ -229,9 +249,11 @@ public class SpriteLoader {
 
         placeholderTexture.Apply();
 
-        placeHolder = Sprite.Create(placeholderTexture,
+        placeHolder = new SpriteContainer {
+            sprite = Sprite.Create(placeholderTexture,
             new Rect(0f, 0f, sizeX, sizeY),
             new Vector2(0.5f, 0.5f), ppu
-        );
+        ), layer = null
+        };
     }
 }

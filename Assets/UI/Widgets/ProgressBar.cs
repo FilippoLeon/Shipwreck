@@ -19,7 +19,7 @@ namespace GUI {
             GameObject imageGameObject = new GameObject("image", new Type[] { typeof(Image) });
             imageGameObject.transform.SetParent(GameObject.transform);
             barComponent = GameObject.GetComponentInChildren<Image>();
-            barComponent.sprite = SpriteController.spriteLoader.tryLoadSprite("UI", "button_background");
+            barComponent.sprite = SpriteController.spriteLoader.tryLoadSprite("UI", "button_background").sprite;
             imageGameObject.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0.5f);
             imageGameObject.GetComponent<RectTransform>().anchorMax = new Vector2(1, 0.5f);
 
@@ -97,7 +97,7 @@ namespace GUI {
                 if (reader.NodeType == XmlNodeType.Element) {
                     switch (reader.Name) {
                         case "Sprite":
-                            Sprite sprite = SpriteController.spriteLoader.Load(new SpriteInfo(reader));
+                            Sprite sprite = SpriteController.spriteLoader.Load(new SpriteInfo(reader)).sprite;
                             progressBar.barComponent.sprite = sprite;
                             break;
                         case "Value":

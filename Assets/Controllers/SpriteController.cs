@@ -6,7 +6,7 @@ using UnityEngine;
 public class SpriteController : MonoBehaviour {
     public static SpriteLoader spriteLoader;
     
-	void Start () {
+    public void Load() { 
         if (spriteLoader != null) {
             Debug.LogError("Only one instance of 'SpriteController' is allowed.");
         } else {

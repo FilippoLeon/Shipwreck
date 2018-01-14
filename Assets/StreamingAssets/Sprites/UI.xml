@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpriteSheet defaultSize="32,32" defaultPivot="0.5,0.5" defaultPpu="64">
-  <Sprite start="0,0" category="UI">selector</Sprite>
+<SpriteSheet defaultSize="32,32" defaultPivot="0.5,0.5" defaultPpu="64" defaultLayer="UI">
+  <Sprite start="0,0" category="UI" ppu="32">selector</Sprite>
   <Sprite start="1,0" category="UI" border="2,2,2,2">panel_background</Sprite>
   <Sprite start="2,0" category="UI" border="5,5,5,5">button_background</Sprite>
   <Sprite start="0,1" category="UI">pause</Sprite>
   <Sprite start="1,1" category="UI">speed0</Sprite>
   <Sprite start="2,1" category="UI">speed1</Sprite>
   <Sprite start="3,1" category="UI">speed2</Sprite>
+  <Sprite start="0,2" category="UI" ppu="32">selector_0</Sprite>
+  <Sprite start="1,2" category="UI" ppu="32">selector_1</Sprite>
+  <Sprite start="2,2" category="UI" ppu="32">selector_2</Sprite>
   <Sprite start="0,15.5" category="UI" size="16,16">close</Sprite>
   <Sprite start="0.5,15.5" category="UI" size="16,16">plus</Sprite>
   <Sprite start="0,15" category="UI" size="16,16">minus</Sprite>
