@@ -8,21 +8,26 @@ public abstract class MeshComponent : ObserverBehaviour<Verse> {
     protected int tileSizeY = 32;
     protected Texture2D paletteTexture;
 
-    protected int sizeX;
-    protected int sizeY;
+    protected int sizeX = 30;
+    protected int sizeY = 30;
+    protected int offsetX = 15;
+    protected int offsetY = 15;
 
     protected Color[] palette;
     protected MeshRenderer meshRenderer;
     protected Mesh mesh;
 
     protected float zAxis = 0f;
-    
+
+    protected GameObject overlay;
+
     public void Awake() {
-        gameObject.AddComponent<MeshFilter>();
-        meshRenderer = gameObject.AddComponent<MeshRenderer>();
+        overlay = new GameObject("mesh");
+        overlay.AddComponent<MeshFilter>();
+        meshRenderer = overlay.AddComponent<MeshRenderer>();
 
         mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
+        overlay.GetComponent<MeshFilter>().mesh = mesh;
     }
 
     public void SetResolution(int resX, int resY) {
@@ -33,13 +38,11 @@ public abstract class MeshComponent : ObserverBehaviour<Verse> {
     protected Color[] GetPalettePixels(int index) {
         return paletteTexture.GetPixels(0, index * tileSizeY, tileSizeX, tileSizeY);
     }
+   
 
     public virtual void CreateMesh() {
-        sizeX = 12;
-        sizeY = 12;
-
-        float deltaX = 0.5f;
-        float deltaY = 0.5f;
+        float deltaX = offsetX + 0.5f;
+        float deltaY = offsetY + 0.5f;
 
         Vector3[] vertices = new Vector3[sizeX * sizeY];
         int I = 0;

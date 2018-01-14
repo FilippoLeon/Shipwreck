@@ -9,6 +9,8 @@ using MoonSharp.Interpreter;
 public partial class Part : Entity<Part> {   
     public bool IsRoot { set; get; }
 
+    public Part Hull { set; get; }
+
     public enum PartType {
         Hull, Addon
     }
@@ -80,6 +82,15 @@ public partial class Part : Entity<Part> {
 
     public string Name {
         get { return Id; }
+    }
+
+    public List<Part> Neighbours() {
+        List<Part> ret = new List<Part>(4);
+        ret.Add(Ship.HullAt(position + Coordinate.Up));
+        ret.Add(Ship.HullAt(position + Coordinate.Left));
+        ret.Add(Ship.HullAt(position + Coordinate.Down));
+        ret.Add(Ship.HullAt(position + Coordinate.Right));
+        return ret;
     }
 
     public bool CanAttachTo(Ship ship, Coordinate position) {
@@ -218,5 +229,7 @@ public partial class Part : Entity<Part> {
     int i = 0;
     public override void Update() {
         SetParameter("direction", ((i++ + 1) % 4).ToString());
+
+        Emit("OnUpdate");
     }
 }

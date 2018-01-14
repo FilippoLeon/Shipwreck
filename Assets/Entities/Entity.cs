@@ -8,6 +8,7 @@ using UnityEngine;
 [MoonSharpUserData]
 abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IXmlSerializable where T: class {
 
+
     protected Dictionary<string, object> parameters = new Dictionary<string, object>();
 
     public override string Category {
@@ -78,6 +79,11 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IXmlSerializable wh
         Emit("On" + name + "Changed");
     }
 
+    public void SetParameterAsInt(string name, int value) {
+        parameters[name] = value;
+        Emit("On" + name + "Changed");
+    }
+
     public override object GetParameter(string name) {
         if ( parameters.ContainsKey(name)) {
             return parameters[name];
@@ -108,6 +114,8 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IXmlSerializable wh
                 parameters[o.Key] = (float) o.Value;
             }
         }
+
+        actions = new Dictionary<string, List<GenericAction>>(other.actions);
     }
 
     public abstract void Update();

@@ -56,7 +56,7 @@ abstract public class Emitter<T> : IXmlSerializable, IEmitter<T> where T : class
 
         if (actions.ContainsKey(signal)) {
             foreach (GenericAction act in actions[signal]) {
-                act.Call(this, null);
+                act.Call(this, new object[] { this });
             }
         }
     }

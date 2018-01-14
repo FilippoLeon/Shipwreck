@@ -10,6 +10,7 @@ public class MainController : MonoBehaviour {
     public Verse Verse { set; get; }
 
     ShipController shipController;
+    OverlayComponent overlayComponent;
 
     // Use this for initialization
     void Start () {
@@ -32,10 +33,12 @@ public class MainController : MonoBehaviour {
         Verse.register(verseComponent);
 
         GameObject overlay = new GameObject("Overlay");
-        OverlayComponent overlayComponent = overlay.AddComponent<OverlayComponent>();
+        overlayComponent = overlay.AddComponent<OverlayComponent>();
         Verse.register(overlayComponent);
 
         Verse.Start();
+
+        Verse.SetMap("Health");
     }
 
     // Update is called once per frame

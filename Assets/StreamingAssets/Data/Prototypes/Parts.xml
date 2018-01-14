@@ -4,6 +4,10 @@
 		<Parameter name="health" type="int">100</Parameter>
 		<Parameter name="energy_drain" type="int">1</Parameter>
 		<Parameter name="energy_storage" type="int">1000</Parameter>
+		<Parameter name="min_pressure" type="int">0</Parameter>
+		<Parameter name="max_pressure" type="int">1000</Parameter>
+		<Parameter name="pressure" type="int">900</Parameter>
+		<Parameter name="temperature" type="int">293</Parameter>
 		<Icon>
 			<Sprite category="Parts">root</Sprite>
 		</Icon>
@@ -12,6 +16,10 @@
 		<Parameter name="health" type="int">100</Parameter>
 		<Parameter name="energy_drain" type="int">1</Parameter>
 		<Parameter name="energy_storage" type="int">1000</Parameter>
+		<Parameter name="min_pressure" type="int">0</Parameter>
+		<Parameter name="max_pressure" type="int">1000</Parameter>
+		<Parameter name="pressure" type="int">900</Parameter>
+		<Parameter name="temperature" type="int">293</Parameter>
 		<Icon>
 			<Sprite category="Parts">basic_hull</Sprite>
 		</Icon>
@@ -35,5 +43,20 @@
 		<Icon>
 			<Sprite category="Parts">shield_generator</Sprite>
 		</Icon>
+	</Part>
+	<Part id="pressurizer" type="addon">
+		<Icon>
+			<Sprite category="Parts">pressurizer</Sprite>
+		</Icon>
+		<Action event="OnUpdate">
+			function ( part ) 
+				M = part.Hull.GetParameter("max_pressure")
+				m = part.Hull.GetParameter("min_pressure")
+				val = part.Hull.GetParameter("pressure") + 5
+				print(part.Hull.Name .. part.Name .. val)
+				-- add safe cast in setparameter or cast to int
+				part.Hull.SetParameterAsInt("pressure", math.floor(math.min(math.max(m, val), M)))
+			end
+		</Action>
 	</Part>
 </Prototypes>

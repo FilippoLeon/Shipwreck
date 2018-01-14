@@ -13,22 +13,17 @@
 				<Value argument="ship">Health</Value>
 				<Text type="function">
 					function (Energy, Health)
-						print(Energy)
-						print(Health)
-						if Health == nil then
-							return Energy .. "erg"
-						end
-						return Energy .. "erg" .. Health
+						return Energy .. " erg"
 					end
 				</Text>
 			</Label>
-			<Label><Text>Energy2</Text></Label>
-			<Label><Text type="dynamic" argument="ship">Energy</Text></Label>
+			<Label><Text>Name</Text></Label>
+			<Label><Text type="dynamic" argument="ship">Name</Text></Label>
 			<Label><Text>Health</Text></Label>
 			<ProgressBar factor="1">
 				<Value argument="ship">Health</Value>
 				<Value argument="ship">MaxHealth</Value>
-				<Sprite>ASD</Sprite>
+				<Sprite>None</Sprite>
 				<Label type="fraction"/>
 			</ProgressBar>
 		</Panel>
@@ -50,6 +45,16 @@
 			<Label><Text type="dynamic" argument="part">Health</Text></Label>
 			<Label><Text>Energy Drain</Text></Label>
 			<Label><Text type="dynamic" argument="part">energy_drain</Text></Label>
+			<Label><Text>Pressure</Text></Label>
+			<Label>
+				<Value argument="part">pressure</Value>
+				<Text type="formatted" argument="player">{0} mBa</Text>
+			</Label>
+			<Label><Text>Temperature</Text></Label>
+			<Label>
+				<Value argument="part">temperature</Value>
+				<Text type="formatted" argument="player">{0} K</Text>
+			</Label>
 			<Label><Text>Level 0</Text></Label>
 			<Panel id="upgrade" layout="horizontal" background="none" padding="2,2,2,2">
 				<Button type="simple">
@@ -86,6 +91,9 @@
 	</Panel>
 	
 	<Panel id="creative_panel" layout="horizontal" anchorMin="0,0" anchorMax="1,0.1" padding="2,2,2,2">
-		<Action event="OnCreate" type="script">buildBuildingPlacementPanel</Action>
+		<Action event="OnCreate" type="script">buildCreativePlacementPanel</Action>
+	</Panel>
+	<Panel id="overlay_panel" layout="horizontal" anchorMin="0,0.1" anchorMax="1,0.2" padding="2,2,2,2">
+		<Action event="OnCreate" type="script">buildOverlayPanel</Action>
 	</Panel>
 </Canvas>

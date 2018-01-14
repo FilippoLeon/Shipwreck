@@ -13,6 +13,8 @@ public class Verse : Entity<Verse> {
     public List<Ship> ships = new List<Ship>();
     List<Player> players = new List<Player>();
 
+    public Dictionary<string, Func<Coordinate, int>> maps = new Dictionary<string, Func<Coordinate, int>>();
+
     public class Selection {
         public Coordinate coordinate { set; get; }
         public int index { set; get; }
@@ -55,6 +57,35 @@ public class Verse : Entity<Verse> {
     ConcreteEntity selectionEntity;
 
     public void Start() {
+        maps["Health"] = (Coordinate c) => {
+            int id = -1;
+            if (this.ships != null &&this.ships.Count != 0) {
+                Ship ship = this.ships[0];
+                if (ship != null) {
+                    Part part = ship.HullAt(c);
+                    if (part != null) {
+                        id = part.Health;
+                    }
+                }
+            }
+            return id;
+        };
+        maps["Pressure"] = (Coordinate c) => {
+            int id = -1;
+            if (this.ships != null && this.ships.Count != 0) {
+                Ship ship = this.ships[0];
+                if (ship != null) {
+                    Part part = ship.HullAt(c);
+                    if (part != null) {
+                        id = Mathf.FloorToInt(
+                            Convert.ToSingle(part.GetParameter("pressure")) / Convert.ToSingle(part.GetParameter("max_pressure")) * 255
+                            );
+                    }
+                }
+            }
+            return id;
+        };
+
         selectionEntity = new ConcreteEntity();
         selectionEntity.spriteInfo = new SpriteInfo();
         selectionEntity.spriteInfo.id = "selector_1";
@@ -100,6 +131,11 @@ public class Verse : Entity<Verse> {
     public override Verse Clone() {
         throw new NotImplementedException();
     }
+
+    public void SetMap(string name) {
+        Emit("SetMap", new object[] { name == null ? null : maps[name] });
+    }
+
     public override void Update() {
         foreach(Player p in players) {
             p.Update();

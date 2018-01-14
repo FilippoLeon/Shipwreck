@@ -10,6 +10,8 @@ public class Ship : Entity<Ship> {
     Dictionary<Coordinate, List<Part>> parts = new Dictionary<Coordinate, List<Part>>();
     public Part Root { get; set; }
 
+    Dictionary<Coordinate, Part> hulls = new Dictionary<Coordinate, Part>();
+
     public Verse verse;
 
     public Ship(Verse verse) {
@@ -89,6 +91,12 @@ public class Ship : Entity<Ship> {
         MaxHealth = h;
     }
 
+    public Part HullAt(Coordinate position) {
+        if (!hulls.ContainsKey(position)) {
+            return null;
+        }
+        return hulls[position];
+    }
 
     public List<Part> PartAt(Coordinate position) {
         if( !parts.ContainsKey(position) ) {
@@ -109,6 +117,11 @@ public class Ship : Entity<Ship> {
 
         if( part.IsRoot ) {
             Root = part;
+        }
+        if( part.partType == Part.PartType.Hull ) {
+            hulls[position] = part;
+        } else {
+            part.Hull = hulls[position];
         }
 
         if( !parts.ContainsKey(position) ) {
@@ -136,9 +149,51 @@ public class Ship : Entity<Ship> {
     }
 
     public override void Update() {
-        foreach(List<Part> pl in parts.Values) {
+
+        foreach (List<Part> pl in parts.Values) {
             foreach(Part p in pl) {
                 p.Update();
+            }
+        }
+        UpdateTemperature();
+        UpdatePressure();
+    }
+
+    public void UpdateTemperature() {
+        int rate = 4;
+
+        foreach (Part p in hulls.Values) {
+            foreach (Part n in p.Neighbours()) {
+                if (n == null) continue;
+                int temperature_p = (int)p.GetParameter("temperature");
+                int temperature_n = (int)n.GetParameter("temperature");
+
+                if (temperature_p > temperature_n) {
+                    int flow_n = Mathf.Min((temperature_p - temperature_n) / 2, rate);
+                    p.SetParameterAsInt("temperature", temperature_p - flow_n);
+                    n.SetParameterAsInt("temperature", temperature_n + flow_n);
+                }
+            }
+        }
+    }
+    public void UpdatePressure() {
+        int rate = 4;
+
+        foreach(Part p in hulls.Values) {
+            foreach(Part n in p.Neighbours()) {
+                if (n == null) continue;
+                int pressure_p = (int) p.GetParameter("pressure");
+                int pressure_n = (int) n.GetParameter("pressure");
+                int min_pressure_p = (int) p.GetParameter("min_pressure");
+                int max_pressure_n = (int) n.GetParameter("max_pressure");
+
+                if ( pressure_p > pressure_n) {
+                    int flow_n = Mathf.Min((pressure_p - pressure_n) / 2, rate);
+                    flow_n = Mathf.Min(flow_n, pressure_p - min_pressure_p);
+                    flow_n = Mathf.Min(flow_n, max_pressure_n - pressure_n);
+                    p.SetParameterAsInt("pressure", pressure_p - flow_n);
+                    n.SetParameterAsInt("pressure", pressure_n + flow_n);
+                }
             }
         }
     }
