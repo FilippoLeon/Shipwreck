@@ -7,36 +7,47 @@ public class GalaxyComponent : ObserverBehaviour<Galaxy> {
     public GameObject vert;
 
     public Material starPathMaterial;
-    
-    void Start() {
-        Delaunay del = new Delaunay();
+
+    Delaunay del;
+   
+
+    void Initialize() {
+        del = new Delaunay();
 
         Vector3[] starts = new Vector3[] {
-             new Vector3(-10, 5, 0),
-             new Vector3(0, -15, 0),
-             new Vector3(10, 5, 0),
+             new Vector3(-100, 100, 0),
+             new Vector3(0, -200, 0),
+             new Vector3(100, 100, 0),
         };
 
         foreach (Vector3 start in starts) {
             del.vertices.Add(new Vertex { coordinate = start });
         }
 
-        int Npoints = 25;
-        for (int i = 0; i < Npoints; ++i) {
-            float x = Random.Range(-5.0f, 5.0f);
-            float y = Random.Range(-5.0f, 5.0f);
-            
-            Vector3 pos = new Vector3(x, y, 0);
-
-            GameObject v = Instantiate(vert);
-            v.transform.SetParent(transform);
-            v.transform.localPosition = pos;
-            v.layer = (int) AppInfo.Layer.StarMap;
-
-            del.vertices.Add(new Vertex { coordinate = pos });
-        }
         vert.SetActive(false);
+    }
 
+    void AddSystem(Coordinate coord) {
+        Vector3 pos = new Vector3(coord.x, coord.y, 0);
+
+        GameObject v = Instantiate(vert);
+        v.transform.SetParent(transform);
+        v.transform.localPosition = pos;
+        v.layer = (int)AppInfo.Layer.StarMap;
+        v.SetActive(true);
+
+        del.vertices.Add(new Vertex { coordinate = pos });
+
+        del.vertices[0].coordinate.x = Mathf.Min(del.vertices[0].coordinate.x, -4 * Mathf.Abs(pos.x));
+        del.vertices[0].coordinate.y = Mathf.Max(del.vertices[0].coordinate.y, 4 * Mathf.Abs(pos.y));
+
+        del.vertices[2].coordinate.x = Mathf.Max(del.vertices[2].coordinate.x, 4 * Mathf.Abs(pos.x));
+        del.vertices[2].coordinate.y = Mathf.Max(del.vertices[2].coordinate.y, 4 * Mathf.Abs(pos.y));
+
+        del.vertices[1].coordinate.y = Mathf.Min(del.vertices[1].coordinate.y, -4 * Mathf.Abs(pos.y));
+    }
+
+    public void Generate() {
         del.Create();
         foreach (Triangle t in del.triangles) {
             if (t.GetReplacements() != null) {
@@ -52,8 +63,8 @@ public class GalaxyComponent : ObserverBehaviour<Galaxy> {
                 edge.transform.SetParent(transform);
                 LineRenderer lr = edge.AddComponent<LineRenderer>();
                 lr.SetPositions(new Vector3[] { del.vertices[t[i]].coordinate, del.vertices[t[(i + 1) % 3]].coordinate });
-                lr.startWidth = 0.05f;
-                lr.endWidth = 0.05f;
+                lr.startWidth = 0.2f;
+                lr.endWidth = 0.2f;
                 lr.startColor = Color.red;
                 lr.endColor = Color.red;
                 lr.gameObject.layer = (int)AppInfo.Layer.StarMap;
@@ -64,7 +75,14 @@ public class GalaxyComponent : ObserverBehaviour<Galaxy> {
 
     public override void HandleEvent(string signal, object[] args) {
         switch(signal) {
-            case "OnCreate":
+            case "OnInitialize":
+                Initialize();
+                break;
+            case "OnGenerate":
+                Generate();
+                break;
+            case "OnAddSystem":
+                AddSystem((Coordinate) args[0]);
                 break;
         }
     }

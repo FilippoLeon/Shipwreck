@@ -20,16 +20,21 @@ public class Galaxy : Entity<Galaxy> {
         throw new System.NotImplementedException();
     }
 
+    internal void Initialize() {
+        Emit("OnInitialize", new object[] { });
+    }
+
     internal void Create() {
         int size = 44;
 
         for(int i = 0; i < size; ++i) {
             string name = Verse.registry.namesRegistry.GetRandom("systems");
             Coordinate coordinate = new Coordinate((int) UnityEngine.Random.Range(-50f,50f), (int) UnityEngine.Random.Range(-50f,50f));
-
+            
             systems[name] = new SolarSystem(name, this, coordinate);
+            Emit("OnAddSystem", new object[] { coordinate });
         }
 
-        Emit("OnCreate", new object[] { });
+        Emit("OnGenerate", new object[] { });
     }
 }

@@ -61,6 +61,8 @@ public class Verse : Entity<Verse> {
     ConcreteEntity selectionEntity;
 
     public void Create() {
+        Galaxy.Initialize();
+
         maps["Health"] = (Coordinate c) => {
             int id = -1;
             if (this.ships != null &&this.ships.Count != 0) {
