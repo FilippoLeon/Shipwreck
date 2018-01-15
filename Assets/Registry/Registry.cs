@@ -9,9 +9,13 @@ using System.Text;
 public class Registry {
     public PartRegistry partRegistry;
 
+    public NameRegistry namesRegistry;
+
     public Registry() {
         ScriptLoader.LoadScript("Entity", "Entity.lua");
 
         partRegistry = new PartRegistry();
+
+        namesRegistry = new NameRegistry();
     }
 }

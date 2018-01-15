@@ -12,6 +12,10 @@ public class MainController : MonoBehaviour {
     ShipController shipController;
     OverlayComponent overlayComponent;
 
+    public GameObject starmapVertex;
+
+    public Material starmapEdgeMaterial;
+
     // Use this for initialization
     void Start () {
         string pathXml = Path.Combine(Application.streamingAssetsPath, "Data/Prototypes/Parts.xml");
@@ -36,7 +40,14 @@ public class MainController : MonoBehaviour {
         overlayComponent = overlay.AddComponent<OverlayComponent>();
         Verse.register(overlayComponent);
 
-        Verse.Start();
+        GameObject galaxy = new GameObject("StarMap");
+        GalaxyComponent galaxyComponent = galaxy.AddComponent<GalaxyComponent>();
+        galaxyComponent.vert = starmapVertex;
+        galaxyComponent.starPathMaterial = starmapEdgeMaterial;
+
+        Verse.Galaxy.register(galaxyComponent);
+
+        Verse.Create();
 
         Verse.SetMap("Health");
     }

@@ -15,6 +15,8 @@ public class Verse : Entity<Verse> {
 
     public Dictionary<string, Func<Coordinate, int>> maps = new Dictionary<string, Func<Coordinate, int>>();
 
+    public Galaxy Galaxy {set; get; }
+
     public class Selection {
         public Coordinate coordinate { set; get; }
         public int index { set; get; }
@@ -52,11 +54,13 @@ public class Verse : Entity<Verse> {
         }
 
         registry = new Registry();
+
+        Galaxy = new Galaxy(this);
     }
 
     ConcreteEntity selectionEntity;
 
-    public void Start() {
+    public void Create() {
         maps["Health"] = (Coordinate c) => {
             int id = -1;
             if (this.ships != null &&this.ships.Count != 0) {
@@ -85,6 +89,8 @@ public class Verse : Entity<Verse> {
             }
             return id;
         };
+
+        Galaxy.Create();
 
         selectionEntity = new ConcreteEntity();
         selectionEntity.spriteInfo = new SpriteInfo();

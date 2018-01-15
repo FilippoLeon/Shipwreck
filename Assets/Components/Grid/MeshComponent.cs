@@ -22,8 +22,9 @@ public abstract class MeshComponent : ObserverBehaviour<Verse> {
     protected GameObject overlay;
 
     public void Awake() {
-        overlay = new GameObject("mesh");
+        overlay = new GameObject("OverlayMesh");
         overlay.AddComponent<MeshFilter>();
+        overlay.transform.SetParent(transform);
         meshRenderer = overlay.AddComponent<MeshRenderer>();
 
         mesh = new Mesh();

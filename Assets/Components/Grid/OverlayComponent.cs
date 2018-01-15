@@ -16,13 +16,11 @@ public class OverlayComponent : MeshComponent {
     new void Awake() {
         SetResolution(1, 1);
         name = "Overlay";
-
-
+        
         base.Awake();
 
         GeneratePalette("rainbow_bgyrm_35-85_c71_n256.csv");
-
-
+        
         paletteData = Directory.GetFiles(StreamingAssets.GetPath("Colormaps"), "*.csv");
     }
 
