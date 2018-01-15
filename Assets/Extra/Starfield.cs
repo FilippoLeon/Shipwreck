@@ -13,10 +13,10 @@ public class Starfield : MonoBehaviour {
 
     public float scale = 0.1f;
 
-    public int density = 1000;
+    public int density = 250;
 
-    public int quadrantSizeX = 100;
-    public int quadrantSizeY = 100;
+    public int quadrantSizeX = 50;
+    public int quadrantSizeY = 50;
 
     [Range(0f, 10f)]
     public float speed = 1f;
@@ -30,6 +30,8 @@ public class Starfield : MonoBehaviour {
     private int[] sums;
 
     private GameObject[] quadrants;
+
+    public Material trMat;
 
     void Start() {
         quadrants = new GameObject[4];
@@ -50,6 +52,7 @@ public class Starfield : MonoBehaviour {
             sum += weight[i];
             sums[i] = sum;
         }
+      
 
         for (int j = 0; j < quadrants.Length; ++j) {
             quadrants[j] = new GameObject("quadrant-" + j.ToString());
@@ -59,6 +62,23 @@ public class Starfield : MonoBehaviour {
                 int si = Random.Range(0, stars.Length - 1);
                 GameObject copy = Instantiate(stars[si]);
                 copy.SetActive(true);
+
+                //GameObject go = new GameObject();
+                //TrailRenderer tr = go.AddComponent<TrailRenderer>();
+                //tr.time = 0.3f;
+                //tr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                //tr.reflectionProbeUsage = UnityEngine.Rendering.ReflectionProbeUsage.Off;
+                //tr.startWidth = 0.1f;
+                //tr.endWidth = 0.01f;
+                //Gradient gr = new Gradient();
+                //gr.colorKeys = new GradientColorKey[] {
+                //    new GradientColorKey(Color.red, 0.5f),
+                //    new GradientColorKey(Color.white, 0.5f),
+                //};
+                //tr.colorGradient = gr;
+                //tr.receiveShadows = false;
+                //tr.material = trMat;
+                //go.transform.SetParent(copy.transform);
 
                 copy.transform.SetParent(this.quadrants[j].transform);
                 copy.transform.position = new Vector3(
@@ -102,18 +122,29 @@ public class Starfield : MonoBehaviour {
         for (int i = 0; i < quadrants.Length; ++i) {
             quadrants[i].transform.Translate(delta);
 
+            //bool translated = false;
+
             Vector3 pos = quadrants[i].transform.position;
             if( pos.x < -quadrantSizeX ) {
                 pos.x += 2 * quadrantSizeX;
+                //translated = true;
             } else if( pos.x > quadrantSizeX ) {
                 pos.x -= 2 * quadrantSizeX;
+                //translated = true;
             }
             if ( pos.y < -quadrantSizeY ) {
                 pos.y += 2 * quadrantSizeY;
+                //translated = true;
             } else if( pos.y > quadrantSizeY ) {
                 pos.y -= 2 * quadrantSizeY;
+                //translated = true;
             }
             quadrants[i].transform.position = pos;
+            //if ( translated ) {
+            //    quadrants[i].SetActive(false);
+            //} else {
+            //    quadrants[i].SetActive(true);
+            //}
         }
     }
 }
