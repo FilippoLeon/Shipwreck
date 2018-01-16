@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SpriteSheet defaultSize="64,64" defaultPivot="0.5,0.5" defaultPpu="64">
+  <Sprite start="0,7" category="Minimap">ship</Sprite>
+</SpriteSheet>
