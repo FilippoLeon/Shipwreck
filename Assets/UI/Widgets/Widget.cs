@@ -40,7 +40,7 @@ namespace GUI {
         }
 
         public void SetParameters(object[] args) {
-            Debug.Log("Change Parameters!");
+            //Debug.Log("Change Parameters!");
 
             this.args = args;
 
@@ -97,8 +97,8 @@ namespace GUI {
                 if (GetPropValue(arg, propName) == null ) {
                     return;
                 }
-                object val = GetPropValue(arg, propName).ToString();
-                Debug.Log(String.Format("Argument object {0} has value {1}", propName, val.ToString()));
+                //object val = GetPropValue(arg, propName).ToString();
+                //Debug.Log(String.Format("Argument object {0} has value {1}", propName, val.ToString()));
                 SetValue(GetPropValue(arg, propName).ToString(), index);
             };
             Root.ChangeArguments += () => {

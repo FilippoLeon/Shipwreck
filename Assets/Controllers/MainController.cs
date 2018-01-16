@@ -1,4 +1,5 @@
 ﻿using LUA;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +15,11 @@ public class MainController : MonoBehaviour {
 
     public GameObject starmapVertex;
 
+    public GameObject planetTemplate;
+    
     public Material starmapEdgeMaterial;
+
+    public GameObject galaxy;
 
     // Use this for initialization
     void Start () {
@@ -40,8 +45,9 @@ public class MainController : MonoBehaviour {
         overlayComponent = overlay.AddComponent<OverlayComponent>();
         Verse.register(overlayComponent);
 
-        GameObject galaxy = new GameObject("StarMap");
+        galaxy = new GameObject("StarMap");
         GalaxyComponent galaxyComponent = galaxy.AddComponent<GalaxyComponent>();
+        galaxyComponent.Camera = GameObject.Find("MapCamera").GetComponent<Camera>();
         galaxyComponent.vert = starmapVertex;
         galaxyComponent.starPathMaterial = starmapEdgeMaterial;
 
@@ -52,8 +58,42 @@ public class MainController : MonoBehaviour {
         Verse.SetMap("Health");
     }
 
+    float hitTime;
+    GameObject oldHitObject;
+
     // Update is called once per frame
     void Update () {
         Verse.Update();
+
+        if( Input.GetButtonDown("map")) {
+            galaxy.SetActive(!galaxy.activeSelf);
+        }
+        if(galaxy.activeSelf) {
+            if( Input.GetMouseButtonDown(0) ) {
+                UnityEngine.Ray ray = galaxy.GetComponent<GalaxyComponent>().Camera.ScreenPointToRay( Input.mousePosition );
+
+                RaycastHit hitInfo;
+                bool hit = Physics.Raycast(ray, out hitInfo);
+
+                if( hit && hitInfo.transform.GetComponent<SolarSystemComponent>() != null ) {
+                    if ( hitInfo.transform.gameObject == oldHitObject && (Time.time - hitTime) < 0.5f) {
+                        hitInfo.transform.GetComponent<SolarSystemComponent>().DisplaySystem();
+                        galaxy.SetActive(false);
+
+                        Debug.Log( hitInfo.transform.GetComponent<SolarSystemComponent>().Emitter.Name );
+                    }
+                   
+                    oldHitObject = hitInfo.transform.gameObject;
+                    hitTime = Time.time;
+                }
+            }
+            
+        }
 	}
+
+    public GameObject GetPlanet() {
+        GameObject ret = Instantiate(planetTemplate);
+
+        return ret;
+    }
 }

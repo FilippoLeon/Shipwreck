@@ -182,7 +182,7 @@ public partial class Part : Entity<Part> {
     override public void ReadXml(XmlReader reader) {
         base.ReadCurrentElement(reader);
 
-        Debug.Log(String.Format("New part with id = {0}", Id));
+        //Debug.Log(String.Format("New part with id = {0}", Id));
 
         if ( reader.GetAttribute("root") != null ) {
             IsRoot = Convert.ToBoolean(reader.GetAttribute("root"));

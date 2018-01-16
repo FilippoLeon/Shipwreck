@@ -11,10 +11,10 @@ class CameraController : MonoBehaviour {
     int ppu = 32;
     int ppuScale = 1;
 
-    //public float maxZoom = 0.1f;
-    //public float minZoom = 30f;
+    public float maxZoom = 6f;
+    public float minZoom = 50f;
     public float cameraZ = -10f;
-    //public float zoomSpeed = 0.1f;
+    public float zoomSpeed = 0.1f;
     public float panSpeed = 5f;
     public float slideSpeed = 0.5f;
 
@@ -24,18 +24,47 @@ class CameraController : MonoBehaviour {
     Vector3 grabPosition;
     Vector3 initialPos;
 
+    MainController main;
+    Camera mainCamera;
+
+    void Start() {
+        main = FindObjectOfType<MainController>();
+        mainCamera = GetComponent<Camera>();
+
+        mainCamera.orthographicSize = Screen.height / (ppu * ppuScale) / 2.0f;
+    }
+
+    enum ZoomMode {
+        Free, PixelPerfect,
+    }
+
+    ZoomMode zoomMode;
+
     void Update() {
-        GetComponent<Camera>().orthographicSize = Screen.height / (ppu * ppuScale) / 2.0f;
+        Camera cameraToProcess = null;
+        if (main.galaxy.activeSelf) {
+            cameraToProcess = main.galaxy.GetComponent<GalaxyComponent>().Camera;
+            zoomMode = ZoomMode.Free;
+        } else {
+            cameraToProcess = mainCamera;
+            zoomMode = ZoomMode.PixelPerfect;
+        }
+
+        switch (zoomMode) {
+            case ZoomMode.Free:
+                float zoom = Input.GetAxis("Zoom");
+                cameraToProcess.orthographicSize += zoom * zoomSpeed;
+                break;
+            case ZoomMode.PixelPerfect:
+                cameraToProcess.orthographicSize = Screen.height / (ppu * ppuScale) / 2.0f;
+                break;
+        }
 
         float speedX = Input.GetAxis("Horizontal");
         float speedY = Input.GetAxis("Vertical");
         
-        //float zoom = Input.GetAxis("Zoom");
 
-        //zoom *= 0.01f * zoom * zoom;
-
-        Vector3 delta = new Vector3(speedX, speedY, 0) * Camera.main.orthographicSize * slideSpeed;
-        //Camera.main.orthographicSize += zoom * zoomSpeed;
+        Vector3 delta = new Vector3(speedX, speedY, 0) * cameraToProcess.orthographicSize * slideSpeed;
 
         //// DRAG
         ////if(Input.GetButtonDown("Pan"))
@@ -48,7 +77,7 @@ class CameraController : MonoBehaviour {
 
         //// GRAB
         if (Input.GetButton("Pan")) {
-            delta += panSpeed * Camera.main.orthographicSize * Camera.main.ScreenToViewportPoint(grabPosition - Input.mousePosition);
+            delta += panSpeed * cameraToProcess.orthographicSize * cameraToProcess.ScreenToViewportPoint(grabPosition - Input.mousePosition);
         }
 
         //// GRAB2
@@ -60,8 +89,12 @@ class CameraController : MonoBehaviour {
         //    pos = initialPos + panSpeed * Camera.main.orthographicSize * Camera.main.ScreenToViewportPoint(grabPosition - Input.mousePosition);
         //}
         
+
         background.transform.position += delta * parallax;
-        Camera.main.transform.position = RestoreCameraWithinBounds(Camera.main.transform.position + delta);
+        cameraToProcess.transform.position = RestoreCameraWithinBounds(cameraToProcess.transform.position + delta);
+        // Restore ortho size
+        cameraToProcess.orthographicSize = Mathf.Clamp(cameraToProcess.orthographicSize, maxZoom, minZoom);
+
         //// GRAB
         grabPosition = Input.mousePosition;
 
@@ -77,8 +110,7 @@ class CameraController : MonoBehaviour {
             background.transform.localPosition.z
             );
         return cameraPos;
-
-        //Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, maxZoom, minZoom);
+        
     }
 
     public void Center() {

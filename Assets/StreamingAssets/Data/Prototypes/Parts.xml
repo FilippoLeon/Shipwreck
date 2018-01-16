@@ -53,7 +53,7 @@
 				M = part.Hull.GetParameter("max_pressure")
 				m = part.Hull.GetParameter("min_pressure")
 				val = part.Hull.GetParameter("pressure") + 5
-				print(part.Hull.Name .. part.Name .. val)
+				-- print(part.Hull.Name .. part.Name .. val)
 				-- add safe cast in setparameter or cast to int
 				part.Hull.SetParameterAsInt("pressure", math.floor(math.min(math.max(m, val), M)))
 			end

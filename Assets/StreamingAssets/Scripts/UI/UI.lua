@@ -3,7 +3,7 @@
 
 function buildCreativePlacementPanel(UI, verse)
 	panel = UI["creative_panel"]
-	print(verse.Name)
+	-- print(verse.Name)
 	for key, prototype in pairs(verse.registry.partRegistry.prototypes)
 	do
 		print(prototype.Id)
@@ -13,7 +13,7 @@ function buildCreativePlacementPanel(UI, verse)
 		-- button.TextColor = Color.black
 		button.SetPreferredSize(100)
 		function printID()
-			print("Building : " .. prototype.Id)
+			-- print("Building : " .. prototype.Id)
 			verse.SetMode(1, { prototype.Id });
 		end
 		button.OnClick(printID)
@@ -27,19 +27,19 @@ function buildOverlayPanel(UI, verse)
 	button.Text = "None"
 	button.SetPreferredSize(50)
 	function setMap()
-		print("Disabling overlay map.")
+		-- print("Disabling overlay map.")
 		verse.SetMap(nil);
 	end
 	button.OnClick(setMap)
 	for key, prototype in pairs(verse.maps)
 	do
-		print(key)
+		-- print(key)
 		button = Button.Create(key)
 		panel.Add(button)
 		button.Text = key
 		button.SetPreferredSize(50)
 		function setMap()
-			print("Setting overlay map to: " .. key)
+			-- print("Setting overlay map to: " .. key)
 			verse.SetMap(key);
 		end
 		button.OnClick(setMap)

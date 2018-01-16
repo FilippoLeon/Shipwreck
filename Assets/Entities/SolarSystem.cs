@@ -6,6 +6,8 @@ public class SolarSystem : Entity<SolarSystem> {
     public Coordinate coordinate;
     private Galaxy galaxy;
 
+    public List<SolarSystem> links = new List<SolarSystem>();
+
     public SolarSystem(string name, Galaxy galaxy, Coordinate coordinate) {
         Name = name;
         this.galaxy = galaxy;
