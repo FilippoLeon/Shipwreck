@@ -22,6 +22,12 @@ public class ShipController : MonoBehaviour {
 
         AddShip(Ship);
 
+        Ship Ship2 = new Ship(GetComponent<MainController>().Verse);
+        Ship2.Name = "Serenity 1.0";
+
+        AddShip(Ship2);
+        Ship2.Position = new Coordinate(10, 10);
+
         GUIController.Find("player_panel").SetParameters(new object[] { Player });
         GUIController.Find("ship_view").SetParameters(new object[] { Ship });
     }
@@ -38,7 +44,7 @@ public class ShipController : MonoBehaviour {
         ShipTacticalViewComponent shipTacticalViewComponent = tv.AddComponent<ShipTacticalViewComponent>();
         tv.name = "Ship_" + ship.Name + "_tv";
 
-        Ship.register(shipComponent);
-        Ship.register(shipTacticalViewComponent);
+        ship.register(shipComponent);
+        ship.register(shipTacticalViewComponent);
     }
 }

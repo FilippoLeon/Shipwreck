@@ -21,6 +21,8 @@ public class MainController : MonoBehaviour {
 
     public GameObject galaxy;
 
+    internal float tacticalStartTime = 0;
+    internal float nonTacticalStartTime = 0;
     float hitTime;
     GameObject oldHitObject;
     public ViewMode viewMode { get; private set; }
@@ -34,6 +36,11 @@ public class MainController : MonoBehaviour {
     }
 
     public void SetMode(ViewMode mode, IView view = null) {
+        if (mode == ViewMode.TacticalMap || viewMode != ViewMode.TacticalMap ) {
+            tacticalStartTime = Time.time;
+        } else if (mode != ViewMode.TacticalMap || viewMode == ViewMode.TacticalMap) {
+            nonTacticalStartTime = Time.time;
+        }
         viewMode = mode;
         switch (mode) {
             case ViewMode.Ship:
@@ -100,12 +107,22 @@ public class MainController : MonoBehaviour {
         if( Input.GetButtonDown("map")) {
             switch (viewMode) {
                 case ViewMode.Ship:
-                    SetMode(ViewMode.Map);
-                    break;
                 case ViewMode.TacticalMap:
+                    SetMode(ViewMode.Map);
                     break;
                 case ViewMode.Map:
                 case ViewMode.SolarMap:
+                    SetMode(ViewMode.Ship);
+                    break;
+            }
+        } else if ( Input.GetButtonDown("TacticalMap") ) {
+            switch (viewMode) {
+                case ViewMode.Ship:
+                case ViewMode.Map:
+                case ViewMode.SolarMap:
+                    SetMode(ViewMode.TacticalMap);
+                    break;
+                case ViewMode.TacticalMap:
                     SetMode(ViewMode.Ship);
                     break;
             }

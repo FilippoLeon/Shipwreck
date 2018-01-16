@@ -26,16 +26,21 @@ class CameraController : MonoBehaviour {
 
     MainController main;
     Camera mainCamera;
+    Camera tacticalMapCamera;
+
+    float size = 0;
 
     void Start() {
         main = FindObjectOfType<MainController>();
         mainCamera = GetComponent<Camera>();
+        tacticalMapCamera = GameObject.Find("TacticalMapCamera").GetComponent<Camera>();
 
         mainCamera.orthographicSize = Screen.height / (ppu * ppuScale) / 2.0f;
     }
 
     enum ZoomMode {
         Free, PixelPerfect,
+        None,
     }
 
     ZoomMode zoomMode;
@@ -45,6 +50,9 @@ class CameraController : MonoBehaviour {
         if (main.viewMode == MainController.ViewMode.Map || main.viewMode == MainController.ViewMode.SolarMap ) {
             cameraToProcess = main.galaxy.GetComponent<GalaxyComponent>().Camera;
             zoomMode = ZoomMode.Free;
+        } else if (main.viewMode == MainController.ViewMode.TacticalMap ) {
+            cameraToProcess = tacticalMapCamera;
+            //zoomMode = ZoomMode.None;
         } else {
             cameraToProcess = mainCamera;
             zoomMode = ZoomMode.PixelPerfect;
@@ -58,6 +66,8 @@ class CameraController : MonoBehaviour {
             case ZoomMode.PixelPerfect:
                 cameraToProcess.orthographicSize = Screen.height / (ppu * ppuScale) / 2.0f;
                 break;
+            case ZoomMode.None:
+                return;
         }
 
         float speedX = Input.GetAxis("Horizontal");
@@ -98,9 +108,28 @@ class CameraController : MonoBehaviour {
         //// GRAB
         grabPosition = Input.mousePosition;
 
+        if (main.viewMode == MainController.ViewMode.TacticalMap) {
+            size += Time.deltaTime;
+        } else {
+            size -= Time.deltaTime;
+        }
+        size = Mathf.Clamp(size, 0, cameraZoomTime);
+
+        float alpha = size / cameraZoomTime;
+        //float X = Mathf.Lerp(0, 0, cameraZoomTime - main.startTime);
+        float X = 0;
+        float Y = Mathf.Lerp(0.7f, 0, alpha );
+        float W = Mathf.Lerp(0.2f, 1, alpha );
+        float H = Mathf.Lerp(0.2f, 1, alpha );
+        tacticalMapCamera.rect = new Rect(X, Y, W, H);
     }
 
+    public float cameraZoomTime = 5.0f;
+
     Vector3 RestoreCameraWithinBounds(Vector3 cameraPos) {
+        if(main.CurrentView == null) {
+            return cameraPos;
+        }
         Coordinate minCoord = main.CurrentView.GetMin();
         Coordinate maxCoord = main.CurrentView.GetMax();
 

@@ -10,6 +10,17 @@ public class Ship : Entity<Ship> {
     Dictionary<Coordinate, List<Part>> parts = new Dictionary<Coordinate, List<Part>>();
     public Part Root { get; set; }
 
+    Coordinate position;
+    public Coordinate Position {
+        set {
+            position = value;
+            Emit("OnPositionChange", new object[] { position });
+        }
+        get {
+            return position;
+        }
+    }
+
     Dictionary<Coordinate, Part> hulls = new Dictionary<Coordinate, Part>();
 
     public Verse verse;

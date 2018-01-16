@@ -8,7 +8,7 @@ public class ShipTacticalViewComponent : ObserverBehaviour<Ship> {
     private void Start() {
         gameObject.layer = (int) AppInfo.Layer.TacticalMap;
 
-        gameObject.transform.localScale = new Vector3(4, 4, 1);
+        gameObject.transform.localScale = new Vector3(1, 1, 1);
         gameObject.AddComponent<SpriteRenderer>().sprite = SpriteLoader.Instance.tryLoadSprite("Minimap", "ship").sprite;
     }
 
@@ -18,7 +18,7 @@ public class ShipTacticalViewComponent : ObserverBehaviour<Ship> {
 
     override public void HandleEvent(string signal, object[] args) {
         switch(signal) {
-            case "MoveTo":
+            case "OnPositionChange":
                 MoveTo((Coordinate) args[0]);
                 break;
         }
