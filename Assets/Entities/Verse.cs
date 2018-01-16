@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 
 [MoonSharpUserData]
-public class Verse : Entity<Verse> {
+public class Verse : Entity<Verse>, IView {
     public Registry registry;
     public static Verse Instance = null;
 
@@ -155,5 +155,13 @@ public class Verse : Entity<Verse> {
         //if (Input.GetMouseButtonDown(2)) {
         //    selectionEntity.Active = !selectionEntity.Active;
         //}
+    }
+
+    public Coordinate GetMin() {
+        return new Coordinate(-10, -10);
+    }
+
+    public Coordinate GetMax() {
+        return new Coordinate(10, 10);
     }
 }

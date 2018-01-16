@@ -42,7 +42,7 @@ class CameraController : MonoBehaviour {
 
     void Update() {
         Camera cameraToProcess = null;
-        if (main.galaxy.activeSelf) {
+        if (main.viewMode == MainController.ViewMode.Map || main.viewMode == MainController.ViewMode.SolarMap ) {
             cameraToProcess = main.galaxy.GetComponent<GalaxyComponent>().Camera;
             zoomMode = ZoomMode.Free;
         } else {
@@ -101,8 +101,11 @@ class CameraController : MonoBehaviour {
     }
 
     Vector3 RestoreCameraWithinBounds(Vector3 cameraPos) {
-        cameraPos.x = Mathf.Clamp(cameraPos.x, -10, 10);
-        cameraPos.y = Mathf.Clamp(cameraPos.y, -10, 10);
+        Coordinate minCoord = main.CurrentView.GetMin();
+        Coordinate maxCoord = main.CurrentView.GetMax();
+
+        cameraPos.x = Mathf.Clamp(cameraPos.x, minCoord.x, maxCoord.x);
+        cameraPos.y = Mathf.Clamp(cameraPos.y, minCoord.y, maxCoord.y);
         float aparallax = Mathf.Abs(parallax);
         background.transform.localPosition = new Vector3(
             Mathf.Clamp(background.transform.localPosition.x, -10 * aparallax, 10 * aparallax),
@@ -110,7 +113,6 @@ class CameraController : MonoBehaviour {
             background.transform.localPosition.z
             );
         return cameraPos;
-        
     }
 
     public void Center() {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SolarSystem : Entity<SolarSystem> {
+public class SolarSystem : Entity<SolarSystem>, IView {
     public Coordinate coordinate;
     private Galaxy galaxy;
 
@@ -25,5 +25,12 @@ public class SolarSystem : Entity<SolarSystem> {
     public override void Update() {
         throw new System.NotImplementedException();
     }
-    
+
+    public Coordinate GetMin() {
+        return new Coordinate(-10, -10);
+    }
+
+    public Coordinate GetMax() {
+        return new Coordinate(10, 10);
+    }
 }

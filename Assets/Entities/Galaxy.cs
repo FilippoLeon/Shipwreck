@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Galaxy : Entity<Galaxy> {
+public class Galaxy : Entity<Galaxy>, IView {
     public Dictionary<Coordinate, SolarSystem> systems = new Dictionary<Coordinate, SolarSystem>();
 
     Verse Verse {set; get;}
@@ -86,6 +86,12 @@ public class Galaxy : Entity<Galaxy> {
 
         del.vertices.Add(new Vertex { coordinate = coordinate.ToVector() });
 
+        minVec.x = Mathf.Min(minVec.x, coordinate.x);
+        minVec.y = Mathf.Min(minVec.y, coordinate.y);
+        maxVec.x = Mathf.Max(maxVec.x, coordinate.x);
+        maxVec.y = Mathf.Max(maxVec.y, coordinate.y);
+
+        // Use min and max
         del.vertices[0].coordinate.x = Mathf.Min(del.vertices[0].coordinate.x, -4 * Mathf.Abs(coordinate.x));
         del.vertices[0].coordinate.y = Mathf.Max(del.vertices[0].coordinate.y, 4 * Mathf.Abs(coordinate.y));
 
@@ -95,5 +101,15 @@ public class Galaxy : Entity<Galaxy> {
         del.vertices[1].coordinate.y = Mathf.Min(del.vertices[1].coordinate.y, -4 * Mathf.Abs(coordinate.y));
 
         Emit("OnAddSystem", new object[] { systems[coordinate], coordinate });
+    }
+
+    Coordinate minVec, maxVec;
+
+    public Coordinate GetMin() {
+        return minVec;
+    }
+
+    public Coordinate GetMax() {
+        return maxVec;
     }
 }

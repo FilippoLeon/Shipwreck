@@ -21,8 +21,41 @@ public class MainController : MonoBehaviour {
 
     public GameObject galaxy;
 
-    // Use this for initialization
-    void Start () {
+    float hitTime;
+    GameObject oldHitObject;
+    public ViewMode viewMode { get; private set; }
+
+    public IView CurrentView {
+        get; private set;
+    }
+
+    public enum ViewMode {
+        Ship, Map, TacticalMap, SolarMap
+    }
+
+    public void SetMode(ViewMode mode, IView view = null) {
+        viewMode = mode;
+        switch (mode) {
+            case ViewMode.Ship:
+                CurrentView = Verse;
+                galaxy.SetActive(false);
+                break;
+            case ViewMode.Map:
+                CurrentView = Verse.Galaxy;
+                galaxy.SetActive(true);
+                break;
+            case ViewMode.SolarMap:
+                CurrentView = view;
+                galaxy.SetActive(false);
+                break;
+            case ViewMode.TacticalMap:
+                CurrentView = null;
+                break;
+        }
+    }
+
+        // Use this for initialization
+       void Start () {
         string pathXml = Path.Combine(Application.streamingAssetsPath, "Data/Prototypes/Parts.xml");
 
         scriptLoader = new ScriptLoader();
@@ -56,19 +89,28 @@ public class MainController : MonoBehaviour {
         Verse.Create();
 
         Verse.SetMap("Health");
+
+        SetMode(ViewMode.Ship);
     }
-
-    float hitTime;
-    GameObject oldHitObject;
-
+    
     // Update is called once per frame
     void Update () {
         Verse.Update();
 
         if( Input.GetButtonDown("map")) {
-            galaxy.SetActive(!galaxy.activeSelf);
+            switch (viewMode) {
+                case ViewMode.Ship:
+                    SetMode(ViewMode.Map);
+                    break;
+                case ViewMode.TacticalMap:
+                    break;
+                case ViewMode.Map:
+                case ViewMode.SolarMap:
+                    SetMode(ViewMode.Ship);
+                    break;
+            }
         }
-        if(galaxy.activeSelf) {
+        if (viewMode == ViewMode.Map) {
             if( Input.GetMouseButtonDown(0) ) {
                 UnityEngine.Ray ray = galaxy.GetComponent<GalaxyComponent>().Camera.ScreenPointToRay( Input.mousePosition );
 
@@ -77,10 +119,11 @@ public class MainController : MonoBehaviour {
 
                 if( hit && hitInfo.transform.GetComponent<SolarSystemComponent>() != null ) {
                     if ( hitInfo.transform.gameObject == oldHitObject && (Time.time - hitTime) < 0.5f) {
-                        hitInfo.transform.GetComponent<SolarSystemComponent>().DisplaySystem();
-                        galaxy.SetActive(false);
+                        SolarSystemComponent ssc = hitInfo.transform.GetComponent<SolarSystemComponent>();
+                        ssc.DisplaySystem();
+                        SetMode(ViewMode.SolarMap, ssc.Emitter);
 
-                        Debug.Log( hitInfo.transform.GetComponent<SolarSystemComponent>().Emitter.Name );
+                        Debug.Log( ssc.Emitter.Name );
                     }
                    
                     oldHitObject = hitInfo.transform.gameObject;
@@ -89,7 +132,7 @@ public class MainController : MonoBehaviour {
             }
             
         }
-	}
+    }
 
     public GameObject GetPlanet() {
         GameObject ret = Instantiate(planetTemplate);

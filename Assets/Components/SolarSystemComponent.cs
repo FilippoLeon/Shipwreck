@@ -11,7 +11,7 @@ public class SolarSystemComponent : ObserverBehaviour<SolarSystem> {
             GameObject o = GetComponentInParent<GalaxyComponent>().mainController.GetPlanet();
 
             float r = UnityEngine.Random.Range(1f, 10f);
-            float eps = UnityEngine.Random.Range(0f, 0.001f);
+            float eps = UnityEngine.Random.Range(0.5f, 0.7f);
             float angle = UnityEngine.Random.Range(0f, 2 * Mathf.PI);
 
             o.transform.position = EllipsePoint(angle, r, eps);
@@ -34,7 +34,7 @@ public class SolarSystemComponent : ObserverBehaviour<SolarSystem> {
         lr.startWidth = 0.1f;
         lr.endWidth = 0.1f;
 
-        int npoints = 30;
+        int npoints = 100;
         Vector3[] points = new Vector3[npoints];
         for(int i = 0; i < npoints; ++i) {
             float angle = (float) i / (npoints - 1) * 2 * Mathf.PI;
