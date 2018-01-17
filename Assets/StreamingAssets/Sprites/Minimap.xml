@@ -4,4 +4,5 @@
   <Sprite start="2,6" category="Minimap" size="128,128">ship</Sprite>
   <Sprite start="4,6" category="Minimap" size="128,128">ship_own</Sprite>
   <Sprite start="6,6" category="Minimap" size="128,128">ship_friendly</Sprite>
+  <Sprite start="0,4" category="Minimap" size="128,128">waypoint</Sprite>
 </SpriteSheet>

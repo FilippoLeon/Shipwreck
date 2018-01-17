@@ -25,8 +25,8 @@ class CameraController : MonoBehaviour {
     Vector3 initialPos;
 
     MainController main;
-    Camera mainCamera;
-    Camera tacticalMapCamera;
+    internal Camera mainCamera;
+    internal Camera tacticalMapCamera;
 
     float size = 0;
 

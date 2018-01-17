@@ -26,7 +26,7 @@ public class ShipController : MonoBehaviour {
         Ship2.Name = "Serenity 1.0";
 
         AddShip(Ship2);
-        Ship2.Position = new Coordinate(10, 10);
+        Ship2.Position = new Vector2(10, 10);
 
         GUIController.Find("player_panel").SetParameters(new object[] { Player });
         GUIController.Find("ship_view").SetParameters(new object[] { Ship });

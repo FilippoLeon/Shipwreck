@@ -61,8 +61,12 @@ public class MainController : MonoBehaviour {
         }
     }
 
+    private CameraController cameraController;
+
         // Use this for initialization
-       void Start () {
+    void Start () {
+        cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
+
         string pathXml = Path.Combine(Application.streamingAssetsPath, "Data/Prototypes/Parts.xml");
 
         scriptLoader = new ScriptLoader();
@@ -75,7 +79,7 @@ public class MainController : MonoBehaviour {
         Verse.registry.partRegistry.ReadPrototypes(pathXml);
 
         gameObject.AddComponent<GUIController>();
-        ShipController shipController = gameObject.AddComponent<ShipController>();
+        shipController = gameObject.AddComponent<ShipController>();
         gameObject.AddComponent<InputController>();
 
         VerseComponent verseComponent = gameObject.AddComponent<VerseComponent>();
@@ -148,6 +152,17 @@ public class MainController : MonoBehaviour {
                 }
             }
             
+        }
+
+        Vector3 mousePos = cameraController.mainCamera.ScreenToViewportPoint(Input.mousePosition);
+        if (cameraController.tacticalMapCamera.rect.Contains(mousePos)) {
+            //Debug.Log("Mouse is on tacmap.");
+            if ( Input.GetButtonDown("Fire1") ) { 
+                shipController.Ship.AddWaypoint(
+                     cameraController.tacticalMapCamera.ScreenToWorldPoint(Input.mousePosition)
+                    );
+                //Debug.Log(cameraController.tacticalMapCamera.ScreenToWorldPoint(Input.mousePosition));
+            }
         }
     }
 

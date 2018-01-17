@@ -10,8 +10,8 @@ public class Ship : Entity<Ship> {
     Dictionary<Coordinate, List<Part>> parts = new Dictionary<Coordinate, List<Part>>();
     public Part Root { get; set; }
 
-    Coordinate position;
-    public Coordinate Position {
+    Vector2 position;
+    public Vector2 Position {
         set {
             position = value;
             Emit("OnPositionChange", new object[] { position });
@@ -20,6 +20,9 @@ public class Ship : Entity<Ship> {
             return position;
         }
     }
+
+    public Vector2 wayPoint;
+    bool moving;
 
     Dictionary<Coordinate, Part> hulls = new Dictionary<Coordinate, Part>();
 
@@ -102,6 +105,11 @@ public class Ship : Entity<Ship> {
         MaxHealth = h;
     }
 
+    public void AddWaypoint(Vector2 coord) {
+        wayPoint = coord;
+        moving = true;
+    }
+
     public Part HullAt(Coordinate position) {
         if (!hulls.ContainsKey(position)) {
             return null;
@@ -159,7 +167,16 @@ public class Ship : Entity<Ship> {
         throw new System.NotImplementedException();
     }
 
+    float speed = 1f;
+
     public override void Update() {
+        if( moving ) {
+            Position += speed * (wayPoint - position).normalized;
+            if( (position - wayPoint).magnitude < 10e-1 ) {
+                moving = false;
+            }
+        }
+
 
         foreach (List<Part> pl in parts.Values) {
             foreach(Part p in pl) {
