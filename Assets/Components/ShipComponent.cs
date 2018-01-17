@@ -19,6 +19,9 @@ public class ShipComponent : ObserverBehaviour<Ship> {
             case "AddPart":
                 AddPart(args[0] as Part);
                 break;
+            case "OnPositionChanged":
+                transform.position = Emitter.Position;
+                break;
         }
     }
 

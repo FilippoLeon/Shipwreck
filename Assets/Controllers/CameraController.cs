@@ -101,7 +101,7 @@ class CameraController : MonoBehaviour {
         
 
         background.transform.position += delta * parallax;
-        cameraToProcess.transform.position = RestoreCameraWithinBounds(cameraToProcess.transform.position + delta);
+        cameraToProcess.transform.localPosition = RestoreCameraWithinBounds(cameraToProcess.transform.localPosition + delta);
         // Restore ortho size
         cameraToProcess.orthographicSize = Mathf.Clamp(cameraToProcess.orthographicSize, maxZoom, minZoom);
 

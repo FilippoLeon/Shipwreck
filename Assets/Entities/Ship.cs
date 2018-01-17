@@ -14,7 +14,7 @@ public class Ship : Entity<Ship> {
     public Vector2 Position {
         set {
             position = value;
-            Emit("OnPositionChange", new object[] { position });
+            Emit("OnPositionChanged", new object[] { position });
         }
         get {
             return position;
@@ -172,7 +172,8 @@ public class Ship : Entity<Ship> {
     public override void Update() {
         if( moving ) {
             Position += speed * (wayPoint - position).normalized;
-            if( (position - wayPoint).magnitude < 10e-1 ) {
+            if( (position - wayPoint).magnitude < speed ) {
+                Position = wayPoint;
                 moving = false;
             }
         }

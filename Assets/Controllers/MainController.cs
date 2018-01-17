@@ -108,6 +108,11 @@ public class MainController : MonoBehaviour {
     void Update () {
         Verse.Update();
 
+        if( Input.GetKeyDown(KeyCode.Tab)) {
+            shipController.NextShip();
+            cameraController.transform.SetParent(shipController.GetActiveShipComponents().transform);
+        }
+
         if( Input.GetButtonDown("map")) {
             switch (viewMode) {
                 case ViewMode.Ship:

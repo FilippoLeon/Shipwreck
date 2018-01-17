@@ -39,7 +39,7 @@ public class ShipTacticalViewComponent : ObserverBehaviour<Ship> {
 
     override public void HandleEvent(string signal, object[] args) {
         switch(signal) {
-            case "OnPositionChange":
+            case "OnPositionChanged":
                 MoveTo((Vector2) args[0]);
                 break;
         }
