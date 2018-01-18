@@ -23,6 +23,17 @@ public class Verse : Entity<Verse>, IView {
         public IEmitter selection { set; get; }
     }
 
+    int index = 0;
+    public Ship ActiveShip() {
+        return ships[index];
+    }
+
+    public void NextShip() {
+        index = (index + 1) % ships.Count;
+
+        Emit("OnActiveShipChanged", new object[] { });
+    }
+
     public Selection selection;
 
     public string Name { get { return "TheVerse"; } }
@@ -95,6 +106,7 @@ public class Verse : Entity<Verse>, IView {
         Galaxy.Create();
 
         selectionEntity = new ConcreteEntity();
+        selectionEntity.Name = "Selector";
         selectionEntity.spriteInfo = new SpriteInfo();
         selectionEntity.spriteInfo.id = "selector_1";
         selectionEntity.spriteInfo.category = "UI";
@@ -120,11 +132,11 @@ public class Verse : Entity<Verse>, IView {
         }
         if( selection == null || selection.coordinate != where ) {
             selection = new Selection { coordinate = where, index = 0, selection = listOfParts[0] };
-            Debug.Log(String.Format("Selecting new coordinate {0}.", where));
+            //Debug.Log(String.Format("Selecting new coordinate {0}.", where));
         } else if( selection.coordinate == where ) {
             selection.index = (selection.index + 1) % listOfParts.Count;
             selection.selection = listOfParts[selection.index];
-            Debug.Log(String.Format("Selecting same coordinate {0}, indesx = {1}", where, selection.index));
+            //Debug.Log(String.Format("Selecting same coordinate {0}, indesx = {1}", where, selection.index));
         }
         if( selection.selection != null ) {
             GUIController.childs["part_view"].SetParameters(new object[] { selection.selection });

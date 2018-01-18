@@ -27,6 +27,7 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IXmlSerializable wh
         }
     }
 
+    public string Name { get; set; }
     override public void ReadXml(XmlReader reader) {
         base.ReadCurrentElement(reader);
 

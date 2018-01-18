@@ -63,7 +63,7 @@
 					<Alt>Reduce</Alt>
 					<Action event="OnClick">
 						function (verse)
-							print(verse);
+							-- print(verse);
 						end
 					</Action> 
 				</Button>
@@ -73,7 +73,7 @@
 					<Alt>Increase</Alt>
 					<Action event="OnClick">
 						function (verse)
-							print("plus");
+							-- print("plus");
 						end
 					</Action> 
 				</Button>

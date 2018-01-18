@@ -100,7 +100,7 @@ class CameraController : MonoBehaviour {
         //}
         
 
-        background.transform.position += delta * parallax;
+        background.transform.localPosition += delta * parallax;
         cameraToProcess.transform.localPosition = RestoreCameraWithinBounds(cameraToProcess.transform.localPosition + delta);
         // Restore ortho size
         cameraToProcess.orthographicSize = Mathf.Clamp(cameraToProcess.orthographicSize, maxZoom, minZoom);
@@ -145,6 +145,6 @@ class CameraController : MonoBehaviour {
     }
 
     public void Center() {
-        Camera.main.transform.position = new Vector3(0f, 0f, cameraZ);
+        Camera.main.transform.localPosition = new Vector3(0f, 0f, cameraZ);
     }
 }

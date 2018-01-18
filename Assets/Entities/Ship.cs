@@ -20,9 +20,22 @@ public class Ship : Entity<Ship> {
             return position;
         }
     }
+    float angle;
+    public float Angle {
+        set {
+            angle = value;
+            Emit("OnPositionChanged", new object[] { position });
+        }
+        get {
+            return angle;
+        }
+    }
 
     public Vector2 wayPoint;
     bool moving;
+    public bool isMoving {
+        get { return moving; }
+    }
 
     Dictionary<Coordinate, Part> hulls = new Dictionary<Coordinate, Part>();
 
@@ -167,14 +180,24 @@ public class Ship : Entity<Ship> {
         throw new System.NotImplementedException();
     }
 
-    float speed = 1f;
+    float speed = 0.4f;
+    float angularSpeed = 5f;
 
     public override void Update() {
         if( moving ) {
-            Position += speed * (wayPoint - position).normalized;
-            if( (position - wayPoint).magnitude < speed ) {
-                Position = wayPoint;
-                moving = false;
+            // If facing correct direction
+            if ( Vector3.Angle(wayPoint - position, Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up ) <= angularSpeed ) {
+                Position += speed * (wayPoint - position).normalized;
+                if ((position - wayPoint).magnitude < speed) {
+                    Position = wayPoint;
+                    moving = false;
+                }
+            // Else rotate
+            } else {
+                Angle -= angularSpeed * Mathf.Sign(
+                    Vector3.Cross(wayPoint - position, Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up).z
+                    );
+
             }
         }
 

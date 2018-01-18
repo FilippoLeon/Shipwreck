@@ -35,6 +35,7 @@ public class ShipTacticalViewComponent : ObserverBehaviour<Ship> {
 
     public void MoveTo(Vector2 c) {
         transform.position = c;
+        transform.rotation = Quaternion.AngleAxis(Emitter.Angle, Vector3.forward);
     }
 
     override public void HandleEvent(string signal, object[] args) {
@@ -50,7 +51,8 @@ public class ShipTacticalViewComponent : ObserverBehaviour<Ship> {
     }
 
     void Update() {
-        if (Emitter.wayPoint != null) {
+        wayPointIndicator.transform.rotation = Quaternion.AngleAxis(5, Vector3.forward) * wayPointIndicator.transform.rotation;
+        if ( Emitter.isMoving ) {
             wayPointIndicator.transform.position = Emitter.wayPoint;
             trajectoryIndicator.GetComponent<LineRenderer>().SetPositions(
                 new Vector3[] {
@@ -58,6 +60,11 @@ public class ShipTacticalViewComponent : ObserverBehaviour<Ship> {
                      Emitter.wayPoint
                 }
                 );
+            wayPointIndicator.SetActive(true);
+            trajectoryIndicator.SetActive(true);
+        } else {
+            wayPointIndicator.SetActive(false);
+            trajectoryIndicator.SetActive(false);
         }
     }
 }

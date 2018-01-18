@@ -11,10 +11,10 @@ public class PartComponent : ObserverBehaviour<Part> {
     }
 
     void AddAt(Coordinate coordinate) {
-        Debug.Log(String.Format("Adding part at {0}x{1}.",
-            Emitter.position.x, Emitter.position.y));
+        //Debug.Log(String.Format("Adding part at {0}x{1}.",
+            //Emitter.position.x, Emitter.position.y));
 
-        transform.position = coordinate.ToVector();
+        transform.localPosition = coordinate.ToVector();
 
         sr = gameObject.AddComponent<SpriteRenderer>();
         SpriteController.spriteLoader.LoadIntoSpriteRenderer(sr, Emitter.spriteInfo, Emitter);

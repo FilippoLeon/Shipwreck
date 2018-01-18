@@ -11,7 +11,7 @@ public class EntityComponent : ObserverBehaviour<ConcreteEntity> {
     }
 
     void SpawnAt(Coordinate coordinate) {
-        transform.position = coordinate.ToVector();
+        transform.localPosition = coordinate.ToVector();
 
         sr = gameObject.AddComponent<SpriteRenderer>();
         
@@ -27,7 +27,7 @@ public class EntityComponent : ObserverBehaviour<ConcreteEntity> {
                 gameObject.SetActive((bool) args[0]);
                 break;
             case "SetPosition":
-                transform.position = ((Coordinate) args[0]).ToVector();
+                transform.localPosition = ((Coordinate) args[0]).ToVector();
                 break;
         }
     }

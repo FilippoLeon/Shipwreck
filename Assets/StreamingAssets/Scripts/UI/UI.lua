@@ -6,7 +6,7 @@ function buildCreativePlacementPanel(UI, verse)
 	-- print(verse.Name)
 	for key, prototype in pairs(verse.registry.partRegistry.prototypes)
 	do
-		print(prototype.Id)
+		-- print(prototype.Id)
 		button = Button.Create(prototype.Id)
 		panel.Add(button)
 		button.Text = prototype.Id

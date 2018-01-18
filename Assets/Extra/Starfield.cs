@@ -53,11 +53,12 @@ public class Starfield : MonoBehaviour {
             sums[i] = sum;
         }
       
-
+        // Create 4 quadrants that will swap position
         for (int j = 0; j < quadrants.Length; ++j) {
             quadrants[j] = new GameObject("quadrant-" + j.ToString());
             quadrants[j].transform.SetParent(this.transform);
 
+            // Populate quadrants with stars
             for (int i = 0; i < density; ++i) {
                 int si = Random.Range(0, stars.Length - 1);
                 GameObject copy = Instantiate(stars[si]);
@@ -105,26 +106,33 @@ public class Starfield : MonoBehaviour {
         StartField();
     }
 	
-    
+    /// <summary>
+    /// Move quadrants to the correct position
+    /// </summary>
     void StartField() {
         quadrants[1].transform.position -= Vector3.left * quadrantSizeX;
         quadrants[2].transform.position -= Vector3.down * quadrantSizeY;
         quadrants[3].transform.position -= new Vector3( quadrantSizeX, quadrantSizeY );
     }
-
-    // Update is called once per frame
+    
+    /// <summary>
+    /// Shift quadrants.
+    /// </summary>
     void Update() {
         Translate(velocity * speed);
     }
     
-
+    /// <summary>
+    /// Shift quadrants by delta amount, if boundaries are reached, move quadrants around.
+    /// </summary>
+    /// <param name="delta"></param>
     void Translate(Vector2 delta) {
         for (int i = 0; i < quadrants.Length; ++i) {
             quadrants[i].transform.Translate(delta);
 
             //bool translated = false;
 
-            Vector3 pos = quadrants[i].transform.position;
+            Vector3 pos = quadrants[i].transform.localPosition;
             if( pos.x < -quadrantSizeX ) {
                 pos.x += 2 * quadrantSizeX;
                 //translated = true;
@@ -139,7 +147,7 @@ public class Starfield : MonoBehaviour {
                 pos.y -= 2 * quadrantSizeY;
                 //translated = true;
             }
-            quadrants[i].transform.position = pos;
+            quadrants[i].transform.localPosition = pos;
             //if ( translated ) {
             //    quadrants[i].SetActive(false);
             //} else {

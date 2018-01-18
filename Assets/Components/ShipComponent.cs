@@ -9,6 +9,7 @@ public class ShipComponent : ObserverBehaviour<Ship> {
         PartComponent partComponent = o.AddComponent<PartComponent>();
 
         partComponent.transform.SetParent(transform);
+        partComponent.transform.localEulerAngles = Vector3.zero;
         o.name = "Part";
 
         part.register(partComponent);
@@ -21,6 +22,7 @@ public class ShipComponent : ObserverBehaviour<Ship> {
                 break;
             case "OnPositionChanged":
                 transform.position = Emitter.Position;
+                transform.rotation = Quaternion.AngleAxis(Emitter.Angle, Vector3.forward);
                 break;
         }
     }

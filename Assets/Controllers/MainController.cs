@@ -86,6 +86,7 @@ public class MainController : MonoBehaviour {
         Verse.register(verseComponent);
 
         GameObject overlay = new GameObject("Overlay");
+        overlay.transform.SetParent(cameraController.transform);
         overlayComponent = overlay.AddComponent<OverlayComponent>();
         Verse.register(overlayComponent);
 
@@ -109,8 +110,7 @@ public class MainController : MonoBehaviour {
         Verse.Update();
 
         if( Input.GetKeyDown(KeyCode.Tab)) {
-            shipController.NextShip();
-            cameraController.transform.SetParent(shipController.GetActiveShipComponents().transform);
+            Verse.NextShip();
         }
 
         if( Input.GetButtonDown("map")) {
