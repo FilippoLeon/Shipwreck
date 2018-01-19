@@ -40,7 +40,7 @@ public class ShipController : MonoBehaviour {
 
         // Test warp and merchant stuff
         Ship.WarpTo(Enumerable.ToList(Ship.verse.Galaxy.systems.Values)[0].planets[0]);
-        Ship.Location.AddNpc(new Merchant());
+        Ship.Location.AddNpc(new Merchant("Jim"));
         GUIController.Find("merchant_view").SetParameters(new object[] { Ship.Location.GetNpc(0) });
     }
     

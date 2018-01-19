@@ -13,10 +13,10 @@ namespace GUI {
 
         private LayoutGroup layout;
 
-        List<IWidget> childs = new List<IWidget>();
+        Dictionary<string, IWidget> childs = new Dictionary<string, IWidget>();
         public IEnumerable<IWidget> Childs {
             get {
-                return childs;
+                return childs.Values;
             }
         }
 
@@ -87,7 +87,7 @@ namespace GUI {
         }
 
         public void Add(IWidget child) {
-            childs.Add(child);
+            childs.Add(child.Id, child);
             child.GameObject.transform.SetParent(GameObject.transform);
         }
         public Panel(string id) : this() {
@@ -246,10 +246,19 @@ namespace GUI {
         }
 
         public override void Update(object[] aregs) {
-            foreach (IWidget child in childs) {
+            foreach (IWidget child in childs.Values) {
                 child.Update(null);
             }
             base.Update(null);
+        }
+
+        public IWidget this[string key] {
+            get {
+                return childs[key];
+            }
+            set {
+                childs[key] = value;
+            }
         }
     }
 }
