@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [MoonSharpUserData]
-public class Merchant : Entity<Merchant> {
+public class Merchant : Entity<Merchant>, INpc {
 
     public class Item {
         public Part part;
@@ -16,7 +16,8 @@ public class Merchant : Entity<Merchant> {
 
     List<Item> basket = new List<Item>();
 
-    public Merchant() {
+    public Merchant(string name) {
+        Name = name;
         inventory["addons"] = new List<Item> {
             new Item{part=Verse.Instance.registry.partRegistry.Get("turret")},
             new Item{part=Verse.Instance.registry.partRegistry.Get("heater")},

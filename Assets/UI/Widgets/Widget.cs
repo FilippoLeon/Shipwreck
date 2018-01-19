@@ -16,7 +16,7 @@ namespace GUI {
         }
 
         public override object GetParameter(string name) {
-            throw new NotImplementedException();
+            return args[argDict[name]];
         }
         public override void SetParameter(string name, object val) {
             throw new NotImplementedException();

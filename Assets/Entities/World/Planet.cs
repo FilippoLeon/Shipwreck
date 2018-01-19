@@ -44,4 +44,12 @@ public class Planet : Entity<Planet>, ILocation {
     public override void Update() {
         throw new System.NotImplementedException();
     }
+
+    public void AddNpc(INpc npc) {
+        npcs.Add(npc);
+    }
+
+    public INpc GetNpc(int i) {
+        return npcs[i];
+    }
 }

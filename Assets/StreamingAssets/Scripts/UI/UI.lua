@@ -48,4 +48,8 @@ end
 
 function rebuildMerchantPanel(UI, verse)
 	print("Rebuild, bye!")
+	-- Merchant
+	print(UI["merchant_view"].GetParameter("@merchant").Name)
+	-- Verse.Instance.ActiveShip().Location.GetNpc(0)
+	-- print(UI["merchant_view"]["merchant_inventory"])
 end

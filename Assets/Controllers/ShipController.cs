@@ -38,7 +38,10 @@ public class ShipController : MonoBehaviour {
         GUIController.Find("player_panel").SetParameters(new object[] { Player });
         GUIController.Find("ship_view").SetParameters(new object[] { Ship });
 
+        // Test warp and merchant stuff
         Ship.WarpTo(Enumerable.ToList(Ship.verse.Galaxy.systems.Values)[0].planets[0]);
+        Ship.Location.AddNpc(new Merchant());
+        GUIController.Find("merchant_view").SetParameters(new object[] { Ship.Location.GetNpc(0) });
     }
     
     public Dictionary<Ship, ShipComponent> shipComponents = new Dictionary<Ship, ShipComponent>();
