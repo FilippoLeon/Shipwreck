@@ -11,7 +11,7 @@ function buildCreativePlacementPanel(UI, verse)
 		panel.Add(button)
 		button.Text = prototype.Id
 		-- button.TextColor = Color.black
-		button.SetPreferredSize(100)
+		button.SetPreferredSize(150)
 		function printID()
 			-- print("Building : " .. prototype.Id)
 			verse.SetMode(1, { prototype.Id });
@@ -25,7 +25,7 @@ function buildOverlayPanel(UI, verse)
 	button = Button.Create("none")
 	panel.Add(button)
 	button.Text = "None"
-	button.SetPreferredSize(50)
+	button.SetPreferredSize(100)
 	function setMap()
 		-- print("Disabling overlay map.")
 		verse.SetMap(nil);
@@ -37,7 +37,7 @@ function buildOverlayPanel(UI, verse)
 		button = Button.Create(key)
 		panel.Add(button)
 		button.Text = key
-		button.SetPreferredSize(50)
+		button.SetPreferredSize(100)
 		function setMap()
 			-- print("Setting overlay map to: " .. key)
 			verse.SetMap(key);

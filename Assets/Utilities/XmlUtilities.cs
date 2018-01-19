@@ -19,4 +19,10 @@ public class XmlUtilities {
         }
         return vectorString.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
     }
+    internal static float[] ToFloatArray(string vectorString) {
+        if (vectorString == null) {
+            return new float[] { 0.0f, 0.0f, 0.0f, 0.0f };
+        }
+        return vectorString.Split(',').Select(n => Convert.ToSingle(n)).ToArray();
+    }
 }

@@ -62,6 +62,23 @@ namespace GUI {
             //GameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
             GameObject.GetComponent<RectTransform>().offsetMax = new Vector2(-50, -10);
         }
+        public void SetSize(float[] size) {
+            if(size[0] == -1) {
+                size[0] = GameObject.GetComponent<RectTransform>().offsetMin.x;
+            }
+            if (size[1] == -1) {
+                size[1] = GameObject.GetComponent<RectTransform>().offsetMin.y;
+            }
+            if (size[2] == -1) {
+                size[2] = GameObject.GetComponent<RectTransform>().offsetMax.x;
+            }
+            if (size[3] == -1) {
+                size[3] = GameObject.GetComponent<RectTransform>().offsetMax.y;
+            }
+            GameObject.GetComponent<RectTransform>().offsetMin = new Vector2(size[0], size[1]);
+            GameObject.GetComponent<RectTransform>().offsetMax = new Vector2(size[2], size[3]);
+        }
+
 
         public void SetMargin() {
             if (layout is HorizontalOrVerticalLayoutGroup) {
@@ -163,8 +180,12 @@ namespace GUI {
                 int[] padding = XmlUtilities.ToIntArray(reader.GetAttribute("padding"));
                 panel.SetPadding(padding);
             }
+            if (reader.GetAttribute("offset") != null) {
+                float[] padding = XmlUtilities.ToFloatArray(reader.GetAttribute("offset"));
+                panel.SetSize(padding);
+            }
 
-            if( reader.GetAttribute("background") != null ) {
+            if ( reader.GetAttribute("background") != null ) {
                 if (reader.GetAttribute("background") == "none") {
                     GameObject.Destroy(panel.background);
                 }

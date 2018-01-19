@@ -4,6 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 
+/// </summary>
 [MoonSharpUserData]
 public class Ship : Entity<Ship> {
 
@@ -40,6 +43,7 @@ public class Ship : Entity<Ship> {
     Dictionary<Coordinate, Part> hulls = new Dictionary<Coordinate, Part>();
 
     public Verse verse;
+    public ILocation location;
 
     public Ship(Verse verse) {
         verse.AddShip(this);

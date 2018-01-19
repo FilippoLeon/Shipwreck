@@ -99,8 +99,10 @@
 		</Label>
 	</Panel>
 	
-	<Panel id="creative_panel" layout="horizontal" anchorMin="0,0" anchorMax="1,0.1" padding="2,2,2,2">
-		<Button type="simple">
+	<Panel id="creative_panel" layout="horizontal" 
+	       anchorMin="0,0" anchorMax="1,0.1" content=",preferredFit" padding="2,2,2,2"
+		   minSize ="-1,20" preferredSize="-1,20">
+		<Button type="sliced" preferredSize="100,20" minSize="100,-1">
 			<Text>Spawn Projectile</Text>
 			<Action event="OnClick">
 				function ()
@@ -114,7 +116,9 @@
 		</Button>
 		<Action event="OnCreate" type="script">buildCreativePlacementPanel</Action>
 	</Panel>
-	<Panel id="overlay_panel" layout="horizontal" anchorMin="0,0.1" anchorMax="1,0.2" padding="2,2,2,2">
+	
+	<Panel id="overlay_panel" layout="horizontal" 
+	anchorMin="0,0" anchorMax="1,0" padding="2,2,2,2" offset="-1,70,-1,90">
 		<Action event="OnCreate" type="script">buildOverlayPanel</Action>
 	</Panel>
 </Canvas>
