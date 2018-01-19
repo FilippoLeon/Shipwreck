@@ -145,8 +145,20 @@
 		<Action event="OnCreate" type="script">buildCreativePlacementPanel</Action>
 	</Panel>
 	
-	<Panel layout="horizontal" anchorMin="0.3,0.3" anchorMax="0.6,0.6" content="expand">
-		<ScrollView anchorMin="0,0" anchorMax="1,1">
+	<Panel id="merchant_view" layout="vertical" 
+	       anchorMin="0.2,0.2" anchorMax="0.8,0.8"  content=",preferredFit" child="expand,">
+		<Argument>@merchant</Argument>
+		<Button type="sliced" preferredSize="100,20" minSize="100,20">
+			<Text>Rebuild ScrollView</Text>
+			<Action event="OnClick">
+				function ( UI )
+					print("Rebuilding view")
+					UI["merchant_view"].Emit("OnArgumentChange", {UI, Verse.Instance })
+				end
+			</Action> 
+		</Button>
+		<Action event="OnArgumentChange" type="script">rebuildMerchantPanel</Action>
+		<ScrollView id="merchant_inventory" anchorMin="0,0" anchorMax="1,1" preferredSize="100,300">
 			<Panel layout="horizontal">
 			<Label><Text>asdadsasd</Text></Label>
 			</Panel>

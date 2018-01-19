@@ -45,3 +45,7 @@ function buildOverlayPanel(UI, verse)
 		button.OnClick(setMap)
 	end
 end
+
+function rebuildMerchantPanel(UI, verse)
+	print("Rebuild, bye!")
+end

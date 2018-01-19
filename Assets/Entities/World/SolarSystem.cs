@@ -17,7 +17,7 @@ public class SolarSystem : Entity<SolarSystem>, IView {
 
         int nplanets = UnityEngine.Random.Range(1, 7);
         for( int i = 0; i < nplanets; ++i ) {
-            planets.Add(Planet.Random(this));
+            planets.Add(Planet.Random(this, i));
         }
     }
 

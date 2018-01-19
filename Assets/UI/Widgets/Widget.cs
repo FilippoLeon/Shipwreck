@@ -22,7 +22,7 @@ namespace GUI {
             throw new NotImplementedException();
         }
 
-        UnityEngine.UI.LayoutElement layoutComponent;
+        protected UnityEngine.UI.LayoutElement layoutComponent;
 
         protected object[] args = null;
         protected Dictionary<string, int> argDict = new Dictionary<string, int>();
@@ -44,9 +44,11 @@ namespace GUI {
 
             this.args = args;
 
-            if(ChangeArguments != null) ChangeArguments();
+            if (ChangeArguments != null) ChangeArguments();
 
-            // 
+            if (this is IWidgetContainer) {
+                Emit("OnArgumentChange", new object[] { GUIController.childs, Verse.Instance });
+            }
         }
 
         public void AddParameter(string name) {

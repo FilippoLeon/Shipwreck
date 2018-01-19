@@ -20,6 +20,7 @@ namespace GUI {
             GameObject.name = Id;
             scrollRect = GameObject.GetComponent<ScrollRect>();
             content = scrollRect.content.gameObject;
+            layoutComponent = GameObject.AddComponent<LayoutElement>();
 
             // Make these choosable
             content.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;

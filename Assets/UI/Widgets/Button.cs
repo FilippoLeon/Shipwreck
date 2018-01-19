@@ -63,7 +63,8 @@ namespace GUI {
                     buttonComponent.onClick.AddListener(
                         () => {
                             //Debug.Log(values);
-                            action.Call(this, values.Values.ToArray());
+                            object[] param = new object[] { GUIController.childs };
+                            action.Call(this, param.Concat(values.Values).ToArray() );
                             }
                         );
                     break;

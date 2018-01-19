@@ -30,7 +30,7 @@ public class Planet : Entity<Planet>, ILocation {
     public static Planet Random(SolarSystem system, int n = -1) {
         Planet planet = new Planet(system);
 
-        planet.Name = system.Name + (n > 0 ? " " + n.ToString() : "");
+        planet.Name = system.Name + (n >= 0 ? " " + (char)('a' + n) : "");
         planet.orbitInfo.radius = UnityEngine.Random.Range(1f, 10f);
         planet.orbitInfo.eccentricity = UnityEngine.Random.Range(0.5f, 0.7f);
 

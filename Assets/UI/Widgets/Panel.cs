@@ -103,6 +103,24 @@ namespace GUI {
                 (layout as HorizontalOrVerticalLayoutGroup).childForceExpandWidth = expand;
             }
         }
+        public void SetChildExpand(string mode, Direction dir) {
+            if (layout is HorizontalOrVerticalLayoutGroup) {
+                bool expand = false;
+                switch (mode) {
+                    case "expand":
+                        expand = true;
+                        break;
+                }
+                switch (dir) {
+                    case Direction.Horizontal:
+                        (layout as HorizontalOrVerticalLayoutGroup).childForceExpandWidth = expand;
+                        break;
+                    case Direction.Vertical:
+                        (layout as HorizontalOrVerticalLayoutGroup).childForceExpandHeight = expand;
+                        break;
+                }
+            }
+        }
 
         public  enum Direction {  Horizontal, Vertical };
 
@@ -154,6 +172,13 @@ namespace GUI {
                 case "vertical":
                     dir = Direction.Vertical;
                     break;
+            }
+
+            string childBehaviour = reader.GetAttribute("child");
+            if( childBehaviour != null ) {
+                string[] s = childBehaviour.Split(',');
+                panel.SetChildExpand(s[0], Direction.Horizontal);
+                panel.SetChildExpand(s[1], Direction.Vertical);
             }
 
             string contentPolicy = reader.GetAttribute("content");
