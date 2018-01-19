@@ -62,7 +62,8 @@ namespace GUI {
         public override void SetValue(object value, int index) {
             values[index] = value;
             if ( textType == TextType.Formatted ) {
-                textComponent.text = String.Format(content, values.Values.ToArray());
+                object[] val = values.Values.ToArray();
+                textComponent.text = String.Format(content, val);
             } else if ( textModifier == null ) {
                 textComponent.text = values[0].ToString();
             } else {

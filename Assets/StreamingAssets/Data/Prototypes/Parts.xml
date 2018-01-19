@@ -59,4 +59,9 @@
 			end
 		</Action>
 	</Part>
+	<Part id="heater" type="addon">
+		<Icon>
+			<Sprite category="Parts">shield_generator</Sprite>
+		</Icon>
+	</Part>
 </Prototypes>

@@ -16,5 +16,7 @@ namespace GUI {
         IEmitter GetArgument(string name);
 
         System.Action ChangeArguments { set; get; }
+
+        GameObject GetContentGameObject();
     }
 }

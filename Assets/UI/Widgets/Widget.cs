@@ -72,6 +72,10 @@ namespace GUI {
 
         static int staticId;
 
+        public Widget(bool createNew) {
+            id = "W" + Convert.ToString(staticId++);
+        }
+
         public Widget() {
             GameObject = new UnityEngine.GameObject();
             Id = "W" + Convert.ToString(staticId++);
@@ -91,15 +95,19 @@ namespace GUI {
 
 
         protected void LinkArgNameToValue(string argName, string propName, int index) {
+            values[index] = null;
 
             System.Action<object[]> action = (object[] o) => {
                 IEmitter arg = Root.GetArgument(argName);
                 if (GetPropValue(arg, propName) == null ) {
+                    //string a = argName + "......." + propName + " .. "+index;
+                    //Debug.Log(argName);
+                    //Debug.Log(propName);
                     return;
                 }
                 //object val = GetPropValue(arg, propName).ToString();
                 //Debug.Log(String.Format("Argument object {0} has value {1}", propName, val.ToString()));
-                SetValue(GetPropValue(arg, propName).ToString(), index);
+                SetValue(GetPropValue(arg, propName), index);
             };
             Root.ChangeArguments += () => {
                 // Register the "Value update"-Lambda with the Root element's argument with this name.
@@ -116,7 +124,7 @@ namespace GUI {
         public void SetParent(IWidget parent) {
             this.parent = parent;
             if (parent != null) {
-                GameObject.transform.SetParent(parent.GameObject.transform);
+                GameObject.transform.SetParent(parent.GetContentGameObject().transform);
 
                 if (parent.Root == null) {
                     Root = parent;
@@ -227,6 +235,10 @@ namespace GUI {
 
             // throws InvalidCastException if types are incompatible
             return (T)retval;
+        }
+
+        public GameObject GetContentGameObject() {
+            return GameObject;
         }
     }
 }

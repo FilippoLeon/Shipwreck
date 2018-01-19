@@ -170,6 +170,9 @@ namespace GUI {
                     case "preferredFit":
                         panel.AddContentSizeFitter(ContentSizeFitter.FitMode.PreferredSize, dir);
                         break;
+                    case "expand":
+                        panel.SetChildExpand(true);
+                        break;
                     default:
                         break;
                 }

@@ -38,6 +38,34 @@
 		</Panel>
 	</Panel>
 	
+	
+	<Panel id="location_view" layout="vertical" 
+	       anchorMin="0,0.5" anchorMax="0.2,1" content="preferredFit,minFit" padding="2,2,2,2">
+		<Action event="OnCreate">
+			function (UI, verse) 
+				this = UI["location_view"] 
+				switchParam = function() 
+					this.SetParameters({ verse.ActiveShip().Location })
+				end
+				verse.AddAction("OnWarpTo", switchParam)
+			end
+		</Action>
+		<Argument>@location</Argument>
+		<Label alignment="MiddleCenter" minSize="-1,20">
+			<Text type="dynamic" argument="location">Name</Text>
+		</Label>
+		<Panel id="location_details" layout="grid" gridY="2" cellSize="200,20" content="minFit">
+			<Label><Text>System</Text></Label>
+			<Label><Text type="dynamic" argument="location">SolarSystem.Name</Text></Label>
+			<Label><Text>Radius (eccentricity)</Text></Label>
+			<Label>
+				<Value argument="location">Orbit.radius</Value>
+				<Value argument="location">Orbit.eccentricity</Value>
+				<Text type="formatted" argument="location">{0:0.##} ({1:0.00})</Text>
+			</Label>
+		</Panel>
+	</Panel>
+	
 	<Panel id="part_view" layout="vertical" 
 			anchorMin="0.8,0" anchorMax="1,1" 
 			content="preferredFit,minFit" padding="2,2,2,2">
@@ -57,12 +85,12 @@
 			<Label><Text>Pressure</Text></Label>
 			<Label>
 				<Value argument="part">pressure</Value>
-				<Text type="formatted" argument="player">{0} mBa</Text>
+				<Text type="formatted">{0} mBa</Text>
 			</Label>
 			<Label><Text>Temperature</Text></Label>
 			<Label>
 				<Value argument="part">temperature</Value>
-				<Text type="formatted" argument="player">{0} K</Text>
+				<Text type="formatted">{0} K</Text>
 			</Label>
 			<Label><Text>Level 0</Text></Label>
 			<Panel id="upgrade" layout="horizontal" background="none" padding="2,2,2,2">
@@ -115,6 +143,20 @@
 			</Action> 
 		</Button>
 		<Action event="OnCreate" type="script">buildCreativePlacementPanel</Action>
+	</Panel>
+	
+	<Panel layout="horizontal" anchorMin="0.3,0.3" anchorMax="0.6,0.6" content="expand">
+		<ScrollView anchorMin="0,0" anchorMax="1,1">
+			<Panel layout="horizontal">
+			<Label><Text>asdadsasd</Text></Label>
+			</Panel>
+			<Panel layout="horizontal">
+				<Label><Text>asdadsasd2</Text></Label>
+			</Panel>
+			<Panel layout="horizontal" content=",minFit">
+				<Label minSize="-1,444"><Text>asdadsasd3</Text></Label>
+			</Panel>
+		</ScrollView>
 	</Panel>
 	
 	<Panel id="overlay_panel" layout="horizontal" 

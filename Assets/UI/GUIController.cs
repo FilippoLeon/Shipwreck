@@ -67,6 +67,9 @@ public class GUIController : UnityEngine.MonoBehaviour {
             case "Panel":
                 child = Panel.Create(reader, parent);
                 break;
+            case "ScrollView":
+                child = ScrollView.Create(reader, parent);
+                break;
             case "Label":
                 child = Label.Create(reader, parent);
                 break;

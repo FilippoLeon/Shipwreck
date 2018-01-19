@@ -37,6 +37,8 @@ public class ShipController : MonoBehaviour {
 
         GUIController.Find("player_panel").SetParameters(new object[] { Player });
         GUIController.Find("ship_view").SetParameters(new object[] { Ship });
+
+        Ship.WarpTo(Enumerable.ToList(Ship.verse.Galaxy.systems.Values)[0].planets[0]);
     }
     
     public Dictionary<Ship, ShipComponent> shipComponents = new Dictionary<Ship, ShipComponent>();
