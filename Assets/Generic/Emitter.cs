@@ -123,10 +123,16 @@ abstract public class Emitter<T> : IXmlSerializable, IEmitter<T> where T : class
         actions[eventName].Add(action);
         return action;
     }
+
     public virtual void RemoveAction(string eventName, GenericAction act) {
         if (actions.ContainsKey(eventName)) {
             actions[eventName].Remove(act);
         }
     }
 
+    protected void SelfDestroy() {
+        Emit("OnSelfDestroy");
+        observers = null;
+        actions = null;
+    }
 }

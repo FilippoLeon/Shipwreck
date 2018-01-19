@@ -6,9 +6,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 
 [MoonSharpUserData]
-abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IXmlSerializable where T: class {
-
-
+abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSerializable where T: class {
     protected Dictionary<string, object> parameters = new Dictionary<string, object>();
 
     public override string Category {
@@ -28,6 +26,27 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IXmlSerializable wh
     }
 
     public string Name { get; set; }
+
+    public Entity() {
+
+    }
+
+    protected Entity(Entity<T> other) {
+        id = other.id;
+        parameters = new Dictionary<string, object>();
+        foreach (KeyValuePair<string, object> o in other.parameters) {
+            if (o.Value is int) {
+                parameters[o.Key] = (int)o.Value;
+            } else if (o.Value is string) {
+                parameters[o.Key] = (string)o.Value;
+            } else if (o.Value is float) {
+                parameters[o.Key] = (float)o.Value;
+            }
+        }
+
+        actions = new Dictionary<string, List<GenericAction>>(other.actions);
+    }
+
     override public void ReadXml(XmlReader reader) {
         base.ReadCurrentElement(reader);
 
@@ -98,26 +117,6 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IXmlSerializable wh
     }
 
     public abstract T Clone();
-
-    public Entity() {
-
-    }
-
-    protected Entity(Entity<T> other) {
-        id = other.id;
-        parameters = new Dictionary<string, object>();
-        foreach (KeyValuePair<string, object> o in other.parameters) {
-            if (o.Value is int) {
-                parameters[o.Key] = (int) o.Value;
-            } else if (o.Value is string) {
-                parameters[o.Key] = (string) o.Value;
-            } else  if (o.Value is float) {
-                parameters[o.Key] = (float) o.Value;
-            }
-        }
-
-        actions = new Dictionary<string, List<GenericAction>>(other.actions);
-    }
-
+    
     public abstract void Update();
 }

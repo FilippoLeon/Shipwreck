@@ -20,10 +20,10 @@ public class ShipController : MonoBehaviour {
         Player.Funds = 1000;
 
         Ship = new Ship(GetComponent<MainController>().Verse);
-        Ship.AddPart(GetComponent<MainController>().Verse.registry.partRegistry.Get("root"), new Coordinate(0, 0));
         Ship.Name = "Serenity 2.0";
 
         AddShip(Ship);
+        Ship.AddPart(GetComponent<MainController>().Verse.registry.partRegistry.Get("root"), new Coordinate(0, 0));
 
         GetComponent<MainController>().Verse.NextShip();
 

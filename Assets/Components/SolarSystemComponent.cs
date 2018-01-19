@@ -53,6 +53,6 @@ public class SolarSystemComponent : ObserverBehaviour<SolarSystem> {
     }
 
     public override void HandleEvent(string signal) {
-        throw new NotImplementedException();
+        base.HandleEvent(signal);
     }
 }

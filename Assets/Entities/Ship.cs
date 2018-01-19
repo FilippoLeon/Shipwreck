@@ -180,13 +180,26 @@ public class Ship : Entity<Ship> {
         throw new System.NotImplementedException();
     }
 
-    float speed = 0.4f;
-    float angularSpeed = 5f;
+    float maxSpeed = 0.4f;
+    float speed = 0.0f;
+    float acceleration = 0.001f;
+    float maxAngularSpeed = 5f;
+    float angularSpeed = 0f;
+    float angularAcceleration = 0.1f;
 
     public override void Update() {
         if( moving ) {
+            Vector3 distance = wayPoint - position;
+            float deltaAngle = Vector3.Angle(distance, Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up);
             // If facing correct direction
-            if ( Vector3.Angle(wayPoint - position, Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up ) <= angularSpeed ) {
+            if (deltaAngle <= angularSpeed ) {
+                float d = 0.5f * speed * speed / acceleration;
+                if ( distance.magnitude > d ) {
+                    speed += acceleration;
+                } else {
+                    speed -= acceleration;
+                }
+                speed = Mathf.Clamp(speed, 0, maxSpeed);
                 Position += speed * (wayPoint - position).normalized;
                 if ((position - wayPoint).magnitude < speed) {
                     Position = wayPoint;
@@ -194,6 +207,13 @@ public class Ship : Entity<Ship> {
                 }
             // Else rotate
             } else {
+                float d = 0.5f * angularSpeed * angularSpeed / angularAcceleration;
+                if (deltaAngle > d) {
+                    angularSpeed += angularAcceleration;
+                } else {
+                    angularSpeed -= angularAcceleration;
+                }
+               angularSpeed = Mathf.Clamp(angularSpeed, 0, maxAngularSpeed);
                 Angle -= angularSpeed * Mathf.Sign(
                     Vector3.Cross(wayPoint - position, Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.up).z
                     );
@@ -228,6 +248,23 @@ public class Ship : Entity<Ship> {
             }
         }
     }
+
+    public void SpawnProjectile(Projectile p, Coordinate coord, Ship target, Coordinate targetCoordinate) {
+        p.Name = "Projectile";
+        p.targetInfo.ship = target;
+        p.targetInfo.coordinate = targetCoordinate;
+        p.sourceInfo.ship = this;
+        p.sourceInfo.coordinate = coord;
+
+        p.spriteInfo = new SpriteInfo();
+        p.spriteInfo.category = "UI";
+        p.spriteInfo.id = "red_square";
+
+        Emit("OnSpawnProjectile", new object[] { p });
+
+        verse.SpawnEntity(p, Position + coord.ToVector());
+    }
+
     public void UpdatePressure() {
         int rate = 4;
 

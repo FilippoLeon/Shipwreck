@@ -14,4 +14,8 @@
   <Sprite start="0.5,15.5" category="UI" size="16,16">plus</Sprite>
   <Sprite start="0,15" category="UI" size="16,16">minus</Sprite>
   <Sprite start="0.5,15" category="UI" size="16,16">handle</Sprite>
+  <Sprite start="2,15.5" category="UI" size="16,16">green_square</Sprite>
+  <Sprite start="2.5,15.5" category="UI" size="16,16">yellow_square</Sprite>
+  <Sprite start="2,15" category="UI" size="16,16">red_square</Sprite>
+  <Sprite start="2.5,15" category="UI" size="16,16">blue_square</Sprite>
 </SpriteSheet>

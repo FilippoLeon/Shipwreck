@@ -8,6 +8,9 @@ public class PartComponent : ObserverBehaviour<Part> {
     void Start() {
         //sr = gameObject.AddComponent<SpriteRenderer>();
         //sr.sprite = SpriteController.spriteLoader.GetSprite("part");
+        
+        BoxCollider2D coll = gameObject.AddComponent<BoxCollider2D>();
+        coll.size = new Vector2(1f, 1f);
     }
 
     void AddAt(Coordinate coordinate) {
@@ -29,7 +32,7 @@ public class PartComponent : ObserverBehaviour<Part> {
     }
 
     override public void HandleEvent(string signals) {
-
+        base.HandleEvent(signals);
     }
 
     void Update() {

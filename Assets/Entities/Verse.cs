@@ -13,6 +13,8 @@ public class Verse : Entity<Verse>, IView {
     public List<Ship> ships = new List<Ship>();
     List<Player> players = new List<Player>();
 
+    public List<IEmitter> entities = new List<IEmitter>();
+
     public Dictionary<string, Func<Coordinate, int>> maps = new Dictionary<string, Func<Coordinate, int>>();
 
     public Galaxy Galaxy {set; get; }
@@ -21,6 +23,14 @@ public class Verse : Entity<Verse>, IView {
         public Coordinate coordinate { set; get; }
         public int index { set; get; }
         public IEmitter selection { set; get; }
+    }
+
+    public void AddEntity<T>(ConcreteEntity<T> e) where T: class {
+        entities.Add(e);
+    }
+
+    internal void RemoveEntity<T>(ConcreteEntity<T> e) where T: class {
+        entities.Remove(e);
     }
 
     int index = 0;
@@ -33,6 +43,7 @@ public class Verse : Entity<Verse>, IView {
 
         Emit("OnActiveShipChanged", new object[] { });
     }
+    
 
     public Selection selection;
 
@@ -51,10 +62,19 @@ public class Verse : Entity<Verse>, IView {
         modeArgs = args;
     }
 
-    public void SpawnEntity(ConcreteEntity entity, Coordinate position) {
+    public void SpawnEntity<T>(ConcreteEntity<T> entity, Vector2 position)  where T: class {
         Emit("SpawnEntity", new object[] { entity });
         entity.Position = position;
         entity.Spawn(position);
+        entity.Verse =  this;
+        AddEntity<T>(entity);
+    }
+    public void SpawnSelectionEntity<T>(ConcreteEntity<T> entity, Vector2 position) where T : class {
+        Emit("SpawnSelectionEntity", new object[] { entity });
+        entity.Position = position;
+        entity.Spawn(position);
+        entity.Verse = this;
+        AddEntity<T>(entity);
     }
 
     public Verse() {
@@ -77,7 +97,7 @@ public class Verse : Entity<Verse>, IView {
         maps["Health"] = (Coordinate c) => {
             int id = -1;
             if (this.ships != null &&this.ships.Count != 0) {
-                Ship ship = this.ships[0];
+                Ship ship = this.ActiveShip();
                 if (ship != null) {
                     Part part = ship.HullAt(c);
                     if (part != null) {
@@ -90,7 +110,7 @@ public class Verse : Entity<Verse>, IView {
         maps["Pressure"] = (Coordinate c) => {
             int id = -1;
             if (this.ships != null && this.ships.Count != 0) {
-                Ship ship = this.ships[0];
+                Ship ship = this.ActiveShip();
                 if (ship != null) {
                     Part part = ship.HullAt(c);
                     if (part != null) {
@@ -111,7 +131,7 @@ public class Verse : Entity<Verse>, IView {
         selectionEntity.spriteInfo.id = "selector_1";
         selectionEntity.spriteInfo.category = "UI";
 
-        SpawnEntity(selectionEntity, new Coordinate(0, 0));
+        SpawnSelectionEntity(selectionEntity, new Vector2(0, 0));
         selectionEntity.Active = false;
 
         Emit("VerseCreated", new object[] { });
@@ -125,8 +145,12 @@ public class Verse : Entity<Verse>, IView {
         ships.Add(ship);
     }
 
+    public Ship GetShip(int index) {
+        return ships[index];
+    }
+
     public void Select(Coordinate where) {
-        List<Part> listOfParts = ships[0].PartAt(where);
+        List<Part> listOfParts = ActiveShip().PartAt(where);
         if( listOfParts == null || listOfParts.Count == 0 ) {
             return;
         }
@@ -142,7 +166,7 @@ public class Verse : Entity<Verse>, IView {
             GUIController.childs["part_view"].SetParameters(new object[] { selection.selection });
 
             selectionEntity.Active = true;
-            selectionEntity.Position = selection.coordinate;
+            selectionEntity.Position = selection.coordinate.ToVector();
         } else {
             selectionEntity.Active = false;
         }
@@ -163,7 +187,11 @@ public class Verse : Entity<Verse>, IView {
         foreach(Ship s in ships) {
             s.Update();
         }
-        
+        foreach(IEmitter e in entities) {
+            if (e is IUpdateable) {
+                (e as IUpdateable).Update();
+            }
+        }
         //if (Input.GetMouseButtonDown(2)) {
         //    selectionEntity.Active = !selectionEntity.Active;
         //}

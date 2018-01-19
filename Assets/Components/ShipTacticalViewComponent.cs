@@ -47,7 +47,7 @@ public class ShipTacticalViewComponent : ObserverBehaviour<Ship> {
     }
 
     override public void HandleEvent(string signals) {
-
+        base.HandleEvent(signals);
     }
 
     void Update() {

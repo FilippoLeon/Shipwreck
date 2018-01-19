@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using MoonSharp.Interpreter;
+using UnityEngine;
 
+[MoonSharpUserData]
 public struct Coordinate {
     public int x, y;
 

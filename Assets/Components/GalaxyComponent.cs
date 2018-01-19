@@ -75,6 +75,6 @@ public class GalaxyComponent : ObserverBehaviour<Galaxy> {
     }
 
     public override void HandleEvent(string signal) {
-        throw new System.NotImplementedException();
+        base.HandleEvent(signal);
     }
 }

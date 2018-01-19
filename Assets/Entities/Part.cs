@@ -25,8 +25,8 @@ public partial class Part : Entity<Part> {
     }
 
     Ship ship = null;
-    Ship Ship {
-        set {
+    public Ship Ship {
+        protected set {
             ship = value;
         }
         get {

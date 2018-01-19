@@ -3,15 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityComponent : ObserverBehaviour<ConcreteEntity> {
+public class EntityComponent<T> : ObserverBehaviour<T> where T : ConcreteEntity<T> {
     SpriteRenderer sr;
 
     void Start() {
 
     }
 
-    void SpawnAt(Coordinate coordinate) {
-        transform.localPosition = coordinate.ToVector();
+    void SpawnAt(Vector2 coordinate) {
+        transform.localPosition = coordinate;
 
         sr = gameObject.AddComponent<SpriteRenderer>();
         
@@ -21,19 +21,19 @@ public class EntityComponent : ObserverBehaviour<ConcreteEntity> {
     override public void HandleEvent(string signal, object[] args) {
         switch(signal) {
             case "SpawnAt":
-                SpawnAt((Coordinate) args[0]);
+                SpawnAt((Vector2) args[0]);
                 break;
             case "SetActive":
                 gameObject.SetActive((bool) args[0]);
                 break;
             case "SetPosition":
-                transform.localPosition = ((Coordinate) args[0]).ToVector();
+                transform.localPosition = ((Vector2)args[0]);
                 break;
         }
     }
 
     override public void HandleEvent(string signals) {
-
+        base.HandleEvent(signals);
     }
 
     void Update() {
@@ -42,3 +42,4 @@ public class EntityComponent : ObserverBehaviour<ConcreteEntity> {
         if (sd.layer != null) sr.sortingLayerName = sd.layer;
     }
 }
+public class EntityComponent : EntityComponent<ConcreteEntity> { }

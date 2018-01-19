@@ -10,8 +10,8 @@ abstract public class ConcreteEntity<T> : Entity<T> where T : class {
 
     public SpriteInfo spriteInfo;
 
-    private Coordinate position;
-    public Coordinate Position {
+    private Vector2 position;
+    public Vector2 Position {
         get { return position; }
         set {
             position = value;
@@ -27,8 +27,10 @@ abstract public class ConcreteEntity<T> : Entity<T> where T : class {
             Emit("SetActive", new object[] { active });
         }
     }
-    
-    public bool Spawn(Coordinate position) {
+
+    public Verse Verse {set; get;}
+
+    internal bool Spawn(Vector2 position) {
         this.Position = position;
 
         Emit("SpawnAt", new object[] { position });
@@ -39,9 +41,8 @@ abstract public class ConcreteEntity<T> : Entity<T> where T : class {
     public override T Clone() {
         throw new NotImplementedException();
     }
-    
+
     public override void Update() {
-        throw new NotImplementedException();
     }
 }
 

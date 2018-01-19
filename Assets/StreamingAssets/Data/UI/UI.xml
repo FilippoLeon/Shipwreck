@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Canvas>
 	<Panel id="ship_view" layout="vertical" anchorMin="0,0" anchorMax="0.2,1" content="preferredFit,minFit" padding="2,2,2,2">
+		<Action event="OnCreate">
+			function (UI, verse) 
+				this = UI["ship_view"] 
+				switchParam = function() 
+					this.SetParameters({ verse.ActiveShip() })
+				end
+				verse.AddAction("OnActiveShipChanged", switchParam)
+			end
+		</Action>
 		<Argument>@ship</Argument>
 		<Label alignment="MiddleCenter" minSize="-1,20"><Text type="dynamic" argument="ship">Name</Text></Label>
 		<Panel id="ship_details" layout="grid" gridY="2" cellSize="100,20" content="minFit">
@@ -91,6 +100,18 @@
 	</Panel>
 	
 	<Panel id="creative_panel" layout="horizontal" anchorMin="0,0" anchorMax="1,0.1" padding="2,2,2,2">
+		<Button type="simple">
+			<Text>Spawn Projectile</Text>
+			<Action event="OnClick">
+				function ()
+					verse = Verse.Instance
+					coord = Coordinate.__new()
+					targetShip = verse.GetShip(1)
+					p = Projectile.__new()
+					verse.ActiveShip().SpawnProjectile(p, coord, targetShip, coord)
+				end
+			</Action> 
+		</Button>
 		<Action event="OnCreate" type="script">buildCreativePlacementPanel</Action>
 	</Panel>
 	<Panel id="overlay_panel" layout="horizontal" anchorMin="0,0.1" anchorMax="1,0.2" padding="2,2,2,2">

@@ -8,5 +8,11 @@ public abstract class ObserverBehaviour<T> : MonoBehaviour, IObserver<T> where T
     public T Emitter { set; get; }
 
     public abstract void HandleEvent(string signal, object[] args);
-    public abstract void HandleEvent(string signal);
+    public virtual void HandleEvent(string signal) {
+        switch (signal) {
+            case "OnSelfDestroy":
+                Destroy(gameObject);
+                break;
+        }
+    }
 }

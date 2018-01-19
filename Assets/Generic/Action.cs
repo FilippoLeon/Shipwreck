@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Xml.Serialization;
 using UnityEngine;
 
+[MoonSharpUserData]
 public class GenericAction {
     ActionType type;
     string name;

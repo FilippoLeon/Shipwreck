@@ -28,6 +28,6 @@ public class ShipComponent : ObserverBehaviour<Ship> {
     }
 
     override public void HandleEvent(string signals) {
-
+        base.HandleEvent(signals);
     }
 }

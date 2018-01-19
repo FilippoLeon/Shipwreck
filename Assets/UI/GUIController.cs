@@ -26,6 +26,10 @@ public class GUIController : UnityEngine.MonoBehaviour {
         
         ScriptLoader.RegisterPlaceolder("UI", typeof(UnityEngine.Color));
 
+        ScriptLoader.RegisterPlaceolder("UI", typeof(Verse));
+        ScriptLoader.RegisterPlaceolder("UI", typeof(Coordinate));
+        ScriptLoader.RegisterPlaceolder("UI", typeof(Projectile));
+
         BuildUI();
     }
 
