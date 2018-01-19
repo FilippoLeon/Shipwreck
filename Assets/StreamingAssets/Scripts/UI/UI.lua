@@ -8,7 +8,7 @@ function buildCreativePlacementPanel(UI, verse)
 	do
 		-- print(prototype.Id)
 		button = Button.Create(prototype.Id)
-		panel.Add(button)
+		panel.AddChild(button)
 		button.Text = prototype.Id
 		-- button.TextColor = Color.black
 		button.SetPreferredSize(150)
@@ -23,7 +23,7 @@ end
 function buildOverlayPanel(UI, verse)
 	panel = UI["overlay_panel"]
 	button = Button.Create("none")
-	panel.Add(button)
+	panel.AddChild(button)
 	button.Text = "None"
 	button.SetPreferredSize(100)
 	function setMap()
@@ -35,7 +35,7 @@ function buildOverlayPanel(UI, verse)
 	do
 		-- print(key)
 		button = Button.Create(key)
-		panel.Add(button)
+		panel.AddChild(button)
 		button.Text = key
 		button.SetPreferredSize(100)
 		function setMap()
@@ -51,5 +51,5 @@ function rebuildMerchantPanel(UI, verse)
 	-- Merchant
 	print(UI["merchant_view"].GetParameter("@merchant").Name)
 	-- Verse.Instance.ActiveShip().Location.GetNpc(0)
-	-- print(UI["merchant_view"]["merchant_inventory"])
+    print(UI["merchant_view"]["merchant_inventory"])
 end

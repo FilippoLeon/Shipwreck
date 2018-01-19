@@ -86,11 +86,9 @@ namespace GUI {
 
         public static Button Create(XmlReader reader, IWidget parent = null) {
             Button button = new Button();
-            button.ReadElement(reader, parent);
+            button.ReadCurrentElement(reader, parent);
 
             String type = reader.GetAttribute("type");
-
-            button.SetParent(parent);
 
             while (reader.Read()) {
                 if (reader.NodeType == XmlNodeType.Element) {

@@ -94,7 +94,12 @@ public class GUIController : UnityEngine.MonoBehaviour {
             } else {
                 child.Root = parent.Root;
             }
+            if(parent is IWidgetContainer) {
+                (parent as IWidgetContainer).AddChild(child);
+            }
         }
+
+
         return child;
     }
 

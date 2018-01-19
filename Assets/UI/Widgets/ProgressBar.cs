@@ -91,7 +91,6 @@ namespace GUI {
         public static ProgressBar Create(XmlReader reader, IWidget parent = null) {
             ProgressBar progressBar = new ProgressBar();
             progressBar.ReadElement(reader, parent);
-            progressBar.SetParent(parent);
 
             while (reader.Read()) {
                 if (reader.NodeType == XmlNodeType.Element) {
@@ -125,7 +124,7 @@ namespace GUI {
                 factor = Convert.ToSingle(factorString);
             }
 
-            base.ReadElement(reader, parent);
+            base.ReadCurrentElement(reader, parent);
         }
 
         public void SetTint(Color color) {

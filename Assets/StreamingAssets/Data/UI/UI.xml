@@ -146,7 +146,7 @@
 	</Panel>
 	
 	<Panel id="merchant_view" layout="vertical" 
-	       anchorMin="0.2,0.2" anchorMax="0.8,0.8"  content=",preferredFit" child="expand,">
+	       anchorMin="0.2,0.2" anchorMax="0.8,0.8"  content=",preferredFit" child="expand," padding="2,2,2,2">
 		<Argument>@merchant</Argument>
 		<Button type="sliced" preferredSize="100,20" minSize="100,20">
 			<Text>Rebuild ScrollView</Text>

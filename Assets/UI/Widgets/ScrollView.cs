@@ -9,11 +9,9 @@ using System.Collections.Generic;
 
 namespace GUI {
     [MoonSharpUserData]
-    public class ScrollView : Widget, IWidgetContainer {
+    public class ScrollView : WidgetContainer {
         ScrollRect scrollRect;
         GameObject content;
-
-        List<IWidget> childs = new List<IWidget>();
 
         public ScrollView() : base(false) {
             GameObject = GameObject.Instantiate(GameObject.FindObjectOfType<GUIPrefabs>().scrollViewPrefab);
@@ -40,47 +38,28 @@ namespace GUI {
             GameObject.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
             GameObject.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
             GameObject.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
-
-
+            
         }
         
         public ScrollView(string id) : this() {
             Id = id;
         }
-
-        public IEnumerable<IWidget> Childs {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
+        
         public static ScrollView Create(string id) {
             return new ScrollView(id);
         }
 
-        public GameObject GetContentGameObject() {
+        public override GameObject GetContentGameObject() {
             return content;
         }
 
         public static ScrollView Create(XmlReader reader, IWidget parent = null) {
             ScrollView scrollView = new ScrollView();
-            scrollView.ReadElement(reader, parent);
-            scrollView.SetParent(parent);
-           
-            while (reader.Read()) {
-                if (reader.NodeType == XmlNodeType.Element) {
-                    XmlReader subReader = reader.ReadSubtree();
-                    GUIController.ReadElement(subReader, scrollView);
-                    subReader.Close();
-                }
-            }
+            scrollView.ReadCurrentElement(reader, parent);
+
+            scrollView.ReadElements(reader);
 
             return scrollView;
-        }
-        
-
-        public override void Update(object[] args) {
-            base.Update(args);
         }
     }
 }

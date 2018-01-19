@@ -126,6 +126,7 @@ namespace GUI {
         public void SetParent(IWidget parent) {
             this.parent = parent;
             if (parent != null) {
+                Debug.LogWarningFormat("Moving {0} to {1}...", GameObject.name, parent.GetContentGameObject().name);
                 GameObject.transform.SetParent(parent.GetContentGameObject().transform);
 
                 if (parent.Root == null) {
@@ -140,8 +141,12 @@ namespace GUI {
             Emit("OnUpdate", args);
         }
 
-        internal void ReadElement(XmlReader reader, IWidget parent) {
+        internal virtual void ReadCurrentElement(XmlReader reader, IWidget parent) {
             base.ReadCurrentElement(reader);
+
+            if (reader.GetAttribute("id") != null) {
+                Id = reader.GetAttribute("id");
+            }
 
             string preferredSize = reader.GetAttribute("preferredSize");
             if (preferredSize != null) {
@@ -153,6 +158,8 @@ namespace GUI {
                 UnityEngine.Vector2 pfs = XmlUtilities.ToVector2(minSize);
                 SetMinSize((int) pfs.x, (int) pfs.y);
             }
+
+            SetParent(parent);
         }
 
         protected int valueIndex = 0;
@@ -239,7 +246,7 @@ namespace GUI {
             return (T)retval;
         }
 
-        public GameObject GetContentGameObject() {
+        public virtual GameObject GetContentGameObject() {
             return GameObject;
         }
     }

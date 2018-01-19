@@ -77,8 +77,7 @@ namespace GUI {
 
         public static Label Create(XmlReader reader, IWidget parent = null) {
             Label label = new Label();
-            label.ReadElement(reader, parent);
-            label.SetParent(parent);
+            label.ReadCurrentElement(reader, parent);
 
             if (reader.GetAttribute("alignment") != null) {
                 label.SetAlignment( (TextAnchor) Enum.Parse( typeof(TextAnchor), reader.GetAttribute("alignment") ) );
