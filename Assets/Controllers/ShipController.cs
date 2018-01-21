@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Assets.Entities.World;
 using UnityEngine;
 
 public class ShipController : MonoBehaviour {
@@ -16,11 +17,9 @@ public class ShipController : MonoBehaviour {
     void Start () {
         tacticalViewObject = new GameObject("Tactical view");
 
-        Player = new Player(GetComponent<MainController>().Verse);
-        Player.Funds = 1000;
+        Player = new Player(GetComponent<MainController>().Verse) {Funds = 1000};
 
-        Ship = new Ship(GetComponent<MainController>().Verse);
-        Ship.Name = "Serenity 2.0";
+        Ship = new Ship(GetComponent<MainController>().Verse) {Name = "Serenity 2.0"};
 
         AddShip(Ship);
         Ship.AddPart(GetComponent<MainController>().Verse.registry.partRegistry.Get("root"), new Coordinate(0, 0));

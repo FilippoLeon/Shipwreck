@@ -40,7 +40,7 @@ public class SolarSystemComponent : ObserverBehaviour<SolarSystem> {
             float angle = (float) i / (npoints - 1) * 2 * Mathf.PI;
             points[i] = EllipsePoint(angle, r, eps);
         }
-        lr.numPositions = npoints;
+        lr.positionCount = npoints;
         lr.SetPositions(points);
 
         lr.startColor = Color.white;

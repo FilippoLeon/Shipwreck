@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Entities.World;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,14 +7,15 @@ using System.Text;
 public class Player : Entity<Player> {
     Verse verse;
 
-    int funds;
+    private Inventory _inventory = new Inventory();
+    
     public int Funds {
         set {
             Emit("OnFundsChanged");
-            funds = value;
+            _inventory.Funds = value;
         }
         get {
-            return funds;
+            return _inventory.Funds;
         }
     }
 
@@ -21,9 +23,7 @@ public class Player : Entity<Player> {
         verse = Verse;
         verse.AddPlayer(this);
     }
-
-    List<Part> inventory = new List<Part>();
-
+    
     public override Player Clone() {
         throw new NotImplementedException();
     }
