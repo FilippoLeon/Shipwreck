@@ -52,17 +52,23 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
     override public void ReadXml(XmlReader reader) {
         base.ReadCurrentElement(reader);
 
-        while (reader.Read()) {
-            if (reader.NodeType == XmlNodeType.Element) {
-                XmlReader subreader = reader.ReadSubtree();
+        XmlReader subreader = reader.ReadSubtree();
+        while (subreader.Read()) {
+            if (subreader.NodeType == XmlNodeType.Element) {
                 ReadElement(subreader);
-                subreader.Close();
             }
         }
-   }
+        subreader.Close();
+    }
 
     public override void ReadElement(XmlReader reader) {
         switch (reader.Name) {
+            case "Icon":
+                XmlReader subreader = reader.ReadSubtree();
+                subreader.ReadToDescendant("Sprite");
+                SpriteInfo = new SpriteInfo(subreader, this);
+                subreader.Close();
+                break;
             case "Parameter":
                 string name = reader.GetAttribute("name");
 
@@ -96,9 +102,10 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
         }
     }
 
-    public override void SetParameter(string name, object value) {
+    public override object SetParameter(string name, object value) {
         parameters[name] = value;
         Emit("On" + name + "Changed");
+        return value;
     }
 
     public void SetParameterAsInt(string name, int value) {

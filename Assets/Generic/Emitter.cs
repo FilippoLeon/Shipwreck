@@ -23,7 +23,7 @@ abstract public class Emitter<T> : IXmlSerializable, IEmitter<T> where T : class
     }
 
     public abstract object GetParameter(string name);
-    public abstract void SetParameter(string name, object v);
+    public abstract object SetParameter(string name, object v);
 
     public void deregister(IObserver<T> observer) {
         observer.Emitter = null;
@@ -130,7 +130,7 @@ abstract public class Emitter<T> : IXmlSerializable, IEmitter<T> where T : class
         }
     }
 
-    protected void SelfDestroy() {
+    public void SelfDestroy() {
         Emit("OnSelfDestroy");
         observers = null;
         actions = null;

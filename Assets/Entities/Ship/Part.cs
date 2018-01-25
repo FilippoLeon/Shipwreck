@@ -43,6 +43,7 @@ public partial class Part : Entity<Part> {
     public SpriteInfo spriteInfo;
     public override SpriteInfo SpriteInfo {
         get { return spriteInfo;  }
+        set { spriteInfo = value; }
     }
 
     public Coordinate position;
@@ -179,12 +180,6 @@ public partial class Part : Entity<Part> {
 
     public override void ReadElement(XmlReader reader) {
         switch (reader.Name) {
-            case "Icon":
-                XmlReader subreader = reader.ReadSubtree();
-                subreader.ReadToDescendant("Sprite");
-                spriteInfo = new SpriteInfo(subreader, this);
-                subreader.Close();
-                break;
             default:
                 base.ReadElement(reader);
                 break;

@@ -137,7 +137,8 @@
 					verse = Verse.Instance
 					coord = Coordinate.__new()
 					targetShip = verse.GetShip(1)
-					p = Projectile.__new()
+					-- p = Projectile.__new()
+					p = verse.registry.entityRegistry.Get("projectiles", "basic_projectile")
 					verse.ActiveShip().SpawnProjectile(p, coord, targetShip, coord)
 				end
 			</Action> 

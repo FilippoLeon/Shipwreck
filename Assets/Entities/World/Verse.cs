@@ -41,6 +41,10 @@ public class Verse : Entity<Verse>, IView {
         entities.Add(e);
     }
 
+    public void RemoveEntity(ConcreteEntity e) {
+        entities.Remove(e);
+    }
+
     internal void RemoveEntity<T>(ConcreteEntity<T> e) where T: class {
         entities.Remove(e);
     }

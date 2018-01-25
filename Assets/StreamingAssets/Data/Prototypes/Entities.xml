@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Prototypes category="projectiles">
+	<Projectile id="basic_projectile">
+		<Parameter name="elapsed" type="int">0</Parameter>
+		<Icon>
+			<Sprite category="Parts">basic_hull</Sprite>
+		</Icon>
+		<Action event="OnUpdate">
+			function( this )
+				elapsed = this.SetParameter("elapsed", this.GetParameter("elapsed") + 1)
+				-- print(this)
+				-- print(elapsed)
+				if elapsed > 5 then
+					print( this.Verse )
+					-- this.Verse.RemoveEntity(this)
+					-- this.SelfDestroy()
+				end
+			end
+		</Action>
+		<Action event="OnHit">
+			function( this, hull )
+				print("Boom")
+			end 
+		</Action>
+	</Projectile>
+</Prototypes>

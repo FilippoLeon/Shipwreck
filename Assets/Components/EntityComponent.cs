@@ -36,7 +36,7 @@ public class EntityComponent<T> : ObserverBehaviour<T> where T : ConcreteEntity<
         base.HandleEvent(signals);
     }
 
-    void Update() {
+    protected void Update() {
         SpriteLoader.SpriteContainer sd = SpriteController.spriteLoader.Load(Emitter.spriteInfo, Emitter);
         sr.sprite = sd.sprite;
         if (sd.layer != null) sr.sortingLayerName = sd.layer;

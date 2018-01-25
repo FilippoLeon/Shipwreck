@@ -10,7 +10,7 @@ public interface IEmitter {
     string Id { set; get; }
 
     object GetParameter(string name);
-    void SetParameter(string name, object o);
+    object SetParameter(string name, object o);
 }
 
 public interface IEmitter<T> : IEmitter where T: class {

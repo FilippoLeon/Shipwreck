@@ -11,6 +11,7 @@ abstract public class ConcreteEntity<T> : Entity<T> where T : class {
     public SpriteInfo spriteInfo;
     public override SpriteInfo SpriteInfo {
         get { return spriteInfo; }
+        set { spriteInfo = value; }
     }
 
     private Vector2 position;
@@ -20,6 +21,16 @@ abstract public class ConcreteEntity<T> : Entity<T> where T : class {
             position = value;
             Emit("SetPosition", new object[] { position });
         }
+    }
+
+    public ConcreteEntity() {
+    }
+
+    public ConcreteEntity(ConcreteEntity<T> other) : base(other) {
+        spriteInfo = other.spriteInfo;
+        position = other.position;
+        active = other.active;
+        Verse = other.Verse;
     }
 
     private bool active;
@@ -46,7 +57,11 @@ abstract public class ConcreteEntity<T> : Entity<T> where T : class {
     }
 
     public override void Update() {
+        Emit("OnUpdate", new object[] { this });
     }
 }
 
-public class ConcreteEntity : ConcreteEntity<ConcreteEntity> { }
+public class ConcreteEntity : ConcreteEntity<ConcreteEntity> {
+    public ConcreteEntity() : base() { }
+    public ConcreteEntity(ConcreteEntity other) : base(other) { }
+}

@@ -45,6 +45,7 @@ public class ShipController : MonoBehaviour {
         Ship.Location.AddNpc(new Merchant("Jim"));
         (Ship.Location.GetNpc(0) as Merchant).Inventory.Funds = 2000;
         GUIController.Find("merchant_view").SetParameters(new object[] { Ship.Location.GetNpc(0) });
+        (GUIController.Find("merchant_view") as GUI.Widget).Hide();
     }
     
     public Dictionary<Ship, ShipComponent> shipComponents = new Dictionary<Ship, ShipComponent>();

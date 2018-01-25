@@ -67,7 +67,6 @@ public class MainController : MonoBehaviour {
     void Start () {
         cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-        string pathXml = Path.Combine(Application.streamingAssetsPath, "Data/Prototypes/Parts.xml");
 
         scriptLoader = new ScriptLoader();
 
@@ -76,7 +75,10 @@ public class MainController : MonoBehaviour {
         SpriteController spriteController = gameObject.AddComponent<SpriteController>();
         spriteController.Load();
 
+        string pathXml = Path.Combine(Application.streamingAssetsPath, "Data/Prototypes/Parts.xml");
         Verse.registry.partRegistry.ReadPrototypes(pathXml);
+        pathXml = Path.Combine(Application.streamingAssetsPath, "Data/Prototypes/Entities.xml");
+        Verse.registry.entityRegistry.ReadPrototypes(pathXml);
 
         gameObject.AddComponent<GUIController>();
         shipController = gameObject.AddComponent<ShipController>();

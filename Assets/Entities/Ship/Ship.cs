@@ -272,9 +272,9 @@ public class Ship : Entity<Ship> {
         p.sourceInfo.ship = this;
         p.sourceInfo.coordinate = coord;
 
-        p.spriteInfo = new SpriteInfo();
-        p.spriteInfo.category = "UI";
-        p.spriteInfo.id = "red_square";
+        //p.spriteInfo = new SpriteInfo();
+        //p.spriteInfo.category = "UI";
+        //p.spriteInfo.id = "red_square";
 
         Emit("OnSpawnProjectile", new object[] { p });
 
