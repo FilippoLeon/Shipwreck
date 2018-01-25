@@ -29,6 +29,9 @@
 		<Icon>
 			<Sprite category="Parts" type="function" id="turret">
 				function ( part )
+					if part == nil then
+						return "turret_1"
+					end
 					return "turret_" .. part.GetParameter("direction")
 				end
 			</Sprite>
@@ -61,7 +64,7 @@
 	</Part>
 	<Part id="heater" type="addon">
 		<Icon>
-			<Sprite category="Parts">shield_generator</Sprite>
+			<Sprite category="Parts">heater</Sprite>
 		</Icon>
 	</Part>
 </Prototypes>

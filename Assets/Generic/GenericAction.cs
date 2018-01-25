@@ -8,6 +8,7 @@ using UnityEngine;
 public class GenericAction {
     ActionType type;
     string name;
+    string category;
     string content;
     Closure closure;
     System.Action<object[]> sysAction;
@@ -33,6 +34,7 @@ public class GenericAction {
             default:
                 this.type = ActionType.Inline;
                 name = emitter.Id + "_" + eventName;
+                category = emitter.Category;
 
                 LUA.ScriptLoader.DoString(emitter.Category, name + " = " + content);
                 return;
@@ -51,12 +53,13 @@ public class GenericAction {
     }
 
     public DynValue Call(IEmitter emitter, object[] args) {
+        
         switch (type) {
             case ActionType.FunctionName:
-                return LUA.ScriptLoader.Call(emitter.Category, content, args);
+                return LUA.ScriptLoader.Call(emitter == null ? category : emitter.Category, content, args);
             case ActionType.Inline:
             default:
-                return LUA.ScriptLoader.Call(emitter.Category, name, args);
+                return LUA.ScriptLoader.Call(emitter == null ? category : emitter.Category, name, args);
             case ActionType.Closure:
                 try {
                     return closure.Call(args);

@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MoonSharp.Interpreter;
+using System;
 using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
 
+[MoonSharpUserData]
 public class SpriteInfo {
     public string id;
     public string category;
@@ -11,6 +13,11 @@ public class SpriteInfo {
 
     public SpriteInfo() {
 
+    }
+
+    public SpriteInfo(string category, string id) {
+        this.id = id;
+        this.category = category;
     }
 
     public SpriteInfo(SpriteInfo other) {
@@ -57,7 +64,16 @@ public class SpriteInfo {
     internal string GetId(IEmitter obj) {
         switch(type) {
             case "function":
-                return action.Call(obj, new object[] { obj }).String;
+                if(action == null) {
+                    Debug.LogError("No action attached to a functional SpriteInfo");
+                    return null;
+                }
+                //try {
+                    return action.Call(obj, new object[] { obj }).String;
+                //} catch(Exception e)  {
+                    //Debug.LogError(e.Message);
+                    //return null;
+                //}
             case null:
             default:
                 return id;

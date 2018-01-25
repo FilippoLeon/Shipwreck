@@ -18,4 +18,8 @@
   <Sprite start="2.5,15.5" category="UI" size="16,16">yellow_square</Sprite>
   <Sprite start="2,15" category="UI" size="16,16">red_square</Sprite>
   <Sprite start="2.5,15" category="UI" size="16,16">blue_square</Sprite>
+  <Sprite start="0,14.5" category="UI" size="16,16">reset</Sprite>
+  <Sprite start="0.5,14.5" category="UI" size="16,16">plus_all</Sprite>
+  <Sprite start="0,14" category="UI" size="16,16">minus_all</Sprite>
+  <Sprite start="0.5,14" category="UI" size="16,16">aaa</Sprite>
 </SpriteSheet>

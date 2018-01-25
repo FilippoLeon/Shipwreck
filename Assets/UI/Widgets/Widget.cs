@@ -5,21 +5,48 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace GUI {
     [MoonSharpUserData]
     abstract public class Widget : Emitter<Widget>, IWidget {
-        private IWidget parent = null, root = null;
+        /// <summary>
+        /// 
+        /// </summary>
+        private IWidget parent = null;
+
+        private IWidget root = null;
         public IWidget Root {
             get { return root; }
             set { root = value; }
         }
 
+        /// <summary>
+        /// Returns the parameter with key "name" stored in this Widget. Currently parameters should be stored in a Root widget.
+        /// </summary>
+        /// <param name="name">The name of the parameter to fetch.</param>
+        /// <returns>The value of the fetched parameter, upcasted to object.</returns>
         public override object GetParameter(string name) {
             return args[argDict[name]];
         }
         public override void SetParameter(string name, object val) {
             throw new NotImplementedException();
+        }
+        
+        public virtual void Dispose() {
+            GameObject.Destroy(GameObject);
+        }
+
+        private string tooltipText;
+        public string GetToolTipText() {
+            if (tooltipText != null) return tooltipText;
+            return id;
+        }
+
+        public string Tooltip {
+            set {
+                tooltipText = value;
+            }
         }
 
         protected UnityEngine.UI.LayoutElement layoutComponent;
@@ -47,7 +74,7 @@ namespace GUI {
             if (ChangeArguments != null) ChangeArguments();
 
             if (this is IWidgetContainer) {
-                Emit("OnArgumentChange", new object[] { GUIController.childs, Verse.Instance });
+                Emit("OnArgumentChange", new object[] { GUIController.childs, Verse.Instance, this });
             }
         }
 
@@ -74,13 +101,26 @@ namespace GUI {
 
         static int staticId;
 
-        public Widget(bool createNew) {
-            id = "W" + Convert.ToString(staticId++);
+        public Widget(bool createNew, string id = null) {
+            if (id == null) {
+                this.id = "W" + Convert.ToString(staticId++);
+            }
         }
 
-        public Widget() {
+        public Widget(string id = null) {
             GameObject = new UnityEngine.GameObject();
-            Id = "W" + Convert.ToString(staticId++);
+            GameObject.AddComponent<WidgetComponent>().widget = this;
+            if(id == null) {
+                Id = "W" + Convert.ToString(staticId++);
+            } else {
+                Id = id;
+            }
+            //EventTrigger.Entry entry = new EventTrigger.Entry() { eventID = EventTriggerType.PointerEnter };
+            //entry.callback.AddListener( (BaseEventData d) => {
+            //    Debug.Log("Enter!");
+            //    GUIController.HoverObject = this;
+            //} );
+            //GameObject.AddComponent<EventTrigger>().triggers.Add(entry);
 
             GameObject.transform.SetParent(GUIController.Canvas.transform);
 
@@ -126,7 +166,7 @@ namespace GUI {
         public void SetParent(IWidget parent) {
             this.parent = parent;
             if (parent != null) {
-                Debug.LogWarningFormat("Moving {0} to {1}...", GameObject.name, parent.GetContentGameObject().name);
+                //Debug.LogWarningFormat("Moving {0} to {1}...", GameObject.name, parent.GetContentGameObject().name);
                 GameObject.transform.SetParent(parent.GetContentGameObject().transform);
 
                 if (parent.Root == null) {
@@ -135,6 +175,28 @@ namespace GUI {
                     Root = parent.Root;
                 }
             }
+        }
+
+        private bool hidden = false;
+        public void Toggle() {
+            if (hidden) Show(); else Hide();
+        }
+
+        public Widget AddTo(WidgetContainer container) {
+            container.AddChild(this);
+            return this;
+        }
+
+        public void Show() {
+            GameObject.SetActive(true);
+            Emit("OnShow", new object[] { GUIController.childs, Verse.Instance, this });
+            hidden = false;
+        }
+
+        public void Hide() {
+            GameObject.SetActive(false);
+            Emit("OnHide", new object[] { GUIController.childs, Verse.Instance, this });
+            hidden = true;
         }
 
         public virtual void Update(object[] args) {
@@ -183,19 +245,23 @@ namespace GUI {
                     int idx = valueIndex++;
                     LinkArgNameToValue(argName, propName, idx);
                     break;
+                case "Tooltip":
+                    tooltipText = reader.ReadElementContentAsString();
+                    break;
                 default:
                     base.ReadElement(reader);
                     break;
             }
         }
-
+        
         public void SetPreferredSize(int w, int h = -1) {
             if( w >= 0) layoutComponent.preferredWidth = w;
             if (h >= 0) layoutComponent.preferredHeight = h;
         }
-        public void SetMinSize(int w, int h = -1) {
+        public Widget SetMinSize(int w, int h = -1) {
             if (w >= 0) layoutComponent.minWidth = w;
             if (h >= 0) layoutComponent.minHeight = h;
+            return this;
         }
 
         public Dictionary<string, int> GetArgDict() {

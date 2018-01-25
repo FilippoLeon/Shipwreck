@@ -4,4 +4,6 @@ using UnityEngine;
 
 public class GUIPrefabs : MonoBehaviour {
     public GameObject scrollViewPrefab;
+
+    public GameObject Tooltip;
 }

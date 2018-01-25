@@ -15,31 +15,35 @@ public class ShipController : MonoBehaviour {
     public GameObject tacticalViewObject;
 
     void Start () {
+        Verse verse = GetComponent<MainController>().Verse;
+
         tacticalViewObject = new GameObject("Tactical view");
 
         Player = new Player(GetComponent<MainController>().Verse) {Funds = 1000};
+        Player.Inventory.Add(new Inventory.Item() { part = verse.registry.partRegistry.Get("turret"), quantity = 1 });
 
-        Ship = new Ship(GetComponent<MainController>().Verse) {Name = "Serenity 2.0"};
+        Ship = new Ship(verse) {Name = "Serenity 2.0"};
 
         AddShip(Ship);
-        Ship.AddPart(GetComponent<MainController>().Verse.registry.partRegistry.Get("root"), new Coordinate(0, 0));
+        Ship.AddPart(verse.registry.partRegistry.Get("root"), new Coordinate(0, 0));
 
-        GetComponent<MainController>().Verse.NextShip();
+        verse.NextShip();
 
-        Ship Ship2 = new Ship(GetComponent<MainController>().Verse);
+        Ship Ship2 = new Ship(verse);
         Ship2.Name = "Serenity 1.0";
 
         AddShip(Ship2);
         Ship2.Position = new Vector2(10, 10);
-        Ship2.AddPart(GetComponent<MainController>().Verse.registry.partRegistry.Get("root"), new Coordinate(0,0));
-        Ship2.AddPart(GetComponent<MainController>().Verse.registry.partRegistry.Get("basic_hull"), new Coordinate(0, 1));
+        Ship2.AddPart(verse.registry.partRegistry.Get("root"), new Coordinate(0,0));
+        Ship2.AddPart(verse.registry.partRegistry.Get("basic_hull"), new Coordinate(0, 1));
 
         GUIController.Find("player_panel").SetParameters(new object[] { Player });
         GUIController.Find("ship_view").SetParameters(new object[] { Ship });
 
         // Test warp and merchant stuff
-        Ship.WarpTo(Enumerable.ToList(Ship.verse.Galaxy.systems.Values)[0].planets[0]);
+        Ship.WarpTo(Enumerable.ToList(verse.Galaxy.systems.Values)[0].planets[0]);
         Ship.Location.AddNpc(new Merchant("Jim"));
+        (Ship.Location.GetNpc(0) as Merchant).Inventory.Funds = 2000;
         GUIController.Find("merchant_view").SetParameters(new object[] { Ship.Location.GetNpc(0) });
     }
     

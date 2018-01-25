@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GUI {
-    public interface IWidget {
+    public interface IWidget : IDisposable {
         void SetParent(IWidget parent);
         string Id { set; get; }
         GameObject GameObject { set; get; }
@@ -18,5 +19,7 @@ namespace GUI {
         System.Action ChangeArguments { set; get; }
 
         GameObject GetContentGameObject();
+        string GetToolTipText();
+        
     }
 }

@@ -9,6 +9,9 @@ using UnityEngine;
 abstract public class ConcreteEntity<T> : Entity<T> where T : class {
 
     public SpriteInfo spriteInfo;
+    public override SpriteInfo SpriteInfo {
+        get { return spriteInfo; }
+    }
 
     private Vector2 position;
     public Vector2 Position {

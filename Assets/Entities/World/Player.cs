@@ -8,6 +8,8 @@ public class Player : Entity<Player> {
     Verse verse;
 
     private Inventory _inventory = new Inventory();
+
+    public Inventory Inventory { get { return _inventory; } }
     
     public int Funds {
         set {

@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MoonSharp.Interpreter;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using UnityEngine;
 
+[MoonSharpUserData]
 public class SpriteLoader {
     static public SpriteLoader Instance = null;
 

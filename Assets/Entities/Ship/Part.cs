@@ -41,6 +41,9 @@ public partial class Part : Entity<Part> {
     /// Information about the sprite used to represent the part.
     /// </summary>
     public SpriteInfo spriteInfo;
+    public override SpriteInfo SpriteInfo {
+        get { return spriteInfo;  }
+    }
 
     public Coordinate position;
     /// <summary>
@@ -131,6 +134,7 @@ public partial class Part : Entity<Part> {
         spriteInfo = other.spriteInfo;
         IsRoot = other.IsRoot;
         partType = other.partType;
+        Price = other.Price;
 
         health = other.health;
         maxHealth = other.maxHealth;
@@ -156,6 +160,12 @@ public partial class Part : Entity<Part> {
                     partType = PartType.Addon;
                     break;
             }
+        }
+
+        if( reader.GetAttribute("price") != null) {
+            Price = Convert.ToInt32(reader.GetAttribute("price"));
+        } else {
+            Price = 100;
         }
 
         XmlReader subreader = reader.ReadSubtree();
@@ -203,7 +213,7 @@ public partial class Part : Entity<Part> {
 
         switch ( partType ) {
             case PartType.Hull:
-                List<Part> cparts = ship.PartAt(position);
+                List<Part> cparts = otherShip.PartAt(position);
                 if (cparts != null) {
                     foreach (Part p in cparts) {
                         if (p.partType == PartType.Hull) {
@@ -213,7 +223,7 @@ public partial class Part : Entity<Part> {
                 }
 
                 bool adjacentHull = false;
-                IEnumerable<List<Part>> nhbd = ship.GetNeighbourhoods(position);
+                IEnumerable<List<Part>> nhbd = otherShip.GetNeighbourhoods(position);
                 foreach (List<Part> nList in nhbd) {
                     if (nList == null) {
                         continue;
@@ -229,7 +239,7 @@ public partial class Part : Entity<Part> {
                 }
                 break;
             case PartType.Addon:
-                List<Part> parts = ship.PartAt(position);
+                List<Part> parts = otherShip.PartAt(position);
                 if (parts != null) {
                     foreach (Part p in parts) {
                         if (p.partType == PartType.Hull) {

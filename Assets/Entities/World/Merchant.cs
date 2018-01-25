@@ -10,12 +10,14 @@ namespace Assets.Entities.World {
         /// </summary>
         private Inventory inventory = new Inventory();
 
+        public Inventory Inventory { get { return inventory; } }
+
         public Merchant(string name) {
             Name = name;
             inventory = new Inventory {
                 new Inventory.Item{part=Verse.Instance.registry.partRegistry.Get("turret")},
-                new Inventory.Item{part=Verse.Instance.registry.partRegistry.Get("heater")},
-                new Inventory.Item{part=Verse.Instance.registry.partRegistry.Get("pressurizer")},
+                new Inventory.Item{part=Verse.Instance.registry.partRegistry.Get("heater"), quantity = 20},
+                new Inventory.Item{part=Verse.Instance.registry.partRegistry.Get("pressurizer"), quantity = 10},
                 new Inventory.Item{part=Verse.Instance.registry.partRegistry.Get("heater") },
                 new Inventory.Item{part=Verse.Instance.registry.partRegistry.Get("basic_hull") },
             };

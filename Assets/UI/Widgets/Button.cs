@@ -8,7 +8,7 @@ using System.Linq;
 namespace GUI {
     [MoonSharpUserData]
     public class Button : Widget {
-        Image backgroundComponent;
+        UnityEngine.UI.Image backgroundComponent;
         UnityEngine.UI.Button buttonComponent;
         Text textComponent;
 
@@ -29,10 +29,26 @@ namespace GUI {
             }
         }
         
+        public void SetSprite(SpriteInfo info) {
+            backgroundComponent.sprite = SpriteController.spriteLoader.Load(info).sprite;
+        }
 
-        public Button() {
-            backgroundComponent = GameObject.AddComponent<Image>();
-            backgroundComponent.type = Image.Type.Sliced;
+        public void SetType(string type) {
+            switch (type) {
+                case "sliced":
+                default:
+                    backgroundComponent.type = UnityEngine.UI.Image.Type.Sliced;
+                    break;
+                case "simple":
+                    backgroundComponent.type = UnityEngine.UI.Image.Type.Simple;
+                    backgroundComponent.preserveAspect = true;
+                    break;
+            }
+        }
+
+        public Button(string id = null) : base(id) {
+            backgroundComponent = GameObject.AddComponent<UnityEngine.UI.Image>();
+            backgroundComponent.type = UnityEngine.UI.Image.Type.Sliced;
             backgroundComponent.sprite = SpriteController.spriteLoader.tryLoadSprite("UI", "button_background").sprite;
             backgroundComponent.SetNativeSize();
 
@@ -63,7 +79,7 @@ namespace GUI {
                     buttonComponent.onClick.AddListener(
                         () => {
                             //Debug.Log(values);
-                            object[] param = new object[] { GUIController.childs };
+                            object[] param = new object[] { GUIController.childs, Verse.Instance, this };
                             action.Call(this, param.Concat(values.Values).ToArray() );
                             }
                         );
@@ -74,10 +90,6 @@ namespace GUI {
         
         public void OnClick(Closure callback) {
             buttonComponent.onClick.AddListener(() => callback.Call());
-        }
-
-        public Button(string id) : this() {
-            Id = id;
         }
 
         public static Button Create(string id) {
@@ -107,20 +119,14 @@ namespace GUI {
                     }
                 }
             }
-
-            switch (type) {
-                case "sliced":
-                default:
-                    button.backgroundComponent.type = Image.Type.Sliced;
-                    break;
-                case "simple":
-                    button.backgroundComponent.type = Image.Type.Simple;
-                    button.backgroundComponent.preserveAspect = true;
-                    break;
-            }
+            button.SetType(type);
             button.FinalizeRead();
 
             return button;
+        }
+
+        public void SetPreserveAspect(bool yn = true) {
+            backgroundComponent.preserveAspect = yn;
         }
 
         public void SetTint(Color color) {

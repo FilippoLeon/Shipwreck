@@ -17,6 +17,18 @@ public class Verse : Entity<Verse>, IView {
 
     public Dictionary<string, Func<Coordinate, int>> maps = new Dictionary<string, Func<Coordinate, int>>();
 
+    public SpriteLoader SpriteLoader {
+        get {
+            return SpriteController.spriteLoader;
+        }
+    }
+
+    public Player Player {
+        get {
+            return players[0];
+        }
+    }
+
     public Galaxy Galaxy {set; get; }
 
     public class Selection {

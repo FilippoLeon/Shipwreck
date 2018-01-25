@@ -6,6 +6,7 @@ using System.Xml;
 using LUA;
 using GUI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GUIController : UnityEngine.MonoBehaviour {
     private static UnityEngine.Canvas canvas;
@@ -14,17 +15,25 @@ public class GUIController : UnityEngine.MonoBehaviour {
 
     static public Color DefaultTextColor = Color.white;
 
+    GameObject Tooltip;
     void Start() {
         canvas = FindObjectOfType(typeof(Canvas)) as Canvas;
 
         canvas.GetComponent<UnityEngine.UI.CanvasScaler>().referencePixelsPerUnit = 64;
 
+        Tooltip = Instantiate(FindObjectOfType<GUIPrefabs>().Tooltip, canvas.transform);
+        //Tooltip.
+
         ScriptLoader.LoadScript("UI", "UI/UI.lua");
 
         ScriptLoader.RegisterPlaceolder("UI", typeof(GUI.Button));
         ScriptLoader.RegisterPlaceolder("UI", typeof(GUI.Panel));
-        
+        ScriptLoader.RegisterPlaceolder("UI", typeof(GUI.Label));
+        ScriptLoader.RegisterPlaceolder("UI", typeof(GUI.Image));
+
         ScriptLoader.RegisterPlaceolder("UI", typeof(UnityEngine.Color));
+        ScriptLoader.RegisterPlaceolder("UI", typeof(SpriteInfo));
+        ScriptLoader.RegisterPlaceolder("UI", typeof(UI.Input));
 
         ScriptLoader.RegisterPlaceolder("UI", typeof(Verse));
         ScriptLoader.RegisterPlaceolder("UI", typeof(Coordinate));
@@ -58,6 +67,9 @@ public class GUIController : UnityEngine.MonoBehaviour {
                     break;
             }
         }
+
+        Tooltip.transform.SetAsLastSibling();
+        Tooltip.GetComponent<UnityEngine.UI.Image>().sprite = SpriteController.spriteLoader.tryLoadSprite("UI", "panel_background").sprite;
     }
 
     public static IWidget ParseXml(XmlReader reader, Widget parent = null) {
@@ -121,10 +133,45 @@ public class GUIController : UnityEngine.MonoBehaviour {
     }
 
     public object LUA { get; private set; }
+    public static IWidget HoverObject { get; internal set; }
+    
 
     private void Update() {
         foreach (IWidget child in childs.Values) {
             child.Update(null);
+        }
+
+        PointerEventData pointerData = new PointerEventData(EventSystem.current);
+
+        pointerData.position = Input.mousePosition;
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+        if (results.Count > 0) {
+            //foreach(RaycastResult r in results) {
+            for (int i = 0; i < results.Count; ++i) {
+                WidgetComponent wic = results[i].gameObject.GetComponent<WidgetComponent>();
+                if (wic != null) {
+                    HoverObject = wic.widget;
+                    break;
+                }
+            }
+            //Debug.Log(results[0].gameObject.name);
+            //}
+        } else {
+            HoverObject = null;
+        }
+        //EventSystem.current.RaycastAll(Input.mousePosition, Camera.main);
+        if ( HoverObject != null) {
+            string ttt = HoverObject.GetToolTipText();
+            if( ttt == null ) {
+                Tooltip.SetActive(false);
+            } else {
+                Tooltip.transform.position = Input.mousePosition + new Vector3(17f,-17f, -1f);
+                Tooltip.SetActive(true);
+                Tooltip.GetComponentInChildren<UnityEngine.UI.Text>().text = ttt;
+            }
+        } else {
+            Tooltip.SetActive(false);
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MoonSharp.Interpreter;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Assets.Entities.World {
+    [MoonSharpUserData]
     public class Inventory : IEnumerable {
         public class Item {
             public Part part;
@@ -19,12 +21,23 @@ namespace Assets.Entities.World {
             return (IEnumerator) _inventory.GetEnumerator();
         }
 
+        public Dictionary<Part, Item> Get() {
+            return _inventory;
+        }
+
         public void Add(Item item) {
             _inventory.Add(item.part, item);
         }
 
         public Item Get(Part part) {
-            return _inventory[part];
+            if (_inventory.ContainsKey(part)) {
+                return _inventory[part];
+            }
+            return null;
+        }
+
+        public bool Contains(Part p) {
+            return _inventory.ContainsKey(p);
         }
 
         /// <summary>

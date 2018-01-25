@@ -9,25 +9,21 @@ using GUI;
 namespace GUI {
     [MoonSharpUserData]
     public class Panel : WidgetContainer {
-        Image background;
+        UnityEngine.UI.Image background;
 
         public override void SetValue(object o, int idx) {
             throw new NotImplementedException();
         }
-
-        public Panel() {
+        
+        public Panel(string id = null) : base(id) {
             GameObject.AddComponent<CanvasRenderer>();
-            background = GameObject.AddComponent<Image>();
-            background.type = Image.Type.Sliced;
+            background = GameObject.AddComponent<UnityEngine.UI.Image>();
+            background.type = UnityEngine.UI.Image.Type.Sliced;
             background.sprite = SpriteController.spriteLoader.tryLoadSprite("UI", "panel_background").sprite;
 
             SetAnchor(new Vector2(0, 0), new Vector2(1, 0.1f));
             SetSize();
             SetMargin();
-        }
-        
-        public Panel(string id) : this() {
-            this.Id = id;
         }
 
         public static Panel Create(string id) {

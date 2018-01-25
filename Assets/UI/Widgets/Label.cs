@@ -40,23 +40,33 @@ namespace GUI {
             }
         }
 
-        public Label() {
+        public Label SetAlignment(string alignment) {
+            switch(alignment) {
+                case "left":
+                default:
+                    return SetAlignment(TextAnchor.MiddleLeft);
+            }
+        }
+
+        Label SetAlignment(TextAnchor alignment) {
+            textComponent.alignment = alignment;
+            return this;
+        }
+
+        public Label(string id = null) : base(id) {
             textComponent = GameObject.AddComponent<Text>();
             textComponent.alignment = TextAnchor.MiddleCenter;
             textComponent.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
             textComponent.color = GUIController.DefaultTextColor;
         }
 
-        void SetAlignment(TextAnchor alignment) {
-            textComponent.alignment = alignment;
-        }
-
-        public Label(string id) : this() {
-            Id = id;
-        }
-
         public static Label Create(string id) {
             return new Label(id);
+        }
+
+        public Label SetText(string text) {
+            Text = text;
+            return this;
         }
 
         public override void SetValue(object value, int index) {

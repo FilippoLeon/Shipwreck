@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 
 [MoonSharpUserData]
-abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSerializable where T: class {
+abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSerializable where T : class {
     protected Dictionary<string, object> parameters = new Dictionary<string, object>();
 
     public override string Category {
@@ -26,6 +26,8 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
     }
 
     public string Name { get; set; }
+
+    public virtual SpriteInfo SpriteInfo { get; set; }
 
     public Entity() {
 

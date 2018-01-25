@@ -65,6 +65,10 @@ namespace LUA {
         }
 
         public static DynValue Call(string category, string function, params object[] args) {
+            if( !script.ContainsKey(category)) {
+                Debug.LogErrorFormat("Category {0} of {1} does not exist!", category, function);
+                return null;
+            }
             object func = script[category].Globals[function];
             try {
                 return script[category].Call(func, args);

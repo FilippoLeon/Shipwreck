@@ -18,11 +18,22 @@ namespace GUI {
             }
         }
 
-        protected WidgetContainer() { }
+        public void Clear() {
+            foreach(IWidget w in childs.Values) {
+                w.Dispose();
+            }
+        }
 
-        protected WidgetContainer(bool createGameObject) : base(createGameObject) { }
+        public override void Dispose() {
+            Clear();
+            GameObject.Destroy(GameObject);
+        }
+
+        protected WidgetContainer(string id = null) : base(id) { }
+
+        protected WidgetContainer(bool createGameObject, string id = null) : base(createGameObject, id) { }
         
-        public void SetLayout(string layoutName) {
+        public WidgetContainer SetLayout(string layoutName) {
             switch (layoutName) {
                 case "grid":
                     layout = GameObject.AddComponent<GridLayoutGroup>();
@@ -36,7 +47,7 @@ namespace GUI {
                     SetChildExpand(false);
                     break;
             }
-
+            return this;
         }
 
         public void SetAnchor(Vector2 anchorMin, Vector2 anchorMax) {
@@ -66,10 +77,11 @@ namespace GUI {
             GameObject.GetComponent<RectTransform>().offsetMax = new Vector2(size[2], size[3]);
         }
         
-        public void SetMargin() {
+        public WidgetContainer SetMargin(int m = 10) {
             if (layout is HorizontalOrVerticalLayoutGroup) {
-                (layout as HorizontalOrVerticalLayoutGroup).spacing = 10;
+                (layout as HorizontalOrVerticalLayoutGroup).spacing = m;
             }
+            return this;
         }
 
         public void AddChild(IWidget child) {
@@ -77,12 +89,20 @@ namespace GUI {
             child.GameObject.transform.SetParent(this.GetContentGameObject().transform);
         }
 
-        public void SetChildExpand(bool expand = true) {
+        public WidgetContainer AddChilds(IEnumerable<IWidget> childs) {
+            foreach(IWidget c in childs) {
+                AddChild(c);
+            }
+            return this;
+        }
+
+        public WidgetContainer SetChildExpand(bool expand = true) {
             if (layout is HorizontalOrVerticalLayoutGroup) {
                 (layout as HorizontalOrVerticalLayoutGroup).childForceExpandWidth = expand;
             }
+            return this;
         }
-        public void SetChildExpand(string mode, Direction dir) {
+        public WidgetContainer SetChildExpand(string mode, Direction dir) {
             if (layout is HorizontalOrVerticalLayoutGroup) {
                 bool expand = false;
                 switch (mode) {
@@ -99,6 +119,7 @@ namespace GUI {
                         break;
                 }
             }
+            return this;
         }
 
         public  enum Direction {  Horizontal, Vertical };
@@ -114,8 +135,9 @@ namespace GUI {
                     break;
             }
         }
-        private void SetPadding(int[] padding) {
+        public WidgetContainer SetPadding(int[] padding) {
             layout.padding = new RectOffset(padding[0], padding[1], padding[2], padding[3]);
+            return this;
         }
 
         internal override void ReadCurrentElement(XmlReader reader, IWidget parent) {
@@ -181,6 +203,9 @@ namespace GUI {
                 }
             }
 
+            if (reader.GetAttribute("margin") != null) {
+                SetMargin(Convert.ToInt32(reader.GetAttribute("margin")));
+            }
 
             if (reader.GetAttribute("padding") != null) {
                 int[] padding = XmlUtilities.ToIntArray(reader.GetAttribute("padding"));

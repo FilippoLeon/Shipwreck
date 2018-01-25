@@ -7,7 +7,7 @@ using System;
 namespace GUI {
     [MoonSharpUserData]
     public class ProgressBar : Widget {
-        Image barComponent;
+        UnityEngine.UI.Image barComponent;
         Text textComponent;
 
         float size;
@@ -15,10 +15,10 @@ namespace GUI {
 
         string labelType;
          
-        public ProgressBar() {
-            GameObject imageGameObject = new GameObject("image", new Type[] { typeof(Image) });
+        public ProgressBar(string id = null) : base(id) {
+            GameObject imageGameObject = new GameObject("image", new Type[] { typeof(UnityEngine.UI.Image) });
             imageGameObject.transform.SetParent(GameObject.transform);
-            barComponent = GameObject.GetComponentInChildren<Image>();
+            barComponent = GameObject.GetComponentInChildren<UnityEngine.UI.Image>();
             barComponent.sprite = SpriteController.spriteLoader.tryLoadSprite("UI", "button_background").sprite;
             imageGameObject.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0.5f);
             imageGameObject.GetComponent<RectTransform>().anchorMax = new Vector2(1, 0.5f);
@@ -45,10 +45,6 @@ namespace GUI {
             textComponent.rectTransform.offsetMax = Vector2.zero;
         }
         
-        public ProgressBar(string id) : this() {
-            Id = id;
-        }
-
         public override void SetValue(object value, int index) {
             values[index] = value;
             float maxVal = 1;

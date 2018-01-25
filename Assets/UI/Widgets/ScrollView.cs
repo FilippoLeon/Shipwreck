@@ -13,7 +13,7 @@ namespace GUI {
         ScrollRect scrollRect;
         GameObject content;
 
-        public ScrollView() : base(false) {
+        public ScrollView(string id = null) : base(false, id) {
             GameObject = GameObject.Instantiate(GameObject.FindObjectOfType<GUIPrefabs>().scrollViewPrefab);
             GameObject.name = Id;
             scrollRect = GameObject.GetComponent<ScrollRect>();
@@ -24,11 +24,11 @@ namespace GUI {
             content.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             content.AddComponent<VerticalLayoutGroup>().padding = new RectOffset(2,2,2,2);
 
-            scrollRect.GetComponent<Image>().sprite
+            scrollRect.GetComponent<UnityEngine.UI.Image>().sprite
                 = SpriteController.spriteLoader.tryLoadSprite("UI", "panel_background").sprite;
-            scrollRect.horizontalScrollbar.handleRect.GetComponent<Image>().sprite
+            scrollRect.horizontalScrollbar.handleRect.GetComponent<UnityEngine.UI.Image>().sprite
                 = SpriteController.spriteLoader.tryLoadSprite("UI", "panel_background").sprite;
-            scrollRect.verticalScrollbar.handleRect.GetComponent<Image>().sprite
+            scrollRect.verticalScrollbar.handleRect.GetComponent<UnityEngine.UI.Image>().sprite
                 = SpriteController.spriteLoader.tryLoadSprite("UI", "panel_background").sprite;
 
             GameObject.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
@@ -41,16 +41,16 @@ namespace GUI {
             
         }
         
-        public ScrollView(string id) : this() {
-            Id = id;
-        }
-        
         public static ScrollView Create(string id) {
             return new ScrollView(id);
         }
 
         public override GameObject GetContentGameObject() {
             return content;
+        }
+
+        public void SetScrollSpeed(int speed) {
+            scrollRect.scrollSensitivity = speed;
         }
 
         public static ScrollView Create(XmlReader reader, IWidget parent = null) {
