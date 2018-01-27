@@ -146,6 +146,43 @@ public class Ship : Entity<Ship> {
 	////// CONSTRUCTORS
 	/////////
 	
+    /// <summary>
+    /// Constructs a random ship.
+    /// </summary>
+    /// <param name="verse">The verse on which the ship will live.</param>
+    /// <param name="score">The ship's power (more or less).</param>
+    /// <returns>A brand new random ship.</returns>
+    public static Ship Random(Verse verse, int score) {
+        Ship ship = new Ship(verse);
+        ship.Name = verse.registry.namesRegistry.GetRandom("ship_name");
+
+        return ship;
+    }
+
+    /// <summary>
+    /// Finds detached hulls and detach them from the Ship.
+    /// </summary>
+    public void FindDetachedHulls() {
+        Coordinate start = new Coordinate(0, 0);
+        Queue<Coordinate> touched = new Queue<Coordinate>();
+        HashSet<Coordinate> connected = new HashSet<Coordinate>();
+        while(touched.Count != 0) {
+            Coordinate next = touched.Dequeue();
+            connected.Add(next);
+            foreach( Part hull in GetNeighbouringHulls(next) ) {
+                if( hull != null && !connected.Contains(hull.position) ) {
+                    touched.Enqueue(hull.position);
+                }
+            }
+        }
+
+        foreach(Part hull in hulls.Values) {
+            if(!connected.Contains(hull.position)) {
+                hull.SelfDestroy();
+            }
+        }
+    }
+
 	/// <summary>Build a ship and set a Universe for the ship.</summary>
     public Ship(Verse verse) {
         verse.AddShip(this);
@@ -177,7 +214,19 @@ public class Ship : Entity<Ship> {
         return parts[position];
     }
 
-	/// <summary>Returns all neighbours of the part (list of), in the order Up, Left, Down, Right.</summary> 
+    /// <summary>Returns all neighbours of the part (list of), in the order Up, Left, Down, Right.</summary> 
+    internal IEnumerable<Part> GetNeighbouringHulls(Coordinate position) {
+        List<Part> ret = new List<Part>();
+
+        ret.Add(HullAt(position + Coordinate.Up));
+        ret.Add(HullAt(position + Coordinate.Left));
+        ret.Add(HullAt(position + Coordinate.Down));
+        ret.Add(HullAt(position + Coordinate.Right));
+
+        return ret;
+    }
+
+    /// <summary>Returns all neighbours of the part (list of), in the order Up, Left, Down, Right.</summary> 
     internal IEnumerable<List<Part>> GetNeighbourhoods(Coordinate position) {
         List<List<Part>> ret = new List<List<Part>>();
 

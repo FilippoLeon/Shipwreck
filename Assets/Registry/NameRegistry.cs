@@ -30,18 +30,18 @@ public class NameRegistry {
             for(int i = 1; i < lines.Length; ++i) {
                 names[cat].Add(lines[i]);
             }
-            Debug.Log(String.Format("Loaded '{0}' files into category '{1}' from '{2}'", lines.Length, cat, name));
+            Debug.LogFormat("Loaded '{0}' entries into category '{1}' from file '{2}'", lines.Length, cat, name);
         } else {
-            Debug.LogError("No category specified (first line must begin with '@'.");
+            Debug.LogError("No category specified (first line must begin with '@' followed by the category).");
         }
     }
 
-    public string GetRandom(string v) {
-        if( !names.ContainsKey(v) || names[v] == null) {
+    public string GetRandom(string category) {
+        if( !names.ContainsKey(category) || names[category] == null) {
             Debug.LogError("Category not found!");
             return null;
         } else {
-            return names[v][UnityEngine.Random.Range(0, names[v].Count)];
+            return names[category][UnityEngine.Random.Range(0, names[category].Count)];
         }
     }
 }
