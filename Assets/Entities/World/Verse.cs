@@ -15,7 +15,10 @@ public class Verse : Entity<Verse>, IView {
 
     public List<IEmitter> entities = new List<IEmitter>();
 
+    public List<IEmitter> flaggedForRemovalEntities = new List<IEmitter>();
+
     public Dictionary<string, Func<Coordinate, int>> maps = new Dictionary<string, Func<Coordinate, int>>();
+
 
     public SpriteLoader SpriteLoader {
         get {
@@ -41,12 +44,16 @@ public class Verse : Entity<Verse>, IView {
         entities.Add(e);
     }
 
-    public void RemoveEntity(ConcreteEntity e) {
+    public void RemoveEntity(IEmitter e) {
         entities.Remove(e);
     }
 
     internal void RemoveEntity<T>(ConcreteEntity<T> e) where T: class {
         entities.Remove(e);
+    }
+
+    public void MarkForRemoval(ConcreteEntity e) {
+        flaggedForRemovalEntities.Add(e);
     }
 
     int index = 0;
@@ -215,6 +222,14 @@ public class Verse : Entity<Verse>, IView {
         //if (Input.GetMouseButtonDown(2)) {
         //    selectionEntity.Active = !selectionEntity.Active;
         //}
+
+        foreach(IEmitter e in flaggedForRemovalEntities) {
+            RemoveEntity(e);
+            if (e is ISelfDestructible) {
+                (e as ISelfDestructible).SelfDestroy();
+            }
+        }
+        flaggedForRemovalEntities.Clear();
     }
 
     public Coordinate GetMin() {

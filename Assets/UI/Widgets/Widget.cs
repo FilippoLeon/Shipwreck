@@ -2,6 +2,7 @@
 using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Xml;
 using UnityEngine;
@@ -139,9 +140,18 @@ namespace GUI {
         protected void LinkArgNameToValue(string argName, string propName, int index) {
             values[index] = null;
 
+            string property = propName;
+            string[] split = propName.Split('.');
+            string lastProp = split[split.Length - 1];
+            if( split.Length > 1 ) {
+                split = split.Take(split.Length - 1).ToArray();
+            } else {
+                split = null;
+            }
+
             System.Action<object[]> action = (object[] o) => {
                 IEmitter arg = Root.GetArgument(argName);
-                if (GetPropValue(arg, propName) == null ) {
+                if (Reflector.GetPropValue(arg, propName) == null ) {
                     //string a = argName + "......." + propName + " .. "+index;
                     //Debug.Log(argName);
                     //Debug.Log(propName);
@@ -149,16 +159,28 @@ namespace GUI {
                 }
                 //object val = GetPropValue(arg, propName).ToString();
                 //Debug.Log(String.Format("Argument object {0} has value {1}", propName, val.ToString()));
-                SetValue(GetPropValue(arg, propName), index);
+                SetValue(Reflector.GetPropValue(arg, propName), index);
             };
             Root.ChangeArguments += () => {
                 // Register the "Value update"-Lambda with the Root element's argument with this name.
                 // Deregister old lambda from the element.
                 // TODO: if argument changes, we should deregister the addedAction.
-                if ( addedAction.ContainsKey(index) ) {
-                    Root.GetArgument(argName).RemoveAction("On" + propName + "Changed", addedAction[index]);
+                IEmitter arg = Root.GetArgument(argName);
+                if (split != null) {
+                    string join = string.Join(".", split);
+                    IEmitter lastEmitter = Reflector.GetPropValue(arg, join) as IEmitter; // TODO: try harder to find emitter (not is only the last)
+                    if (lastEmitter == null) {
+                        Debug.LogWarningFormat("Property '{1}' of '{0}' is not an emitter ({2}).", argName, join, propName);
+                    } else {
+                        arg = lastEmitter;
+                        property = lastProp;
+                    }
                 }
-                addedAction[index] = Root.GetArgument(argName).AddAction("On" + propName + "Changed", action);
+
+                if ( addedAction.ContainsKey(index) ) {
+                    arg.RemoveAction("On" + property + "Changed", addedAction[index]);
+                }
+                addedAction[index] = arg.AddAction("On" + property + "Changed", action);
             };
 
         }
@@ -221,6 +243,14 @@ namespace GUI {
                 SetMinSize((int) pfs.x, (int) pfs.y);
             }
 
+            string pivot = reader.GetAttribute("pivot");
+            if(pivot != null) {
+                GameObject.GetComponent<RectTransform>().pivot =  XmlUtilities.ToVector2(pivot);
+            }
+
+            string hidden = reader.GetAttribute("hidden");
+            if (hidden != null && Convert.ToBoolean(hidden)) { Hide(); }
+
             SetParent(parent);
         }
 
@@ -282,34 +312,6 @@ namespace GUI {
             } else {
                 return null;
             }
-        }
-        public static object GetPropValue(object obj, String name) {
-            foreach (String part in name.Split('.')) {
-                if (obj == null) { return null; }
-
-                Type type = obj.GetType();
-
-                object param = null;
-                if( obj is IEmitter ) {
-                    param =  (obj as IEmitter).GetParameter(name);
-                }
-                if (param != null) {
-                    obj = param;
-                } else {
-                    PropertyInfo info = type.GetProperty(part);
-                    if (info == null) { return null; }
-
-                    obj = info.GetValue(obj, null);
-                }
-            }
-            return obj;
-        }
-        public static T GetPropValue<T>(object obj, String name) {
-            object retval = GetPropValue(obj, name);
-            if (retval == null) { return default(T); }
-
-            // throws InvalidCastException if types are incompatible
-            return (T)retval;
         }
 
         public virtual GameObject GetContentGameObject() {

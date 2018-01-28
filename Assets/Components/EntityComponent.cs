@@ -29,6 +29,9 @@ public class EntityComponent<T> : ObserverBehaviour<T> where T : ConcreteEntity<
             case "SetPosition":
                 transform.localPosition = ((Vector2)args[0]);
                 break;
+            case "SetAngle":
+                transform.localEulerAngles = new Vector3(0,0,(float) args[0]);
+                break;
         }
     }
 

@@ -3,15 +3,16 @@
 	<Projectile id="basic_projectile">
 		<Parameter name="elapsed" type="int">0</Parameter>
 		<Icon>
-			<Sprite category="Parts">basic_hull</Sprite>
+			<Sprite category="Effects">basic_projectile</Sprite>
 		</Icon>
 		<Action event="OnUpdate">
 			function( this )
 				elapsed = this.SetParameter("elapsed", this.GetParameter("elapsed") + 1)
 				-- print(this)
 				-- print(elapsed)
-				if elapsed > 5 then
+				if elapsed > 150 then
 					print( this.Verse )
+					this.Verse.MarkForRemoval(this)
 					-- this.Verse.RemoveEntity(this)
 					-- this.SelfDestroy()
 				end

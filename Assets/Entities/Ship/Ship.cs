@@ -79,10 +79,34 @@ public class Ship : Entity<Ship> {
             return name;
         }
     }
-	
-	/// IDEA FOR THESE PARAMETERS: we could use a setter that simply invalidates the value. And a getter that does the computation
-	// whenever the value is invalid.
-	// Or we simply keep track of the data as it changes.
+
+    internal void RemovePart(Part part) {
+        if( part.partType == Part.PartType.Addon) {
+            parts[part.position].Remove(part);
+        } else {
+            foreach (Part p in parts[part.position]) {
+                if (p != part) {
+                    p.SelfDestroy();
+                }
+            }
+            parts[part.position].Clear();
+            parts.Remove(part.position);
+            hulls.Remove(part.position);
+        }
+        if( part.IsRoot) {
+            // FIND NEW ROOT
+        }
+
+        dirtyHull = true;
+    }
+
+    /// <summary>
+    /// Set to true to initialize a search of unconnected parts at the next update. This is set to true when a part is removed.
+    /// </summary>
+    private bool dirtyHull = false;
+    /// IDEA FOR THESE PARAMETERS: we could use a setter that simply invalidates the value. And a getter that does the computation
+    // whenever the value is invalid.
+    // Or we simply keep track of the data as it changes.
 
     int health = 0;
 	/// <summary>Ship's health, this should be updated whenever the Health of a part changes. Emits "OnHealthChanged".</summary>
@@ -163,9 +187,10 @@ public class Ship : Entity<Ship> {
     /// Finds detached hulls and detach them from the Ship.
     /// </summary>
     public void FindDetachedHulls() {
-        Coordinate start = new Coordinate(0, 0);
+        Coordinate start = Root.position;
         Queue<Coordinate> touched = new Queue<Coordinate>();
         HashSet<Coordinate> connected = new HashSet<Coordinate>();
+        touched.Enqueue(start);
         while(touched.Count != 0) {
             Coordinate next = touched.Dequeue();
             connected.Add(next);
@@ -176,11 +201,20 @@ public class Ship : Entity<Ship> {
             }
         }
 
+        List<Part> nonConnected = new List<Part>();
         foreach(Part hull in hulls.Values) {
-            if(!connected.Contains(hull.position)) {
-                hull.SelfDestroy();
+            if (!connected.Contains(hull.position)) {
+                nonConnected.Add(hull);
             }
         }
+
+        foreach(Part hull in nonConnected) {
+            //hulls.Remove(hull.position);
+            hull.SelfDestroy();
+        }
+        nonConnected.Clear();
+
+        dirtyHull = false;
     }
 
 	/// <summary>Build a ship and set a Universe for the ship.</summary>
@@ -381,13 +415,20 @@ public class Ship : Entity<Ship> {
 
             }
         }
-
+        
 
         foreach (List<Part> pl in parts.Values) {
+            if(pl == null) {
+                continue;
+            }
             foreach(Part p in pl) {
                 p.Update();
             }
         }
+        if(dirtyHull) {
+            FindDetachedHulls();
+        }
+
         UpdateTemperature();
         UpdatePressure();
     }

@@ -122,7 +122,7 @@
 	<Panel id="player_panel" layout="horizontal" anchorMin="0,0.9" anchorMax="1,1" padding="4,2,2,2">
 		<Argument>@player</Argument>
 		<Label>
-			<Value argument="player">Funds</Value>
+			<Value argument="player">Inventory.Funds</Value>
 			<Text type="formatted" argument="player">{0} $</Text>
 		</Label>
 	</Panel>
@@ -135,11 +135,17 @@
 			<Action event="OnClick">
 				function ()
 					verse = Verse.Instance
+					startcoord = Coordinate.__new()
 					coord = Coordinate.__new()
 					targetShip = verse.GetShip(1)
 					-- p = Projectile.__new()
 					p = verse.registry.entityRegistry.Get("projectiles", "basic_projectile")
-					verse.ActiveShip().SpawnProjectile(p, coord, targetShip, coord)
+					if verse.selection != nil then
+						targetShip = verse.selection.selection.Ship
+						coord = verse.selection.coordinate
+					end
+					
+					verse.ActiveShip().SpawnProjectile(p, startcoord, targetShip, coord)
 				end
 			</Action> 
 		</Button>
@@ -182,5 +188,18 @@
 	<Panel id="overlay_panel" layout="horizontal" 
 	anchorMin="0,0" anchorMax="1,0" padding="2,2,2,2" offset="-1,70,-1,90">
 		<Action event="OnCreate" type="script">buildOverlayPanel</Action>
+	</Panel>
+	
+	<Panel id="planet_menu" layout="vertical" 
+	       content="preferredFit,preferredFit" padding="2,2,2,2" pivot="0,0" hidden="true">
+		<Label preferredSize="100,20">
+			<Text>Entry 1</Text>
+			<Action event="OnHover">
+				function( UI, verse, this )
+					print("HOver!!!!!!!!!!!!!!!!")
+				end
+			</Action>
+		</Label>
+		<Label preferredSize="100,20"><Text>Entry 2</Text></Label>
 	</Panel>
 </Canvas>

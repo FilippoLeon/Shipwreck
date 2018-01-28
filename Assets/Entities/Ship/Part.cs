@@ -76,9 +76,19 @@ public partial class Part : Entity<Part> {
             health = value;
             Emit("OnHealthChanged");
             Ship.RecomputeHealth();
+            if( health <= 0 ) {
+                SelfDestroy();
+            }
         }
         get {
             return health;
+        }
+    }
+
+    public override void SelfDestroy() {
+        base.SelfDestroy();
+        if (Ship != null) {
+            Ship.RemovePart(this);
         }
     }
 

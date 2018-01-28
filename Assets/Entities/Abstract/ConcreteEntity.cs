@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 
 [MoonSharpUserData]
-abstract public class ConcreteEntity<T> : Entity<T> where T : class {
+abstract public class ConcreteEntity<T> :Entity<T>, ISelfDestructible where T : class  {
 
     public SpriteInfo spriteInfo;
     public override SpriteInfo SpriteInfo {
@@ -20,6 +20,15 @@ abstract public class ConcreteEntity<T> : Entity<T> where T : class {
         set {
             position = value;
             Emit("SetPosition", new object[] { position });
+        }
+    }
+
+    private float angle;
+    public float Angle {
+        get { return angle;  }
+        set {
+            angle = value;
+            Emit("SetAngle", new object[] { angle });
         }
     }
 

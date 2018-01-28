@@ -5,14 +5,21 @@ using System.Collections.Generic;
 
 namespace Assets.Entities.World {
     [MoonSharpUserData]
-    public class Inventory : IEnumerable {
+    public class Inventory : Entity<Inventory>, IEnumerable {
         public class Item {
             public Part part;
             public int quantity = 1;
         }
 
+        private int funds;
         public int Funds {
-            get; set;
+            get {
+                return funds;
+            }
+            set {
+                funds = value;
+                Emit("OnFundsChanged");
+            }
         }
 
         private Dictionary<Part, Item> _inventory = new Dictionary<Part, Item>();
@@ -66,6 +73,14 @@ namespace Assets.Entities.World {
             } else {
                 _inventory[part] = new Item() { part = part, quantity = quantity };
             }
+        }
+
+        public override Inventory Clone() {
+            throw new NotImplementedException();
+        }
+
+        public override void Update() {
+            throw new NotImplementedException();
         }
     }
 }

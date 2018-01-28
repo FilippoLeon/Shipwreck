@@ -5,18 +5,19 @@ using UnityEngine;
 
 public class SolarSystemComponent : ObserverBehaviour<SolarSystem> {
 
-    public void DisplaySystem() {
-        int planets = 5;
-        for(int p = 0; p < planets; ++p) {
-            GameObject o = GetComponentInParent<GalaxyComponent>().mainController.GetPlanet();
+    public GameObject SolarSystemObject;
 
-            float r = UnityEngine.Random.Range(1f, 10f);
-            float eps = UnityEngine.Random.Range(0.5f, 0.7f);
+    public void DisplaySystem() {
+        SolarSystemObject = new GameObject("SolarSystem");
+        foreach(Planet planet in Emitter.planets) { 
+            GameObject planetComponent = GetComponentInParent<GalaxyComponent>().mainController.GetPlanet(planet);
+            planetComponent.transform.SetParent(SolarSystemObject.transform);
+            
             float angle = UnityEngine.Random.Range(0f, 2 * Mathf.PI);
 
-            o.transform.position = EllipsePoint(angle, r, eps);
+            planetComponent.transform.position = EllipsePoint(angle, planet.Orbit.radius, planet.Orbit.eccentricity);
 
-            DrawOrbit(r, eps);
+            DrawOrbit(planet.Orbit.radius, planet.Orbit.eccentricity);
         }
     }
 
@@ -29,6 +30,7 @@ public class SolarSystemComponent : ObserverBehaviour<SolarSystem> {
     private void DrawOrbit(float r, float eps) {
         GameObject o = new GameObject();
         LineRenderer lr = o.AddComponent<LineRenderer>();
+        o.transform.SetParent(SolarSystemObject.transform);
 
         o.layer = (int) AppInfo.Layer.StarMap;
         lr.startWidth = 0.1f;

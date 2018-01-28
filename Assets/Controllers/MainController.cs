@@ -138,14 +138,14 @@ public class MainController : MonoBehaviour {
                     break;
             }
         }
-        if (viewMode == ViewMode.Map) {
+        if (viewMode == ViewMode.Map || viewMode == ViewMode.SolarMap ) {
             if( Input.GetMouseButtonDown(0) ) {
-                UnityEngine.Ray ray = galaxy.GetComponent<GalaxyComponent>().Camera.ScreenPointToRay( Input.mousePosition );
+                Camera camera = galaxy.GetComponent<GalaxyComponent>().Camera;
+                Vector2 ray = camera.ScreenToWorldPoint( Input.mousePosition );
 
-                RaycastHit hitInfo;
-                bool hit = Physics.Raycast(ray, out hitInfo);
-
-                if( hit && hitInfo.transform.GetComponent<SolarSystemComponent>() != null ) {
+                RaycastHit2D hitInfo = Physics2D.Raycast(ray, ray, 0.0f);
+                
+                if( viewMode == ViewMode.Map && hitInfo.transform != null && hitInfo.transform.GetComponent<SolarSystemComponent>() != null ) {
                     if ( hitInfo.transform.gameObject == oldHitObject && (Time.time - hitTime) < 0.5f) {
                         SolarSystemComponent ssc = hitInfo.transform.GetComponent<SolarSystemComponent>();
                         ssc.DisplaySystem();
@@ -156,6 +156,14 @@ public class MainController : MonoBehaviour {
                    
                     oldHitObject = hitInfo.transform.gameObject;
                     hitTime = Time.time;
+                    //GUIController.childs["star_menu"].Show();
+                } else if( viewMode == ViewMode.SolarMap && hitInfo.transform != null && hitInfo.transform.GetComponentInParent<PlanetComponent>() != null ) {
+                    PlanetComponent pc = hitInfo.transform.GetComponentInParent<PlanetComponent>();
+                    GUIController.childs["planet_menu"].Show();
+                    GUIController.childs["planet_menu"].GameObject.transform.position = camera.WorldToScreenPoint( pc.transform.position );
+                } else {
+                    //GUIController.childs["star_menu"].Hide();
+                    GUIController.childs["planet_menu"].Hide();
                 }
             }
             
@@ -173,8 +181,9 @@ public class MainController : MonoBehaviour {
         }
     }
 
-    public GameObject GetPlanet() {
+    public GameObject GetPlanet(Planet p) {
         GameObject ret = Instantiate(planetTemplate);
+        ret.AddComponent<PlanetComponent>().Emitter = p;
 
         return ret;
     }

@@ -20,6 +20,11 @@ namespace GUI {
 
         GameObject GetContentGameObject();
         string GetToolTipText();
-        
+
+        void Show();
+
+        void Hide();
+
+        void Toggle();
     }
 }

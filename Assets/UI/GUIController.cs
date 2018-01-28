@@ -151,6 +151,9 @@ public class GUIController : UnityEngine.MonoBehaviour {
             for (int i = 0; i < results.Count; ++i) {
                 WidgetComponent wic = results[i].gameObject.GetComponent<WidgetComponent>();
                 if (wic != null) {
+                    if(wic.widget is Widget) {
+                        (wic.widget as Widget).Emit("OnHover");
+                    }
                     HoverObject = wic.widget;
                     break;
                 }

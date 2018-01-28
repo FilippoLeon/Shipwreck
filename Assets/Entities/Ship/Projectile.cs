@@ -29,6 +29,7 @@ public class Projectile : ConcreteEntity {
         base.Update();
         Vector2 dir = (targetInfo.ship.Position + targetInfo.coordinate.ToVector()) - (sourceInfo.ship.Position + sourceInfo.coordinate.ToVector());
         Position += 0.1f * dir.normalized;
+        Angle = Vector2.Angle(dir, Vector2.right) - 90;
     }
 
     public void Hit(IEmitter emitter) {

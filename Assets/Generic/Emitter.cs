@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
@@ -130,9 +131,41 @@ abstract public class Emitter<T> : IXmlSerializable, IEmitter<T> where T : class
         }
     }
 
-    public void SelfDestroy() {
+    public virtual void SelfDestroy() {
         Emit("OnSelfDestroy");
         observers = null;
         actions = null;
+    }
+}
+
+class Reflector {
+    public static object GetPropValue(object obj, String name) {
+        foreach (String part in name.Split('.')) {
+            if (obj == null) { return null; }
+
+            Type type = obj.GetType();
+
+            object param = null;
+            if (obj is IEmitter) {
+                param = (obj as IEmitter).GetParameter(name);
+            }
+            if (param != null) {
+                obj = param;
+            } else {
+                PropertyInfo info = type.GetProperty(part);
+                if (info == null) { return null; }
+
+                obj = info.GetValue(obj, null);
+            }
+        }
+        return obj;
+    }
+
+    public static T GetPropValue<T>(object obj, String name) {
+        object retval = GetPropValue(obj, name);
+        if (retval == null) { return default(T); }
+
+        // throws InvalidCastException if types are incompatible
+        return (T)retval;
     }
 }
