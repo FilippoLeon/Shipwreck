@@ -100,7 +100,7 @@
 					<Alt>Reduce</Alt>
 					<Action event="OnClick">
 						function (verse)
-							-- print(verse);
+							-- print("minus");
 						end
 					</Action> 
 				</Button>
@@ -167,7 +167,7 @@
 			<Text>Rebuild ScrollView</Text>
 			<Action event="OnClick">
 				function ( UI, verse, this )
-					print("Rebuilding view")
+					print("Rebuilding view...")
 					UI["merchant_view"].Emit("OnArgumentChange", {UI, Verse.Instance, this })
 				end
 			</Action> 
@@ -176,7 +176,6 @@
 		<Panel id="merchant_header" padding="3,3,3,3" margin="30" layout="horizontal"/>
 		<Action event="OnShow">
 			function(UI, verse, this)
-				print(trade)
 				rebuildMerchantPanel(UI, verse, this)
 			end
 		</Action>
@@ -192,14 +191,31 @@
 	
 	<Panel id="planet_menu" layout="vertical" 
 	       content="preferredFit,preferredFit" padding="2,2,2,2" pivot="0,0" hidden="true">
-		<Label preferredSize="100,20">
-			<Text>Entry 1</Text>
+		<Argument>@planet</Argument>
+		<Label><Text type="dynamic" argument="planet">Name</Text></Label>
+		<Button preferredSize="100,20" color="none" hoverColor="red">
+			<Text>Warp To...</Text>
+			<Sprite type="none"></Sprite>
+			<!-- Implement changing color using Button things, implement string to color -->
 			<Action event="OnHover">
 				function( UI, verse, this )
-					print("HOver!!!!!!!!!!!!!!!!")
+					this.SetSprite(SpriteInfo.__new("UI", "white"))
+					this.SetColor(Color.red)
 				end
 			</Action>
-		</Label>
+			<Action event="OnHoverExit">
+				function( UI, verse, this )
+					this.SetSprite(nil)
+					this.SetColor(Color.__new(255,255,255,0))
+				end
+			</Action>
+			<Action event="OnClick">
+				function( UI, verse, this)
+					print("Warping to " .. this.Root.GetArgument("@planet").Name)
+					-- print("Click!!!!!!!!!!!!!!!!" .. verse .. this.Name)
+				end
+			</Action>
+		</Button>
 		<Label preferredSize="100,20"><Text>Entry 2</Text></Label>
 	</Panel>
 </Canvas>

@@ -20,6 +20,7 @@ public class MainController : MonoBehaviour {
     public Material starmapEdgeMaterial;
 
     public GameObject galaxy;
+    public GameObject solarMap;
 
     internal float tacticalStartTime = 0;
     internal float nonTacticalStartTime = 0;
@@ -58,6 +59,9 @@ public class MainController : MonoBehaviour {
             case ViewMode.TacticalMap:
                 CurrentView = null;
                 break;
+        }
+        if(mode != ViewMode.SolarMap && solarMap != null) {
+             Destroy(solarMap);
         }
     }
 
@@ -144,26 +148,29 @@ public class MainController : MonoBehaviour {
                 Vector2 ray = camera.ScreenToWorldPoint( Input.mousePosition );
 
                 RaycastHit2D hitInfo = Physics2D.Raycast(ray, ray, 0.0f);
-                
-                if( viewMode == ViewMode.Map && hitInfo.transform != null && hitInfo.transform.GetComponent<SolarSystemComponent>() != null ) {
-                    if ( hitInfo.transform.gameObject == oldHitObject && (Time.time - hitTime) < 0.5f) {
+
+                if (viewMode == ViewMode.Map && hitInfo.transform != null && hitInfo.transform.GetComponent<SolarSystemComponent>() != null) {
+                    if (hitInfo.transform.gameObject == oldHitObject && (Time.time - hitTime) < 0.5f) {
                         SolarSystemComponent ssc = hitInfo.transform.GetComponent<SolarSystemComponent>();
-                        ssc.DisplaySystem();
+                        solarMap = ssc.DisplaySystem();
                         SetMode(ViewMode.SolarMap, ssc.Emitter);
 
-                        Debug.Log( ssc.Emitter.Name );
+                        Debug.Log(ssc.Emitter.Name);
                     }
-                   
+
                     oldHitObject = hitInfo.transform.gameObject;
                     hitTime = Time.time;
                     //GUIController.childs["star_menu"].Show();
-                } else if( viewMode == ViewMode.SolarMap && hitInfo.transform != null && hitInfo.transform.GetComponentInParent<PlanetComponent>() != null ) {
+                } else if (viewMode == ViewMode.SolarMap && hitInfo.transform != null && hitInfo.transform.GetComponentInParent<PlanetComponent>() != null) {
                     PlanetComponent pc = hitInfo.transform.GetComponentInParent<PlanetComponent>();
                     GUIController.childs["planet_menu"].Show();
-                    GUIController.childs["planet_menu"].GameObject.transform.position = camera.WorldToScreenPoint( pc.transform.position );
-                } else {
-                    //GUIController.childs["star_menu"].Hide();
-                    GUIController.childs["planet_menu"].Hide();
+                    GUIController.childs["planet_menu"].GameObject.transform.position = camera.WorldToScreenPoint(pc.transform.position);
+                    GUIController.childs["planet_menu"].SetParameters(new object[] { pc.Emitter });
+                } else if (hitInfo.transform == null || hitInfo.transform.GetComponent<WidgetComponent>() == null) {
+                    if (GUIController.HoverObject == null) {
+                        //GUIController.childs["star_menu"].Hide();
+                        GUIController.childs["planet_menu"].Hide();
+                    }
                 }
             }
             
@@ -181,9 +188,11 @@ public class MainController : MonoBehaviour {
         }
     }
 
-    public GameObject GetPlanet(Planet p) {
+    public GameObject GetPlanet(Planet p = null) {
         GameObject ret = Instantiate(planetTemplate);
-        ret.AddComponent<PlanetComponent>().Emitter = p;
+        if (p != null) {
+            ret.AddComponent<PlanetComponent>().Emitter = p;
+        }
 
         return ret;
     }

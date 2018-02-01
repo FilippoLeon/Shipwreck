@@ -6,7 +6,7 @@ using UnityEngine;
 public class Galaxy : Entity<Galaxy>, IView {
     public Dictionary<Coordinate, SolarSystem> systems = new Dictionary<Coordinate, SolarSystem>();
 
-    Verse Verse {set; get;}
+    public Verse Verse {set; get;}
 
     Delaunay del;
 

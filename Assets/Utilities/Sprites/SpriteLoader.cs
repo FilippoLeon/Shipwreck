@@ -94,6 +94,9 @@ public class SpriteLoader {
             Debug.LogError("null SpriteInfo.");
             return placeHolder;
         }
+        if(spriteInfo.type == "none") {
+            return new SpriteContainer(){ sprite = null };
+        }
         if (spriteInfo.category == null) { return GetSprite(spriteInfo.GetId(obj)); }
         return tryLoadSprite(spriteInfo.category, spriteInfo.GetId(obj));
     }

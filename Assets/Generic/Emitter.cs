@@ -44,22 +44,26 @@ abstract public class Emitter<T> : IXmlSerializable, IEmitter<T> where T : class
             observer.HandleEvent(signal, args);
         }
 
-        if (actions.ContainsKey(signal)) {
-            foreach (GenericAction act in actions[signal]) {
-                act.Call(this, args);
-            }
-        }
+        Call(signal, args);
     }
     public void Emit(String signal) {
         foreach (IObserver<T> observer in observers) {
             observer.HandleEvent(signal);
         }
 
-        if (actions.ContainsKey(signal)) {
-            foreach (GenericAction act in actions[signal]) {
-                act.Call(this, new object[] { this });
+        Call(signal, new object[] { this });
+    }
+
+    internal object Call(string eventName, object[] args) {
+        DynValue ret = null;
+
+        if (actions.ContainsKey(eventName)) {
+            foreach (GenericAction act in actions[eventName]) {
+                ret = act.Call(this, args);
             }
         }
+
+        return ret;
     }
 
     virtual public XmlSchema GetSchema() {

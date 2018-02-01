@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 
 [MoonSharpUserData]
-abstract public class ConcreteEntity<T> :Entity<T>, ISelfDestructible where T : class  {
+abstract public class ConcreteEntity<T> : Entity<T>, ISelfDestructible where T : class  {
 
     public SpriteInfo spriteInfo;
     public override SpriteInfo SpriteInfo {

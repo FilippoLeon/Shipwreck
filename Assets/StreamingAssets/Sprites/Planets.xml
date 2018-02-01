@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SpriteSheet defaultSize="16,16" defaultPivot="0.5,0.5" defaultPpu="64">
+  <Sprite start="0,0" category="Planet" ppu="32" size="16,16">terran</Sprite>
+  <Sprite start="1,0" category="Planet" ppu="32" size="16,16">arid</Sprite>
+  <Sprite start="2,0" category="Planet" ppu="32" size="16,16">ice</Sprite>
+  <Sprite start="3,0" category="Planet" ppu="32" size="16,16">jungle</Sprite>
+  <Sprite start="0,2" category="Planet" ppu="32" size="32,32">giant_star</Sprite>
+  <Sprite start="2,2" category="Planet" ppu="32" size="32,32">neutron_star</Sprite>
+</SpriteSheet>

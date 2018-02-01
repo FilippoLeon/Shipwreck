@@ -30,7 +30,8 @@ namespace GUI {
         }
         
         public void SetSprite(SpriteInfo info) {
-            backgroundComponent.sprite = SpriteController.spriteLoader.Load(info).sprite;
+            if (info == null) backgroundComponent.sprite = null;
+            else backgroundComponent.sprite = SpriteController.spriteLoader.Load(info).sprite;
         }
 
         public void SetType(string type) {
@@ -44,6 +45,10 @@ namespace GUI {
                     backgroundComponent.preserveAspect = true;
                     break;
             }
+        }
+
+        public void SetColor(Color color) {
+            backgroundComponent.color = color;
         }
 
         public Button(string id = null) : base(id) {

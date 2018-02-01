@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Generators>
+	<PlanetGenerator id="terran">
+		<Action event="OnScoreGenerator">
+			function(planet)
+				return 10
+			end
+		</Action>
+		<Action event="OnGenerate">
+			function(planet)
+				print("terran")
+			end
+		</Action>
+		<Icon>
+			<Sprite category="Planet">terran</Sprite>
+		</Icon>
+	</PlanetGenerator>
+	<PlanetGenerator id="arid">
+		<Action event="OnScoreGenerator">
+			function(planet)
+				return 20
+			end
+		</Action>
+		<Action event="OnGenerate">
+			function(planet)
+				print("arid")
+			end
+		</Action>
+		<Icon>
+			<Sprite category="Planet">arid</Sprite>
+		</Icon>
+	</PlanetGenerator>
+	<PlanetGenerator id="ice">
+		<Action event="OnScoreGenerator">
+			function(planet)
+				return 20
+			end
+		</Action>
+		<Action event="OnGenerate">
+			function(planet)
+				print("ice")
+			end
+		</Action>
+		<Icon>
+			<Sprite category="Planet">ice</Sprite>
+		</Icon>
+	</PlanetGenerator>
+	<PlanetGenerator id="jungle">
+		<Action event="OnScoreGenerator">
+			function(planet)
+				return 20
+			end
+		</Action>
+		<Action event="OnGenerate">
+			function(planet)
+				print("jungle")
+			end
+		</Action>
+		<Icon>
+			<Sprite category="Planet">jungle</Sprite>
+		</Icon>
+	</PlanetGenerator>
+
+
+</Generators>

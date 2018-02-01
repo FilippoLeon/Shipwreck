@@ -87,7 +87,7 @@ class CameraController : MonoBehaviour {
 
         //// GRAB
         if (Input.GetButton("Pan")) {
-            delta += panSpeed * cameraToProcess.orthographicSize * cameraToProcess.ScreenToViewportPoint(grabPosition - Input.mousePosition);
+            delta += panSpeed * cameraToProcess.orthographicSize * Camera.main.ScreenToViewportPoint(grabPosition - Input.mousePosition);
         }
 
         //// GRAB2

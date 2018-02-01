@@ -140,7 +140,7 @@ public class GUIController : UnityEngine.MonoBehaviour {
         foreach (IWidget child in childs.Values) {
             child.Update(null);
         }
-
+        
         PointerEventData pointerData = new PointerEventData(EventSystem.current);
 
         pointerData.position = Input.mousePosition;
@@ -152,8 +152,11 @@ public class GUIController : UnityEngine.MonoBehaviour {
                 WidgetComponent wic = results[i].gameObject.GetComponent<WidgetComponent>();
                 if (wic != null) {
                     if(wic.widget is Widget) {
-                        (wic.widget as Widget).Emit("OnHover");
+                        (wic.widget as Widget).Emit("OnHover", new object[] { childs, Verse.Instance, wic.widget });
                     }
+                    if( HoverObject is Widget && wic.widget != HoverObject) {
+                        (HoverObject as Widget).Emit("OnHoverExit", new object[] { childs, Verse.Instance, HoverObject });
+                    } 
                     HoverObject = wic.widget;
                     break;
                 }

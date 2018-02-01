@@ -25,7 +25,7 @@ namespace LUA {
             Debug.Assert(ret.CastToBool() == true);
         }
 
-        public static void LoadScript(string category, string filename) {
+        public static void AddCategory(string category) {
             if (!script.ContainsKey(category)) {
                 script[category] = new Script();
 
@@ -36,6 +36,10 @@ namespace LUA {
                     script[category].Globals[global.typeName] = global.type;
                 }
             }
+        }
+
+        public static void LoadScript(string category, string filename) {
+            AddCategory(category);
 
             FileInfo info = new FileInfo(
                 Path.Combine(Application.streamingAssetsPath,

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SolarSystem : Entity<SolarSystem>, IView {
     public Coordinate coordinate;
-    private Galaxy galaxy;
+    public Galaxy galaxy;
 
     public List<SolarSystem> links = new List<SolarSystem>();
 
@@ -17,12 +17,10 @@ public class SolarSystem : Entity<SolarSystem>, IView {
 
         int nplanets = UnityEngine.Random.Range(1, 7);
         for( int i = 0; i < nplanets; ++i ) {
-            planets.Add(Planet.Random(this, i));
+            Planet p = Planet.Random(this, i);
+            
+            planets.Add(p);
         }
-    }
-
-    public string Name {
-        get; set;
     }
 
     public override SolarSystem Clone() {

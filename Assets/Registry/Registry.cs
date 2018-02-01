@@ -13,12 +13,17 @@ public class Registry {
 
     public NameRegistry namesRegistry;
 
+    public Generator generator;
+
     public Registry() {
         ScriptLoader.LoadScript("Entity", "Entity.lua");
+        ScriptLoader.AddCategory("Generator");
 
         partRegistry = new PartRegistry();
         entityRegistry = new EntityRegistry();
 
         namesRegistry = new NameRegistry();
+
+        generator = new Generator();
     }
 }

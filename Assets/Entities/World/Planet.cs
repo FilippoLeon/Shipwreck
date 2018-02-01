@@ -31,8 +31,10 @@ public class Planet : Entity<Planet>, ILocation {
         Planet planet = new Planet(system);
 
         planet.Name = system.Name + (n >= 0 ? " " + (char)('a' + n) : "");
-        planet.orbitInfo.radius = UnityEngine.Random.Range(1f, 10f);
-        planet.orbitInfo.eccentricity = UnityEngine.Random.Range(0.5f, 0.7f);
+        planet.orbitInfo.radius = UnityEngine.Random.Range(1f + n, 3f + n);
+        planet.orbitInfo.eccentricity = UnityEngine.Random.Range(0.5f + n * 0.01f, 0.7f + n * 0.01f);
+
+        system.galaxy.Verse.registry.generator.Generate(planet);
 
         return planet;
     }
