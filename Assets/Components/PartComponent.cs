@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PartComponent : ObserverBehaviour<Part> {
-    SpriteRenderer sr;
+public class PartComponent : SpritedObserverBehaviour<Part> {
     void Start() {
         //sr = gameObject.AddComponent<SpriteRenderer>();
         //sr.sprite = SpriteController.spriteLoader.GetSprite("part");
@@ -19,8 +18,7 @@ public class PartComponent : ObserverBehaviour<Part> {
 
         transform.localPosition = coordinate.ToVector();
 
-        sr = gameObject.AddComponent<SpriteRenderer>();
-        SpriteController.spriteLoader.LoadIntoSpriteRenderer(sr, Emitter.spriteInfo, Emitter);
+        base.CreateGraphics();
     }
 
     override public void HandleEvent(string signal, object[] args) {
@@ -43,6 +41,6 @@ public class PartComponent : ObserverBehaviour<Part> {
     }
 
     void Update() {
-        SpriteController.spriteLoader.LoadIntoSpriteRenderer(sr, Emitter.spriteInfo, Emitter);
+        base.UpdateGraphics();
     }
 }

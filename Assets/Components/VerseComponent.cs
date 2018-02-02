@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class VerseComponent : ObserverBehaviour<Verse> {
     EntityComponent<ConcreteEntity> selectorComponent;
+    EntityComponent<ConcreteEntity> buildIndicatorComponent;
 
     EntityComponent<ConcreteEntity> SpawnEntity(ConcreteEntity entity) {
         GameObject o = new GameObject();
@@ -18,6 +19,9 @@ public class VerseComponent : ObserverBehaviour<Verse> {
             component = o.AddComponent<EntityComponent>();
             entity.register(component);
         }
+        if( entity.Name == "BuildIndicator") {
+            buildIndicatorComponent = component;
+        }
         return component;
     }
 
@@ -30,6 +34,8 @@ public class VerseComponent : ObserverBehaviour<Verse> {
                 ShipComponent sc = GetComponent<ShipController>().GetShipComponent(Emitter.ActiveShip());
                 selectorComponent.transform.SetParent(sc.transform);
                 selectorComponent.transform.localEulerAngles = new Vector3(0, 0, 0);
+                buildIndicatorComponent.transform.SetParent(sc.transform);
+                buildIndicatorComponent.transform.localEulerAngles = new Vector3(0, 0, 90 * (int) buildIndicatorComponent.Emitter.Facing);
                 GameObject.Find("Main Camera").transform.SetParent(sc.transform);
                 GameObject.Find("Main Camera").transform.localEulerAngles = new Vector3(0,0,0);
                 GameObject.Find("Main Camera").GetComponent<CameraController>().Center();

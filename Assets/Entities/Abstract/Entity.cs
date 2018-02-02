@@ -47,8 +47,15 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
     }
 
     public string Name { get; set; }
-
-    public virtual SpriteInfo SpriteInfo { get; set; }
+    
+    /// <summary>
+    /// Information about the sprite used to represent the part.
+    /// </summary>
+    public Icon spriteInfo;
+    public virtual Icon SpriteInfo {
+        get { return spriteInfo; }
+        set { spriteInfo = value; }
+    }
 
     public Entity() {
 
@@ -66,6 +73,7 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
                 parameters[o.Key] = (float)o.Value;
             }
         }
+        spriteInfo = other.spriteInfo;
 
         actions = new Dictionary<string, List<GenericAction>>(other.actions);
     }
@@ -86,8 +94,7 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
         switch (reader.Name) {
             case "Icon":
                 XmlReader subreader = reader.ReadSubtree();
-                subreader.ReadToDescendant("Sprite");
-                SpriteInfo = new SpriteInfo(subreader, this);
+                spriteInfo = new Icon(subreader, this);
                 subreader.Close();
                 break;
             case "Parameter":
@@ -140,6 +147,12 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
         } else {
             return null;
         }
+    }
+    public V GetParameter<V>(string name) where V: new() {
+        if (!parameters.ContainsKey(name)) {
+            parameters[name] = new V();
+        }
+        return (V) parameters[name];
     }
 
     override public void WriteXml(XmlWriter writer) {

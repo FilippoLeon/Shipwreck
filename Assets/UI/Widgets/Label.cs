@@ -80,7 +80,7 @@ namespace GUI {
                 try {
                     textComponent.text = textModifier.Call(this, values.Values.ToArray()).String;
                 } catch(Exception e) {
-
+                    Debug.LogError(e.Message);
                 }
             }
         }

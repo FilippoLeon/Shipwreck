@@ -23,11 +23,11 @@ namespace GUI {
 
         public Image SetSprite(SpriteInfo info) {
             spriteInfo = info;
-            imageComponent.sprite = SpriteController.spriteLoader.Load(info).sprite;
+            imageComponent.sprite = SpriteController.spriteLoader.Load(spriteInfo).sprite;
             return this;
         }
         
-        public new static Image Create(XmlReader reader, IWidget parent = null) {
+        public static Image Create(XmlReader reader, IWidget parent = null) {
             Image image = new Image();
             image.ReadCurrentElement(reader, parent);
             

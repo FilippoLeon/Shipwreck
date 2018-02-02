@@ -10,8 +10,6 @@ using UnityEngine;
 public class SpriteLoader {
     static public SpriteLoader Instance = null;
 
-    string spritesFolder = "Sprites";
-
     public Vector2 defaultSize = new Vector2(64, 64);
     public Vector2 defaultPivot = new Vector2(0.5f, 0.5f);
 
@@ -19,8 +17,13 @@ public class SpriteLoader {
 
     public void LoadIntoSpriteRenderer(SpriteRenderer sr, SpriteInfo spriteInfo, IEmitter emitter) {
         SpriteLoader.SpriteContainer sd = SpriteController.spriteLoader.Load(spriteInfo, emitter);
-        sr.sprite = sd.sprite;
-        if (sd.layer != null) sr.sortingLayerName = sd.layer;
+        if (sd == null) {
+            sr.sprite = null;
+        } else {
+            sr.sprite = sd.sprite;
+            if (sd.layer != null) sr.sortingLayerName = sd.layer;
+        }
+        sr.color = spriteInfo.tint;
     }
 
     public Texture2D placeholderTexture;
@@ -54,7 +57,6 @@ public class SpriteLoader {
         } else {
             Debug.LogError("Only one instance of 'SpriteUtilities' is allowed.");
         }
-        this.spritesFolder = spritesFolder;
         
         try {
             DirectoryInfo dir = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, spritesFolder));
@@ -77,11 +79,17 @@ public class SpriteLoader {
     /// <param name="id"></param>
     /// <returns></returns>
     public SpriteContainer tryLoadSprite(string category, string id) {
+        if (id == "none") {
+            return null;
+        }
         if (categories.ContainsKey(category) && categories[category].ContainsKey(id))
             return categories[category][id];
         return placeHolder;
     }
     public SpriteContainer GetSprite(string name) {
+        if(name == "none") {
+            return null;
+        }
         if (name != null && sprites.ContainsKey(name) && sprites[name] != null) {
             return sprites[name];
         } else {

@@ -70,7 +70,7 @@ public class Ship : Entity<Ship> {
 	
     string name = "Serenity";
 	/// <summary>Ship's name. Emits "OnNameChanged".</summary>
-    public string Name {
+    public new string Name {
         set {
             name = value;
             Emit("OnNameChanged");
@@ -440,8 +440,8 @@ public class Ship : Entity<Ship> {
         foreach (Part p in hulls.Values) {
             foreach (Part n in p.Neighbours()) {
                 if (n == null) continue;
-                int temperature_p = (int)p.GetParameter("temperature");
-                int temperature_n = (int)n.GetParameter("temperature");
+                int temperature_p = p.GetParameter<int>("temperature");
+                int temperature_n = n.GetParameter<int>("temperature");
 
                 if (temperature_p > temperature_n) {
                     int flow_n = Mathf.Min((temperature_p - temperature_n) / 2, rate);
@@ -459,10 +459,10 @@ public class Ship : Entity<Ship> {
         foreach(Part p in hulls.Values) {
             foreach(Part n in p.Neighbours()) {
                 if (n == null) continue;
-                int pressure_p = (int) p.GetParameter("pressure");
-                int pressure_n = (int) n.GetParameter("pressure");
-                int min_pressure_p = (int) p.GetParameter("min_pressure");
-                int max_pressure_n = (int) n.GetParameter("max_pressure");
+                int pressure_p = p.GetParameter<int>("pressure");
+                int pressure_n = n.GetParameter<int>("pressure");
+                int min_pressure_p = p.GetParameter<int>("min_pressure");
+                int max_pressure_n = n.GetParameter<int>("max_pressure");
 
                 if ( pressure_p > pressure_n) {
                     int flow_n = Mathf.Min((pressure_p - pressure_n) / 2, rate);

@@ -39,11 +39,27 @@
 			</Sprite>
 		</Icon>
 	</Part>
-	<Part id="engine_big" type="addon">
+	<Part id="engine_big" type="hull">
 		<Icon>
 			<Sprite category="Parts">engine_big</Sprite>
-			<Sprite category="Parts">flameout_big</Sprite>
+			<Sprite category="Effects" type="function" id="flameout_big">
+				function ( part )
+					if part == nil or part.Ship == nil then
+						return "none"
+					end
+					if part.Ship.isMoving then
+						return "flameout_big"
+					else
+						return "none"
+					end
+				end
+			</Sprite>
 		</Icon>
+		<Action event="OnCanAttachTo">
+			function ( part, coord ) 
+			
+			end
+		</Action>
 	</Part>
 	<Part id="battery" type="addon">
 		<Icon>

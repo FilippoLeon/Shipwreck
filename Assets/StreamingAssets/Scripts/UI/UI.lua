@@ -106,7 +106,7 @@ function rebuildMerchantPanel(UI, verse, this)
 			.AddTo(UI["merchant_view"]["merchant_inventory"])
 		
 		-- Item icon 
-		local i_icon = Image.Create().SetSprite(part.SpriteInfo).AddTo(p)
+		local i_icon = Image.Create().SetSprite(part.SpriteInfo.Get(0)).AddTo(p)
 		
 		-- Item name label
 		local l_item = Label.Create()

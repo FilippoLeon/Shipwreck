@@ -26,7 +26,7 @@ public class Verse : Entity<Verse>, IView {
 
     public Selection selection;
 
-    public string Name { get { return "TheVerse"; } }
+    public new string Name { get { return "TheVerse"; } }
 
     public enum VerseMode {
         None,
@@ -160,15 +160,13 @@ public class Verse : Entity<Verse>, IView {
 
         selectionEntity = new ConcreteEntity();
         selectionEntity.Name = "Selector";
-        selectionEntity.spriteInfo = new SpriteInfo();
-        selectionEntity.spriteInfo.id = "selector_1";
-        selectionEntity.spriteInfo.category = "UI";
-
+        selectionEntity.spriteInfo = new Icon(new SpriteInfo() { id = "selector_1", category = "UI" });
 
         SpawnSelectionEntity(selectionEntity, new Vector2(0, 0));
         selectionEntity.Active = false;
 
         buildIndicatorEntity = new ConcreteEntity();
+        buildIndicatorEntity.Name = "BuildIndicator";
         SpawnEntity(buildIndicatorEntity, new Vector2(0, 0));
         buildIndicatorEntity.Active = false;
 
@@ -223,9 +221,7 @@ public class Verse : Entity<Verse>, IView {
 
             if (modeArgs.Length >= 1 && modeArgs[0] is string) {
                 Part p = registry.partRegistry.Get(modeArgs[0] as string, false);
-                buildIndicatorEntity.SpriteInfo = new SpriteInfo(p.SpriteInfo);
-                buildIndicatorEntity.SpriteInfo.tint = Color.green;
-                buildIndicatorEntity.SpriteInfo.layer = 3;
+                buildIndicatorEntity.SpriteInfo = new Icon(new SpriteInfo(p.SpriteInfo.Get(0)) { tint = Color.green, layer = 3 });
                 buildIndicatorEntity.Active = true;
             }
         } else {

@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class MainController : MonoBehaviour {
 
-    ScriptLoader scriptLoader;
+    ScriptLoader scriptLoader = null;
     public Verse Verse { set; get; }
 
     ShipController shipController;

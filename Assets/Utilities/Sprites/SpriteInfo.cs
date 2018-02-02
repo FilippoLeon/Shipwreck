@@ -1,5 +1,6 @@
 ﻿using MoonSharp.Interpreter;
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class SpriteInfo {
     public string category;
     public string type;
     public GenericAction action = null;
-    public Color tint;
+    public Color tint = Color.white;
     public int layer;
 
     public SpriteInfo() {

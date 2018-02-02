@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityComponent<T> : ObserverBehaviour<T> where T : ConcreteEntity<T> {
-    SpriteRenderer sr;
+public class EntityComponent<T> : SpritedObserverBehaviour<T> where T : ConcreteEntity<T> {
 
     void Start() {
 
@@ -12,10 +11,9 @@ public class EntityComponent<T> : ObserverBehaviour<T> where T : ConcreteEntity<
 
     void SpawnAt(Vector2 coordinate) {
         transform.localPosition = coordinate;
+        name = Emitter.Name;
 
-        sr = gameObject.AddComponent<SpriteRenderer>();
-        
-        SpriteController.spriteLoader.LoadIntoSpriteRenderer(sr, Emitter.spriteInfo, Emitter);
+        base.CreateGraphics();
     }
 
     override public void HandleEvent(string signal, object[] args) {
@@ -50,12 +48,8 @@ public class EntityComponent<T> : ObserverBehaviour<T> where T : ConcreteEntity<
     }
 
     protected void Update() {
-        SpriteLoader.SpriteContainer sd = SpriteController.spriteLoader.Load(Emitter.spriteInfo, Emitter);
-        sr.sprite = sd.sprite;
-        if(Emitter.spriteInfo.tint != null) {
-            sr.color = Emitter.spriteInfo.tint;
-        }
-        if (sd.layer != null) sr.sortingLayerName = sd.layer;
+        base.UpdateGraphics();
     }
 }
+
 public class EntityComponent : EntityComponent<ConcreteEntity> { }

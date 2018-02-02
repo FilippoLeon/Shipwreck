@@ -7,13 +7,7 @@ using UnityEngine;
 
 [MoonSharpUserData]
 abstract public class ConcreteEntity<T> : Entity<T>, ISelfDestructible where T : class  {
-
-    public SpriteInfo spriteInfo;
-    public override SpriteInfo SpriteInfo {
-        get { return spriteInfo; }
-        set { spriteInfo = value; }
-    }
-
+    
     private Vector2 position;
     public Vector2 Position {
         get { return position; }

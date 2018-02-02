@@ -6,7 +6,7 @@ using UnityEngine;
 
 class CameraController : MonoBehaviour {
 
-    public GameObject background;
+    public GameObject background = null;
 
     int ppu = 32;
     int ppuScale = 1;

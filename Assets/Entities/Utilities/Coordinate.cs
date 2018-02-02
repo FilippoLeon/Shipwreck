@@ -37,4 +37,22 @@ public struct Coordinate {
     public override string ToString() {
         return "(" + x + "," + y + ")";
     }
+
+    public override bool Equals(object obj) {
+        if (!(obj is Coordinate)) {
+            return false;
+        }
+
+        var coordinate = (Coordinate) obj;
+        return x == coordinate.x &&
+               y == coordinate.y;
+    }
+
+    public override int GetHashCode() {
+        var hashCode = 1502939027;
+        hashCode = hashCode * -1521134295 + base.GetHashCode();
+        hashCode = hashCode * -1521134295 + x.GetHashCode();
+        hashCode = hashCode * -1521134295 + y.GetHashCode();
+        return hashCode;
+    }
 }

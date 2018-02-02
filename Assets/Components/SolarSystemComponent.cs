@@ -25,7 +25,7 @@ public class SolarSystemComponent : ObserverBehaviour<SolarSystem> {
 
             if (planet.SpriteInfo != null) {
                 planetComponent.GetComponentInChildren<SpriteRenderer>().sprite 
-                    = SpriteLoader.Instance.Load(planet.SpriteInfo, planet).sprite;
+                    = SpriteLoader.Instance.Load(planet.SpriteInfo.Get(0), planet).sprite;
             }
 
             float angle = UnityEngine.Random.Range(0f, 2 * Mathf.PI);

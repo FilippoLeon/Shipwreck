@@ -38,15 +38,6 @@ public partial class Part : Entity<Part> {
     /// </summary>
     public PartType partType;
 
-    /// <summary>
-    /// Information about the sprite used to represent the part.
-    /// </summary>
-    public SpriteInfo spriteInfo;
-    public override SpriteInfo SpriteInfo {
-        get { return spriteInfo;  }
-        set { spriteInfo = value; }
-    }
-
     public Coordinate position;
     /// <summary>
     /// The coordinate of the part relaive to the ship.
@@ -143,7 +134,6 @@ public partial class Part : Entity<Part> {
     public Part() { }
 
     private Part(Part other) : base(other) {
-        spriteInfo = other.spriteInfo;
         IsRoot = other.IsRoot;
         partType = other.partType;
         Price = other.Price;
@@ -287,16 +277,8 @@ public partial class Part : Entity<Part> {
         return true;
     }
     
-    /// <summary>
-    /// Rotate the part.
-    /// </summary>
-    public void Rotate() {
-        Facing =  (Direction) (((int) Facing + 1) % 4);
-    }
-
     int i = 0;
-
-
+    
     public override void Update() {
         SetParameter("direction", ((i++ + 1) % 4).ToString());
 
