@@ -17,6 +17,7 @@ public partial class Part : Entity<Part> {
     public enum PartType {
         Hull, Addon
     }
+    
 
     //////////
     ////// PROPERTIES
@@ -258,10 +259,21 @@ public partial class Part : Entity<Part> {
         return true;
     }
 
+    /// <summary>
+    /// Returns true if an addon is compatible with the part.
+    /// </summary>
+    /// <param name="addon"></param>
+    /// <returns></returns>
     public bool IsAddonCompatible(Part addon) {
         return true;
     }
 
+    /// <summary>
+    /// Adds the part to the ship, at the given coordinate. Return true if add was succesful.
+    /// </summary>
+    /// <param name="ship"></param>
+    /// <param name="position"></param>
+    /// <returns></returns>
     public bool AddTo(Ship ship, Coordinate position) {
         if( !CanAttachTo(ship, position) ) {
             return false;
@@ -275,8 +287,16 @@ public partial class Part : Entity<Part> {
         return true;
     }
     
+    /// <summary>
+    /// Rotate the part.
+    /// </summary>
+    public void Rotate() {
+        Facing =  (Direction) (((int) Facing + 1) % 4);
+    }
 
     int i = 0;
+
+
     public override void Update() {
         SetParameter("direction", ((i++ + 1) % 4).ToString());
 

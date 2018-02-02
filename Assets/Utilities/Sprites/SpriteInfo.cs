@@ -10,6 +10,8 @@ public class SpriteInfo {
     public string category;
     public string type;
     public GenericAction action = null;
+    public Color tint;
+    public int layer;
 
     public SpriteInfo() {
 
@@ -25,6 +27,8 @@ public class SpriteInfo {
         this.type = other.type;
         this.category = other.category;
         this.action = other.action;
+        this.layer = other.layer;
+        this.tint = other.tint;
     }
 
     public SpriteInfo(XmlReader reader, IEmitter emitter = null) {

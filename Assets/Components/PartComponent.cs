@@ -32,7 +32,14 @@ public class PartComponent : ObserverBehaviour<Part> {
     }
 
     override public void HandleEvent(string signals) {
-        base.HandleEvent(signals);
+        switch (signals) {
+            case "OnFacingChanged":
+                transform.localEulerAngles = new Vector3(0, 0, 90 * (int) Emitter.Facing);
+                break;
+            default:
+                base.HandleEvent(signals);
+                break;
+        }
     }
 
     void Update() {

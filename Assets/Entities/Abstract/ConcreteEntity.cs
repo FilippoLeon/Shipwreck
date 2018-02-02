@@ -22,6 +22,7 @@ abstract public class ConcreteEntity<T> : Entity<T>, ISelfDestructible where T :
             Emit("SetPosition", new object[] { position });
         }
     }
+    
 
     private float angle;
     public float Angle {

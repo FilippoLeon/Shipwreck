@@ -32,9 +32,16 @@
 					if part == nil then
 						return "turret_1"
 					end
-					return "turret_" .. part.GetParameter("direction")
+					dir = part.GetParameter("direction")
+					if dir == nil then return "turret_1" end
+					return "turret_" .. dir
 				end
 			</Sprite>
+		</Icon>
+	</Part>
+	<Part id="engine_big" type="addon">
+		<Icon>
+			<Sprite category="Parts">engine_big</Sprite>
 		</Icon>
 	</Part>
 	<Part id="battery" type="addon">

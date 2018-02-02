@@ -8,6 +8,27 @@ using UnityEngine;
 [MoonSharpUserData]
 abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSerializable where T : class {
     protected Dictionary<string, object> parameters = new Dictionary<string, object>();
+    
+    private Direction facing;
+    /// <summary>
+    /// Where the part is pointing.
+    /// </summary>
+    public Direction Facing {
+        set {
+            facing = value;
+            Emit("OnFacingChanged");
+        }
+        get {
+            return facing;
+        }
+    }
+
+    /// <summary>
+    /// Rotate the part.
+    /// </summary>
+    public void Rotate() {
+        Facing = (Direction)(((int)Facing + 1) % 4);
+    }
 
     public override string Category {
         get {

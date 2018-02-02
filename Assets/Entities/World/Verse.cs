@@ -18,7 +18,27 @@ public class Verse : Entity<Verse>, IView {
     public List<IEmitter> flaggedForRemovalEntities = new List<IEmitter>();
 
     public Dictionary<string, Func<Coordinate, int>> maps = new Dictionary<string, Func<Coordinate, int>>();
+    
+    /// <summary>
+    /// Index of active ship.
+    /// </summary>
+    int index = 0;
 
+    public Selection selection;
+
+    public string Name { get { return "TheVerse"; } }
+
+    public enum VerseMode {
+        None,
+        Build
+    };
+
+    public VerseMode verseMode = VerseMode.None;
+    public object[] modeArgs;
+
+    ConcreteEntity selectionEntity;
+
+    public ConcreteEntity buildIndicatorEntity;
 
     public SpriteLoader SpriteLoader {
         get {
@@ -56,7 +76,6 @@ public class Verse : Entity<Verse>, IView {
         flaggedForRemovalEntities.Add(e);
     }
 
-    int index = 0;
     public Ship ActiveShip() {
         return ships[index];
     }
@@ -66,19 +85,7 @@ public class Verse : Entity<Verse>, IView {
 
         Emit("OnActiveShipChanged", new object[] { });
     }
-    
-
-    public Selection selection;
-
-    public string Name { get { return "TheVerse"; } }
-    
-    public enum VerseMode {
-        None,
-        Build
-    };
-
-    public VerseMode verseMode = VerseMode.None;
-    public object[] modeArgs;
+   
 
     public void SetMode(VerseMode mode, object[] args) {
         verseMode = mode;
@@ -115,8 +122,7 @@ public class Verse : Entity<Verse>, IView {
     public void OnWarpTo(ILocation location) {
         Emit("OnWarpTo", new object[] { });
     }
-
-    ConcreteEntity selectionEntity;
+    
 
     public void Create() {
         Galaxy.Initialize();
@@ -158,8 +164,13 @@ public class Verse : Entity<Verse>, IView {
         selectionEntity.spriteInfo.id = "selector_1";
         selectionEntity.spriteInfo.category = "UI";
 
+
         SpawnSelectionEntity(selectionEntity, new Vector2(0, 0));
         selectionEntity.Active = false;
+
+        buildIndicatorEntity = new ConcreteEntity();
+        SpawnEntity(buildIndicatorEntity, new Vector2(0, 0));
+        buildIndicatorEntity.Active = false;
 
         Emit("VerseCreated", new object[] { });
     }
@@ -208,6 +219,19 @@ public class Verse : Entity<Verse>, IView {
     }
 
     public override void Update() {
+        if (verseMode == VerseMode.Build) {
+
+            if (modeArgs.Length >= 1 && modeArgs[0] is string) {
+                Part p = registry.partRegistry.Get(modeArgs[0] as string, false);
+                buildIndicatorEntity.SpriteInfo = new SpriteInfo(p.SpriteInfo);
+                buildIndicatorEntity.SpriteInfo.tint = Color.green;
+                buildIndicatorEntity.SpriteInfo.layer = 3;
+                buildIndicatorEntity.Active = true;
+            }
+        } else {
+            buildIndicatorEntity.Active = false;
+        }
+
         foreach(Player p in players) {
             p.Update();
         }

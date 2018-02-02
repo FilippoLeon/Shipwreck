@@ -1,6 +1,5 @@
 
-
-- DFS to find unattached hulls
-- After-update destroy all marked items
-- Random generators
-- Really wart to other planets
+High priority:
+- Random generators (partially done)
+- Really warp to other planets
+- multilevel sprites/SpriteInfo

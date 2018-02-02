@@ -10,9 +10,13 @@ public class PartRegistry {
 
     public Dictionary<string, Part> prototypes = new Dictionary<string, Part>();
 
-    public Part Get(string name) {
-        if( prototypes.ContainsKey(name) ) {
-            return prototypes[name].Clone();
+    public Part Get(string name, bool clone = true) {
+        if (prototypes.ContainsKey(name)) {
+            if (clone) { 
+                return prototypes[name].Clone();
+            } else {
+                return prototypes[name];
+            }
         } else {
             Debug.LogError(String.Format("Part {0} not found in prototypes.", name));
             return null;

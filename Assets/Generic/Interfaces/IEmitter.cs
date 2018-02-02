@@ -13,6 +13,13 @@ public interface IEmitter {
     object SetParameter(string name, object o);
 }
 
+/// <summary>
+/// Direction the part is facing.
+/// </summary>
+public enum Direction {
+    Down, Right, Up, Left
+};
+
 public interface IEmitter<T> : IEmitter where T: class {
 
     void register(IObserver<T> observer);
