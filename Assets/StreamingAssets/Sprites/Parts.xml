@@ -3,6 +3,7 @@
   <Sprite start="0,15" category="Parts" layer="0">root</Sprite>
   <Sprite start="1,15" category="Parts" layer="0">basic_hull</Sprite>
   <Sprite start="2,15" category="Parts" layer="0">engine_big</Sprite>
+  <Sprite start="3,15" category="Parts" layer="0">winglet</Sprite>
   <Sprite start="0,13" category="Parts" layer="1">turret_0</Sprite>
   <Sprite start="0,12" category="Parts" layer="1">turret_1</Sprite>
   <Sprite start="0,11" category="Parts" layer="1">turret_2</Sprite>

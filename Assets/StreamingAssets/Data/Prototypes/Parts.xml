@@ -39,6 +39,11 @@
 			</Sprite>
 		</Icon>
 	</Part>
+	<Part id="winglet" type="hull">
+		<Icon>
+			<Sprite category="Parts">winglet</Sprite>
+		</Icon>
+	</Part>
 	<Part id="engine_big" type="hull">
 		<Icon>
 			<Sprite category="Parts">engine_big</Sprite>
