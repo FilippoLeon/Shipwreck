@@ -31,7 +31,7 @@ abstract public class ConcreteEntity<T> : Entity<T>, ISelfDestructible where T :
     }
 
     public ConcreteEntity(ConcreteEntity<T> other) : base(other) {
-        spriteInfo = other.spriteInfo;
+        icon = other.icon;
         position = other.position;
         active = other.active;
         Verse = other.Verse;

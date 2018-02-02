@@ -160,7 +160,7 @@ public class Verse : Entity<Verse>, IView {
 
         selectionEntity = new ConcreteEntity();
         selectionEntity.Name = "Selector";
-        selectionEntity.spriteInfo = new Icon(new SpriteInfo() { id = "selector_1", category = "UI" });
+        selectionEntity.icon = new Icon(new SpriteInfo() { id = "selector_1", category = "UI" });
 
         SpawnSelectionEntity(selectionEntity, new Vector2(0, 0));
         selectionEntity.Active = false;
@@ -221,7 +221,7 @@ public class Verse : Entity<Verse>, IView {
 
             if (modeArgs.Length >= 1 && modeArgs[0] is string) {
                 Part p = registry.partRegistry.Get(modeArgs[0] as string, false);
-                buildIndicatorEntity.SpriteInfo = new Icon(new SpriteInfo(p.SpriteInfo.Get(0)) { tint = Color.green, layer = 3 });
+                buildIndicatorEntity.Icon = new Icon(new SpriteInfo(p.Icon.Get(0)) { tint = Color.green, layer = 3 });
                 buildIndicatorEntity.Active = true;
             }
         } else {

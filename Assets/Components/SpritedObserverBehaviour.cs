@@ -9,19 +9,19 @@ public class SpritedObserverBehaviour<T> : ObserverBehaviour<T> where T: Entity<
     }
 
     protected void CreateGraphics() {
-        if(Emitter.spriteInfo == null) {
+        if(Emitter.icon == null) {
             return;
         }
         EnsureSize();
-        for (int i = 0; i < Emitter.SpriteInfo.Count; ++i) {
-            SpriteController.spriteLoader.LoadIntoSpriteRenderer(layers[i], Emitter.SpriteInfo.Get(i), Emitter);
+        for (int i = 0; i < Emitter.Icon.Count; ++i) {
+            SpriteController.spriteLoader.LoadIntoSpriteRenderer(layers[i], Emitter.Icon.Get(i), Emitter);
         }
     }
 
     private void EnsureSize() {
         int oldCap = layers.Count;
-        layers.Capacity = Mathf.Max(oldCap, Emitter.SpriteInfo.Count);
-        for (int i = oldCap; i < Emitter.SpriteInfo.Count; ++i) {
+        layers.Capacity = Mathf.Max(oldCap, Emitter.Icon.Count);
+        for (int i = oldCap; i < Emitter.Icon.Count; ++i) {
             GameObject layer = new GameObject("layer" + i);
             layer.transform.SetParent(transform, false);
             //layer.transform.localPosition = Vector3.zero;
@@ -31,8 +31,8 @@ public class SpritedObserverBehaviour<T> : ObserverBehaviour<T> where T: Entity<
 
     protected void UpdateGraphics() {
         EnsureSize();
-        for (int i = 0; i < Emitter.SpriteInfo.Count; ++i) {
-            SpriteController.spriteLoader.LoadIntoSpriteRenderer(layers[i], Emitter.SpriteInfo.Get(i), Emitter);
+        for (int i = 0; i < Emitter.Icon.Count; ++i) {
+            SpriteController.spriteLoader.LoadIntoSpriteRenderer(layers[i], Emitter.Icon.Get(i), Emitter);
         }
     }
 }

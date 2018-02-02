@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Generator {
 
-    Dictionary<string, Dictionary<string, PlanetGenerator>> generators = new Dictionary<string, Dictionary<string, PlanetGenerator>>();
+    Dictionary<string, Dictionary<string, EntityGenerator>> generators = new Dictionary<string, Dictionary<string, EntityGenerator>>();
 
     public static TKey lowerBound<TKey, TValue>(SortedList<TKey, TValue> dictionary, TKey key) where TKey : System.IComparable {
         if (dictionary == null || dictionary.Count <= 0) {
@@ -59,7 +59,7 @@ public class Generator {
                     case "PlanetGenerator":
                     case "ShipGenerator":
                         count++;
-                        PlanetGenerator pg = new PlanetGenerator(reader);
+                        EntityGenerator pg = new EntityGenerator(reader);
                         generators[reader.Name][pg.Id] = pg;
                         break;
                 }
@@ -73,8 +73,8 @@ public class Generator {
 
     public void Generate<T>(T p, int points = 0) where T : Entity<T> {
         int totScore = 0;
-        SortedList<int, PlanetGenerator> avail_generators = new SortedList<int, PlanetGenerator>();
-        foreach(PlanetGenerator gen in generators[typeof(T).ToString() + "Generator"].Values) {
+        SortedList<int, EntityGenerator> avail_generators = new SortedList<int, EntityGenerator>();
+        foreach(EntityGenerator gen in generators[typeof(T).ToString() + "Generator"].Values) {
             DynValue genScore = (gen.Call("GetGenerationScore", new object[] { Verse.Instance, p, points }) as DynValue);
             int score = 1;
             if (genScore != null) {
@@ -90,7 +90,7 @@ public class Generator {
 
         int k = lowerBound(avail_generators, rnd);
         avail_generators[k].Call("OnGenerate", new object[] { Verse.Instance, p, points });
-        p.SpriteInfo = avail_generators[k].SpriteInfo;
+        p.Icon = avail_generators[k].Icon;
     }
 
 }

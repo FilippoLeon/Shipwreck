@@ -51,10 +51,10 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
     /// <summary>
     /// Information about the sprite used to represent the part.
     /// </summary>
-    public Icon spriteInfo;
-    public virtual Icon SpriteInfo {
-        get { return spriteInfo; }
-        set { spriteInfo = value; }
+    public Icon icon;
+    public virtual Icon Icon {
+        get { return icon; }
+        set { icon = value; }
     }
 
     public Entity() {
@@ -73,7 +73,7 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
                 parameters[o.Key] = (float)o.Value;
             }
         }
-        spriteInfo = other.spriteInfo;
+        icon = other.icon;
 
         actions = new Dictionary<string, List<GenericAction>>(other.actions);
     }
@@ -94,7 +94,7 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
         switch (reader.Name) {
             case "Icon":
                 XmlReader subreader = reader.ReadSubtree();
-                spriteInfo = new Icon(subreader, this);
+                icon = new Icon(subreader, this);
                 subreader.Close();
                 break;
             case "Parameter":

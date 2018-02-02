@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Xml;
 
-internal class PlanetGenerator : Entity<PlanetGenerator> {
+internal class EntityGenerator : Entity<EntityGenerator> {
     public override string Category {
         get {
             return "Generator";
         }
     }
 
-    public PlanetGenerator(XmlReader reader) {
+    public EntityGenerator(XmlReader reader) {
         ReadXml(reader);
     }
 
@@ -35,7 +35,7 @@ internal class PlanetGenerator : Entity<PlanetGenerator> {
         throw new System.NotImplementedException();
     }
 
-    public override PlanetGenerator Clone() {
+    public override EntityGenerator Clone() {
         throw new NotImplementedException();
     }
 
