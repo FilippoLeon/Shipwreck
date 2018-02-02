@@ -6,3 +6,8 @@ High priority:
 - Save/Load
 - Resource gathering/Combat
 - AI for ships
+- life support
+- crew 
+- modifiers (for ship and parts)
+- decide of to add parameters of parts into ship (and other assembly buys)
+- GetParameterOrDefault implement

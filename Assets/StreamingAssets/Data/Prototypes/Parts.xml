@@ -24,6 +24,19 @@
 			<Sprite category="Parts">basic_hull</Sprite>
 		</Icon>
 	</Part>
+	<Part id="cargo_bay" type="addon">
+		<Parameter name="item_capacity">1000</Parameter>
+		<Icon>
+			<Sprite category="Parts">cargo_bay</Sprite>
+		</Icon>
+	</Part>
+	<Part id="fuel_tank" type="addon">
+		<Parameter name="fluid_capacity">1000</Parameter>
+		<Parameter name="fluid_types">1</Parameter>
+		<Icon>
+			<Sprite category="Parts">fuel_tank</Sprite>
+		</Icon>
+	</Part>
 	<Part id="turret" type="addon">
 		<Parameter name="direction" type="string">0</Parameter>
 		<Icon>

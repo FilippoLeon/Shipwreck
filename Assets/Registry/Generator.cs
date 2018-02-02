@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Generator {
 
-    Dictionary<string, PlanetGenerator> planetBiomes = new Dictionary<string, PlanetGenerator>();
+    Dictionary<string, Dictionary<string, PlanetGenerator>> generators = new Dictionary<string, Dictionary<string, PlanetGenerator>>();
 
     public static TKey lowerBound<TKey, TValue>(SortedList<TKey, TValue> dictionary, TKey key) where TKey : System.IComparable {
         if (dictionary == null || dictionary.Count <= 0) {
@@ -42,6 +42,8 @@ public class Generator {
     public Generator() {
         string pathXml = Path.Combine(Application.streamingAssetsPath, "Data/Prototypes/Biomes.xml");
         ReadPrototypes(pathXml);
+        pathXml = Path.Combine(Application.streamingAssetsPath, "Data/Prototypes/Ships.xml");
+        ReadPrototypes(pathXml);
     }
 
     public void ReadPrototypes(string pathXml) {
@@ -55,9 +57,10 @@ public class Generator {
             while (reader.Read()) {
                 switch (reader.Name) {
                     case "PlanetGenerator":
+                    case "ShipGenerator":
                         count++;
                         PlanetGenerator pg = new PlanetGenerator(reader);
-                        planetBiomes[pg.Id] = pg;
+                        generators[reader.Name][pg.Id] = pg;
                         break;
                 }
             }
@@ -68,22 +71,26 @@ public class Generator {
         }
     }
 
-    public void Generate(Planet p) {
+    public void Generate<T>(T p, int points = 0) where T : Entity<T> {
         int totScore = 0;
-        SortedList<int, PlanetGenerator> generators = new SortedList<int, PlanetGenerator>();
-        foreach(PlanetGenerator gen in planetBiomes.Values) {
-            int score = (int) (gen.Call("OnScoreGenerator", new object[] { p }) as DynValue).Number;
+        SortedList<int, PlanetGenerator> avail_generators = new SortedList<int, PlanetGenerator>();
+        foreach(PlanetGenerator gen in generators[typeof(T).ToString() + "Generator"].Values) {
+            DynValue genScore = (gen.Call("GetGenerationScore", new object[] { Verse.Instance, p, points }) as DynValue);
+            int score = 1;
+            if (genScore != null) {
+                score = (int)genScore.Number;
+            }
             if(score > 0) {
-                generators[totScore] = gen;
+                avail_generators[totScore] = gen;
                 totScore += score;
             }
         }
 
         int rnd = UnityEngine.Random.Range(0, totScore);
 
-        int k = lowerBound(generators, rnd);
-        generators[k].Call("OnGenerate", new object[] { p });
-        p.SpriteInfo = generators[k].SpriteInfo;
+        int k = lowerBound(avail_generators, rnd);
+        avail_generators[k].Call("OnGenerate", new object[] { Verse.Instance, p, points });
+        p.SpriteInfo = avail_generators[k].SpriteInfo;
     }
 
 }

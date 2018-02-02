@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MoonSharp.Interpreter;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+[MoonSharpUserData]
 public class NameRegistry {
     public Dictionary<string, List<string>> names = new Dictionary<string, List<string>>();
 

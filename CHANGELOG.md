@@ -6,3 +6,8 @@
 - Multilayer sprites
 - Build indicator fixes
 - Engine/Flameout/Robustness of Pars Parameters increased
+- ShipGenerator
+- ship names
+- engines
+- part rotation
+- projectiles

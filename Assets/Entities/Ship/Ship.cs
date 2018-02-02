@@ -9,10 +9,15 @@ using UnityEngine;
 /// </summary>
 [MoonSharpUserData]
 public class Ship : Entity<Ship> {
-	/////////
-	////// BASIC PARAMETERS
-	/////////
-	
+    /////////
+    ////// BASIC PARAMETERS
+    /////////
+
+    /// <summary>
+    /// The crew of the ship. Includes players and merchants.
+    /// </summary>
+    public List<ILivingEntity> crew = new List<ILivingEntity>();
+
 	/// <summary>The root of the ship, i.e. the Part to which all other parts are attached.</summary>
 	/// <todo>Is this really needed?</todo>
     public Part Root { get; set; }
@@ -178,7 +183,7 @@ public class Ship : Entity<Ship> {
     /// <returns>A brand new random ship.</returns>
     public static Ship Random(Verse verse, int score) {
         Ship ship = new Ship(verse);
-        ship.Name = verse.registry.namesRegistry.GetRandom("ship_name");
+        ship.Name = verse.registry.namesRegistry.GetRandom("ships");
 
         return ship;
     }
@@ -315,10 +320,10 @@ public class Ship : Entity<Ship> {
     }
 
 	/// Adds a part to the given coordinate. Checks if part can be added. Emits "AddPart".</summary>
-    public void AddPart(Part part, Coordinate position) {
+    public int AddPart(Part part, Coordinate position) {
 		// TODO: change to "OnAddPart".
         if (!part.CanAttachTo(this, position)) {
-            return;
+            return 0;
         }
 
         Emit("AddPart", new object[] { part });
@@ -341,6 +346,8 @@ public class Ship : Entity<Ship> {
 
         RecomputeHealth();
         RecomputeMaxHealth();
+
+        return part.GetParameter<int>("score_cost");
     }
 
 	/// <summary> Spawn a new projectile.</summary>

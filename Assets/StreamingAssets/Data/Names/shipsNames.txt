@@ -1,0 +1,8 @@
+@ships
+Serenity
+Millenium Falcon
+Hearth Of Gold
+La Niña
+La Pinta
+La Santa Maria
+Death Star

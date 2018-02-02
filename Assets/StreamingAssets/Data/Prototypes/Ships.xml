@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Generators>
+	<ShipGenerator id="small_fighter">
+		<Action event="OnGenerate">
+			function(verse, ship, points)
+				ship.Name = Verse.Instance.registry.nameRegistry.GetRandom("ships")
+			
+				cost = 0
+			
+				cost += ship.AddPart(verse.registry.partRegistry.Get("root"), Coordinate.__new(0,0));
+				cost += ship.AddPart(verse.registry.partRegistry.Get("basic_hull"), Coordinate.__new(0, 1));
+			
+				return ship
+			end
+		</Action>
+	</ShipGenerator>
+</Generators>

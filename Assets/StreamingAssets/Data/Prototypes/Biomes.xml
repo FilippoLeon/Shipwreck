@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Generators>
 	<PlanetGenerator id="terran">
-		<Action event="OnScoreGenerator">
-			function(planet)
+		<Action event="GetGenerationScore">
+			function(verse, planet, points)
 				return 10
 			end
 		</Action>
 		<Action event="OnGenerate">
-			function(planet)
+			function(verse, planet, points)
 				print("terran")
 			end
 		</Action>
@@ -16,13 +16,13 @@
 		</Icon>
 	</PlanetGenerator>
 	<PlanetGenerator id="arid">
-		<Action event="OnScoreGenerator">
-			function(planet)
+		<Action event="GetGenerationScore">
+			function(verse, planet, points)
 				return 20
 			end
 		</Action>
 		<Action event="OnGenerate">
-			function(planet)
+			function(verse, planet, score)
 				print("arid")
 			end
 		</Action>
@@ -31,13 +31,13 @@
 		</Icon>
 	</PlanetGenerator>
 	<PlanetGenerator id="ice">
-		<Action event="OnScoreGenerator">
-			function(planet)
+		<Action event="GetGenerationScore">
+			function(verse, planet, points)
 				return 20
 			end
 		</Action>
 		<Action event="OnGenerate">
-			function(planet)
+			function(verse, planet, score)
 				print("ice")
 			end
 		</Action>
@@ -46,13 +46,13 @@
 		</Icon>
 	</PlanetGenerator>
 	<PlanetGenerator id="jungle">
-		<Action event="OnScoreGenerator">
-			function(planet)
+		<Action event="GetGenerationScore">
+			function(verse, planet, points)
 				return 20
 			end
 		</Action>
 		<Action event="OnGenerate">
-			function(planet)
+			function(verse, planet, score)
 				print("jungle")
 			end
 		</Action>
