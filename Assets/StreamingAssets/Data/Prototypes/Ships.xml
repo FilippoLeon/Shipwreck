@@ -7,8 +7,8 @@
 			
 				cost = 0
 			
-				cost += ship.AddPart(verse.registry.partRegistry.Get("root"), Coordinate.__new(0,0));
-				cost += ship.AddPart(verse.registry.partRegistry.Get("basic_hull"), Coordinate.__new(0, 1));
+				cost = cost + ship.AddPart(verse.registry.partRegistry.Get("root"), Coordinate.__new(0,0));
+				cost = cost + ship.AddPart(verse.registry.partRegistry.Get("basic_hull"), Coordinate.__new(0, 1));
 			
 				return ship
 			end

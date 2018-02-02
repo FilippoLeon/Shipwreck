@@ -40,10 +40,16 @@ public class Generator {
     }
 
     public Generator() {
+        AddGeneratorType("ShipGenerator");
+        AddGeneratorType("PlanetGenerator");
         string pathXml = Path.Combine(Application.streamingAssetsPath, "Data/Prototypes/Biomes.xml");
         ReadPrototypes(pathXml);
         pathXml = Path.Combine(Application.streamingAssetsPath, "Data/Prototypes/Ships.xml");
         ReadPrototypes(pathXml);
+    }
+
+    public void AddGeneratorType(string type) {
+        generators[type] = new Dictionary<string, EntityGenerator>();
     }
 
     public void ReadPrototypes(string pathXml) {

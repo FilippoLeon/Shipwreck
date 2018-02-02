@@ -25,14 +25,14 @@
 		</Icon>
 	</Part>
 	<Part id="cargo_bay" type="addon">
-		<Parameter name="item_capacity">1000</Parameter>
+		<Parameter name="item_capacity" type="int">1000</Parameter>
 		<Icon>
 			<Sprite category="Parts">cargo_bay</Sprite>
 		</Icon>
 	</Part>
 	<Part id="fuel_tank" type="addon">
-		<Parameter name="fluid_capacity">1000</Parameter>
-		<Parameter name="fluid_types">1</Parameter>
+		<Parameter name="fluid_capacity" type="int">1000</Parameter>
+		<Parameter name="fluid_types" type="int">1</Parameter>
 		<Icon>
 			<Sprite category="Parts">fuel_tank</Sprite>
 		</Icon>
