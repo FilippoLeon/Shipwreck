@@ -5,9 +5,14 @@ High priority:
 - multilevel sprites/SpriteInfo
 - Save/Load
 - Resource gathering/Combat
-- AI for ships
+- AI for ships (waypoints, shooting and faction/enemy detection)
 - life support
 - crew 
 - modifiers (for ship and parts)
 - decide of to add parameters of parts into ship (and other assembly buys)
 - GetParameterOrDefault implement
+- add battle controls
+- factions
+- F = m*a
+- ship movement should use engine directionarlity and figure out the optimal way to move
+- RCS
