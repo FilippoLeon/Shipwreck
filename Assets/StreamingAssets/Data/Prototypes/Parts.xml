@@ -42,6 +42,7 @@
 	<Part id="engine_big" type="addon">
 		<Icon>
 			<Sprite category="Parts">engine_big</Sprite>
+			<Sprite category="Parts">flameout_big</Sprite>
 		</Icon>
 	</Part>
 	<Part id="battery" type="addon">

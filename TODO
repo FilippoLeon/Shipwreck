@@ -3,3 +3,6 @@ High priority:
 - Random generators (partially done)
 - Really warp to other planets
 - multilevel sprites/SpriteInfo
+- Save/Load
+- Resource gathering/Combat
+- AI for ships
