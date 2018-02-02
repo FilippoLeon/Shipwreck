@@ -55,9 +55,24 @@
 				end
 			</Sprite>
 		</Icon>
-		<Action event="OnCanAttachTo">
-			function ( part, coord ) 
-			
+		<Action event="IsAttachableTo">
+			function ( this, coord ) 
+				return true
+			end
+		</Action>
+		<Action event="IsValidNeighbour">
+			-- is other a valid nhbd of this (other is the one you want to attach, this is the one you are attacing to
+			-- dir == 0: other is below this
+			-- dir == 1: .. right
+			-- dir == 2: .. top
+			-- dir == 3: .. left
+			-- Facing = rotation is Facing * 90 deg
+			function ( this, other, direction )
+				print(direction .. " AAAAAAAAAAAAA " .. other.Facing)
+				if direction == (this.Facing + 2) % 4 then 
+					return false
+				end
+				return true
 			end
 		</Action>
 	</Part>

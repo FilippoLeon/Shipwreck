@@ -19,6 +19,8 @@ public class PartComponent : SpritedObserverBehaviour<Part> {
         transform.localPosition = coordinate.ToVector();
 
         base.CreateGraphics();
+
+        transform.localEulerAngles = new Vector3(0, 0, 90 * (int)Emitter.Facing);
     }
 
     override public void HandleEvent(string signal, object[] args) {

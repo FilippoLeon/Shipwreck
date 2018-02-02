@@ -207,7 +207,7 @@ public partial class Part : Entity<Part> {
             return otherShip.Root == null;
         }
 
-        switch ( partType ) {
+        switch (partType) {
             case PartType.Hull:
                 List<Part> cparts = otherShip.PartAt(position);
                 if (cparts != null) {
@@ -244,6 +244,28 @@ public partial class Part : Entity<Part> {
                     }
                 }
                 return false;
+        }
+
+        DynValue isAttachableTo = (Call("IsAttachableTo", new object[] { this, position }) as DynValue);
+        if ( isAttachableTo != null && !isAttachableTo.Boolean ) {
+            return false;
+        }
+
+        IEnumerable<List<Part>> nhbd2 = otherShip.GetNeighbourhoods(position);
+        int dir = 0;
+        foreach (List<Part> nList in nhbd2) {
+            if (nList == null) {
+                dir++;
+                continue;
+            }
+            foreach (Part n in nList) {
+                DynValue isValidNhbd = (n.Call("IsValidNeighbour", new object[] { n, this, dir}) as DynValue);
+                DynValue isValidNhbd2 = (Call("IsValidNeighbour", new object[] { this, n, (dir + 2 ) % 4 }) as DynValue);
+                if ( (isValidNhbd != null && !isValidNhbd.Boolean) || (isValidNhbd2 != null && !isValidNhbd2.Boolean) ) {
+                    return false;
+                }
+            }
+            dir++;
         }
 
         return true;

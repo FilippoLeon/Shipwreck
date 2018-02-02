@@ -30,8 +30,8 @@ public class InputController : MonoBehaviour {
         if (verse.verseMode == Verse.VerseMode.Build) {
             if (Input.GetButtonDown("Fire1")) {
                 Part part = verse.registry.partRegistry.Get(verse.modeArgs[0] as string);
-                activeShipComponent.Emitter.AddPart(part, coord);
                 part.Facing = verse.buildIndicatorEntity.Facing;
+                activeShipComponent.Emitter.AddPart(part, coord);
             }
         }
         if (Input.GetButtonDown("Fire3")) {

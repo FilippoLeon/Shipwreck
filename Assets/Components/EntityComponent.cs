@@ -14,6 +14,7 @@ public class EntityComponent<T> : SpritedObserverBehaviour<T> where T : Concrete
         name = Emitter.Name;
 
         base.CreateGraphics();
+        transform.localEulerAngles = new Vector3(0, 0, 90 * (int)Emitter.Facing);
     }
 
     override public void HandleEvent(string signal, object[] args) {
