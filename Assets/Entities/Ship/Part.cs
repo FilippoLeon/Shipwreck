@@ -81,7 +81,9 @@ public partial class Part : Entity<Part> {
         base.SelfDestroy();
         if (Ship != null) {
             Ship.RemovePart(this);
-        }
+        
+			Emit("OnDetach", new object[] { this, position });
+		}
     }
 
     private int maxHealth = 100;
@@ -246,7 +248,7 @@ public partial class Part : Entity<Part> {
                 return false;
         }
 
-        DynValue isAttachableTo = (Call("IsAttachableTo", new object[] { this, position }) as DynValue);
+        DynValue isAttachableTo = (Call("IsAttachableTo", new object[] { this, otherShip, position }) as DynValue);
         if ( isAttachableTo != null && !isAttachableTo.Boolean ) {
             return false;
         }
@@ -294,7 +296,8 @@ public partial class Part : Entity<Part> {
         this.position = position;
         Ship = ship;
 
-        Emit("AddTo", new object[] { position });
+        Emit("AddTo", new object[] { position }); // deprecated
+        Emit("OnAttach", new object[] { this, position });
 
         return true;
     }

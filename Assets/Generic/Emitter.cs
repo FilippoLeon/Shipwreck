@@ -23,6 +23,8 @@ abstract public class Emitter<T> : IXmlSerializable, IEmitter<T> where T : class
         observers.Add(observer);
     }
 
+
+    public abstract bool HasParameter(string name);
     public abstract object GetParameter(string name);
     public abstract object SetParameter(string name, object v);
 

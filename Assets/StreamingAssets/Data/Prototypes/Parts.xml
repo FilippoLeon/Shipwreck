@@ -93,11 +93,43 @@
 				return true
 			end
 		</Action>
+		<Action event="OnAttach">
+			function (this, coord)
+				local thrustData = {coord, {1, 0}, this.GetParameter("thrust")}
+				local id = this.Ship.GetParameter("thrusters").Insert(thrustData)
+				this.SetParameter("thrusterId") = id
+			end
+		</Action>
+		<Action event="OnDetach">
+			function (this, coord)
+				this.Ship.GetParameter("thrusters").Delete(this.GetParameter("thrusterId"))
+			end
+		</Action>
+		<Action event="OnThrustChanged">
+			function ()
+				local thrustData = {coord, {1, 0}, this.GetParameter("thrust")}
+				this.Ship.GetParameter("thrusters").At(id) = thrustData 
+			end
+		</Action>
+		<Parameter name="thrust" type="float">44</Parameter>
 	</Part>
 	<Part id="battery" type="addon">
 		<Icon>
 			<Sprite category="Parts">battery</Sprite>
 		</Icon>
+	</Part>
+	<Part id="booster" type="addon">
+		<Icon>
+			<Sprite category="Parts">booster</Sprite>
+		</Icon>
+		<Modifier object="@root" parameter="thrust" type="multiplicative">
+		  1.1
+		</Modifier>
+		<Action event="IsAttachableTo">
+			function ( this, ship, coord ) 
+				return ship.HullAt(coord).HasParameter("thrust")
+			end
+		</Action>
 	</Part>
 	<Part id="shield_generator" type="addon">
 		<Icon>

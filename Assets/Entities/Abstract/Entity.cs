@@ -124,6 +124,9 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
             case "float":
                 parameters[name] = Convert.ToSingle(value);
                 break;
+            case "table":
+                parameters[name] = new ParameterTable();
+                break;
             case null:
                 Debug.LogError("Invalid type of parameter.");
                 break;
@@ -141,6 +144,11 @@ abstract public class Entity<T> : Emitter<T>, ICloneable<T>, IUpdateable, IXmlSe
         Emit("On" + name + "Changed");
     }
 
+
+    public override object HasParameter(string name) {
+		return parameters.ContainsKey(name);
+	}
+	
     public override object GetParameter(string name) {
         if ( parameters.ContainsKey(name)) {
             return parameters[name];

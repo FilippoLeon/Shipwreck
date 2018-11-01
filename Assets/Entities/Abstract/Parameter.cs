@@ -1,48 +1,26 @@
-﻿using System.Collections;
+﻿
+
+using MoonSharp.Interpreter;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class ReductionTypeAdd<T> {
-    public T Op(T left, T right) {
-       return left += right;
-    }
-}
+[MoonSharpUserData]
+public class ParameterTable {
 
-public interface IParameter { }
-
-public interface IModifier<T> {
-    void Modify(T val);
-}
-
-public class AdditiveModifier<T> : IModifier<T> { }
-public class MultiplicativeModifier : IModifier<T> { }
-
-public class Parameter<T, ReductionType> : IParameter where ReductionType : IReductionType {
-    public T Value { get {
-            T ret = baseValue;
-            foreach(IEmitter e in emitters) {
-                ReductionType.Op(ret, (T) e.GetParameter(name));
-            }
-            foreach(SortedList<int, IModifier<T>> mod in modifiers.Values) {
-                foreach(IModifier<T> m in mod.Values) {
-                    m.Modify(ret);
-                }
-            }
-
-            return ret;
-        }
+    void Insert(string key, Table obj) {
+        //values.Add(key, obj.);
     }
 
-    enum ModifierType {  Additive, Multiplicative };
+    void Insert(string key, object obj) {
+        values.Add(key, obj);
+    }
 
-    T baseValue;
-    string name;
-    string reductionType;
-    SortedDictionary<ModifierType, SortedList<int, IModifier<T>>> modifiers = 
-        new SortedDictionary<ModifierType, SortedList<int, IModifier<T>>>();
+    void Remove(string key) {
+        values.Remove(key);
+    }
 
-    List<IEmitter> emitters = null;
-}
+    void At(string key) {
 
-internal interface IReductionType {
+    }
+
+    Dictionary<string, object> values;
 }
